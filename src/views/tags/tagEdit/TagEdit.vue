@@ -153,7 +153,7 @@ export default {
     },
     //处理搜索
     filterOption(inputValue, option) {
-      return option.name.indexOf(inputValue) > -1;
+      return option.name.indexOf(inputValue) > -1||(option.name2&&option.name2.indexOf(inputValue)>-1);
     }
   },
   watch: {
