@@ -366,6 +366,22 @@ export const asyncRouterMap = [
             meta: {
               title: '会员通信中心'
             }
+          },
+          {
+            path: '/member/management',
+            name: 'member-management',
+            component: () => import('@/views/member/memberManagement/MemberManagement'),
+            meta: {
+              title: '会员管理'
+            }
+          },
+          {
+            path: '/member/vip/setting',
+            name: 'vip-setting',
+            component: () => import('@/views/member/vipSetting/VipSetting'),
+            meta: {
+              title: 'Vip设置'
+            }
           }
         ]
       }

@@ -8,3 +8,11 @@ export function addUser(data) {
     data
   })
 }
+
+export function getUserList(params){
+  return request({
+    url: `${USER_BASE_URL}/user/public/api/company-users`,
+    method:'get',
+    params
+  })
+}
