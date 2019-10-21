@@ -353,12 +353,12 @@
                 let currentDate = this.previewData.items.map(ele => {
                     return this.$moment(
                         new Date(ele.year + "-" + ele.month + "-" + ele.day)
-                    ).format("YY-MM-DD");
+                    ).format("YYYY-MM-DD");
                 });
                 // console.log(currentDate)
                 if (value.month() == item.month()) {
-                    // console.log(currentDate.includes(value.format("YY-MM-DD")))
-                    if (currentDate.includes(value.format("YY-MM-DD"))) {
+                    // console.log(currentDate.includes(value.format("YYYY-MM-DD")))
+                    if (currentDate.includes(value.format("YYYY-MM-DD"))) {
                         style.background = "red";
                         style.color = "#fff";
                     }
@@ -369,20 +369,20 @@
             },
             getCurrentStyle(current, today) {
                 const style = {};
-                if (this.dateList.includes(current.format("YY-MM-DD"))) {
+                if (this.dateList.includes(current.format("YYYY-MM-DD"))) {
                     style.border = "1px solid #1890ff";
                     style.borderRadius = "50%";
                 }
                 return style;
             },
             handleDateClick(date) {
-                // console.log(this.dateList.indexOf(date.format("YY-MM-DD")));
-                if (this.dateList.indexOf(date.format("YY-MM-DD")) == -1) {
-                    this.dateList.push(date.format("YY-MM-DD"));
+                // console.log(this.dateList.indexOf(date.format("YYYY-MM-DD")));
+                if (this.dateList.indexOf(date.format("YYYY-MM-DD")) == -1) {
+                    this.dateList.push(date.format("YYYY-MM-DD"));
                 } else {
                     this.$delete(
                         this.dateList,
-                        this.dateList.indexOf(date.format("YY-MM-DD"))
+                        this.dateList.indexOf(date.format("YYYY-MM-DD"))
                     );
                 }
             },
@@ -404,13 +404,14 @@
                     "YYYY-MM-DD"
                 );
                 let item = [];
+                if(this.ruleDateMode == 'week'){type = 1}else{type=2};
                 if (this.weekSelect.length > 0) {
                     // this.level = 0;
-                    this.type = 1;
+                    
                     item = this.weekSelect;
                 } else {
                     // this.level = 1;
-                    this.type = 2;
+                   
                     item = this.dateList;
                 }
                 const data = {
@@ -449,26 +450,20 @@
                 let currentRuleData = this.daterulesData.find(ele => ele.id == id)
                 this.rule_name = currentRuleData.rule_name
                 this.level = currentRuleData.level
-                console.log(currentRuleData)
                 if (currentRuleData.type == 1) {
                     this.ruleDateMode = 'week'
-                    console.log(currentRuleData.items)
                     this.weekSelect = currentRuleData.items.map(ele => {
-                        console.log(ele)
                         if (ele.hasOwnProperty('day')) {
                             //  return this.weekSelectOption[ele.day]
                             return ele.day
                         }
                     })
-                    console.log(this.weekSelect)
                 } else if (currentRuleData.type == 2) {
                     this.ruleDateMode = 'date'
                     this.dateList = currentRuleData.items.map(ele => {
                         return `${ele.year}-${ele.month}-${ele.day}`
                     })
                 }
-                console.log(currentRuleData.type == 1)
-                console.log(currentRuleData)
 
             },
             isNullListItem(item) {

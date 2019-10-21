@@ -49,7 +49,12 @@
           </a-select>
         </a-form-item>
 
-        <a-form-item :label-col="labelCol" :wrapper-col="wrapperCol" label="房间类型">
+        <a-form-item
+          :label-col="labelCol"
+          :wrapper-col="wrapperCol"
+          label="房间类型"
+          v-if="activeGoodType.type=='room'"
+        >
           <a-select
             v-decorator="[
             'typeId',
@@ -68,11 +73,11 @@
 
         <a-form-item :label-col="labelCol" :wrapper-col="wrapperCol" label="商品名称">
           <a-input
-            placeholder="unavailable choice"
+            placeholder="请填写商品的名称"
             v-decorator="[
             'name',
             {
-              rules: [{ required: true, message: 'name is required!' }],
+              rules: [{ required: true, message: '商品的名称是必须的!' }],
             }
           ]"
           />
@@ -80,7 +85,7 @@
 
         <a-form-item :label-col="labelCol" :wrapper-col="wrapperCol" label="商品副标题">
           <a-input
-            placeholder="商品副标题"
+            placeholder="请填写商品的副标题"
             v-decorator="[
             'name2',
             {
@@ -177,9 +182,9 @@
             @change="handleChange"
             :remove="handleImageRemove"
           >
-            <div v-if="fileList.length < 8">
+            <div v-if="fileList.length < 8" class="center" style="height:100%;">
               <a-icon type="plus" />
-              <div class="ant-upload-text">上传图片</div>
+              <!-- <div class="ant-upload-text">上传图片</div> -->
             </div>
           </a-upload>
           <a-modal :visible="previewVisible" :footer="null" @cancel="handleCancel">
@@ -345,7 +350,7 @@
               <a-radio :style="radioStyle" :value="1">暂不售卖,放入仓库</a-radio>
               <a-radio :style="radioStyle" :value="2">
                 <span class="text">设定在</span>
-                <a-range-picker @change="onShelvesStyle" v-model="shelvesTime"  />
+                <a-range-picker @change="onShelvesStyle" v-model="shelvesTime" />
                 <span class="text">内售卖</span>
               </a-radio>
             </a-radio-group>
@@ -357,7 +362,7 @@
               <a-radio :style="radioStyle" :value="0">长期</a-radio>
               <a-radio :style="radioStyle" :value="1">
                 <span class="text">设定在</span>
-                <a-range-picker @change="onBookableDateChange"  v-model="bookableRangeTime"/>
+                <a-range-picker @change="onBookableDateChange" v-model="bookableRangeTime" />
                 <span class="text">内预定有效</span>
               </a-radio>
             </a-radio-group>
@@ -372,7 +377,7 @@
             }]"
           />
         </a-form-item>
-         <a-form-item :label-col="labelCol" :wrapper-col="wrapperCol" label="使用时间选择">
+        <a-form-item :label-col="labelCol" :wrapper-col="wrapperCol" label="使用时间选择">
           <div class="form-item">
             <a-radio-group v-model="upShelvesStyle" v-decorator="[
             'ignoreDateSelect']">
@@ -381,7 +386,7 @@
             </a-radio-group>
           </div>
         </a-form-item>
-         <a-form-item :label-col="labelCol" :wrapper-col="wrapperCol" label="退款政策">
+        <a-form-item :label-col="labelCol" :wrapper-col="wrapperCol" label="退款政策">
           <div class="form-item">
             <a-radio-group v-model="upShelvesStyle" v-decorator="[
             'refundPolicy']">
@@ -440,7 +445,7 @@ export default {
     return {
       items: [
         { title: "基础商品", sub_title: "（无需地址）", type: "base" },
-        { title: "积分商品", sub_title: "", type: "point" },
+        { title: "房型商品", sub_title: "", type: "room" },
         { title: "套餐商品", sub_title: "", type: "meal  " }
       ],
       labelCol: {
@@ -478,8 +483,8 @@ export default {
           label: "不选择房间类型"
         }
       ],
-      shelvesTime:[],
-      bookableRangeTime:[],
+      shelvesTime: [],
+      bookableRangeTime: [],
       //销售渠道选项
       placeOption: [
         {
@@ -577,24 +582,29 @@ export default {
   },
   watch: {
     upShelvesTime(val) {
-      if (val==null||val == "") {
+      if (val == null || val == "") {
         this.upShelvesStyle = 1;
-      }   else {
+      } else {
         if (this.downShelvesTime) {
           this.upShelvesStyle = 2;
-          this.shelvesTime = [this.$moment(this.upShelvesStyle),this.$moment(this.downShelvesTime)]
-        }else{
+          this.shelvesTime = [
+            this.$moment(this.upShelvesStyle),
+            this.$moment(this.downShelvesTime)
+          ];
+        } else {
           this.upShelvesStyle = 0;
         }
-        
       }
     },
-    bookableTime(val){
-      if(val){
-        this.bookableType = 1
-        this.bookableRangeTime = [this.$moment(this.bookableTime),this.$moment(this.endBookableTime)]
-      }else{
-        this.bookableType = 0
+    bookableTime(val) {
+      if (val) {
+        this.bookableType = 1;
+        this.bookableRangeTime = [
+          this.$moment(this.bookableTime),
+          this.$moment(this.endBookableTime)
+        ];
+      } else {
+        this.bookableType = 0;
       }
     },
     goodId(val) {
@@ -1091,8 +1101,8 @@ export default {
         people_num: this.peopleNum,
         bookable_time: this.bookableTime,
         end_bookable_time: this.endBookableTime,
-        is_need_date:this.ignoreDateSelect,
-        is_return:this.refundPolicy,
+        is_need_date: this.ignoreDateSelect,
+        is_return: this.refundPolicy
 
         // storeNo:state => state.addGood.storeNo,
         // storeType:state => state.addGood.storeType,
@@ -1146,8 +1156,8 @@ export default {
         people_num: this.peopleNum,
         bookable_time: this.bookableTime,
         end_bookable_time: this.endBookableTime,
-        is_need_date:this.ignoreDateSelect,
-        is_return:this.refundPolicy,
+        is_need_date: this.ignoreDateSelect,
+        is_return: this.refundPolicy
 
         // storeNo:state => state.addGood.storeNo,
         // storeType:state => state.addGood.storeType,
@@ -1198,6 +1208,21 @@ export default {
   max-width: 360px;
   max-height: 270px;
   display: block;
+}
+.ant-upload-select-picture-card i {
+  font-size: 32px;
+  color: #999;
+}
+
+.ant-upload-select-picture-card {
+  display: flex!important;
+  justify-content: center;
+  align-items: center;
+}
+
+.ant-upload-select-picture-card .ant-upload-text {
+  margin-top: 8px;
+  color: #666;
 }
 </style>
 

@@ -27,6 +27,34 @@
                 placeholder="请填写用户真实姓名"
               />
             </a-form-item>
+            <a-form-item :label-col="{ span: 3 }" :wrapper-col="{ span: 16 }" :label="`身份证号码`">
+              <a-input
+                v-decorator="[
+                `realname`,
+                {
+                  rules: [{
+                    required: true,
+                    message: 'Input something!',
+                  }],
+                }
+              ]"
+                placeholder="请填写用户真实姓名"
+              />
+            </a-form-item>
+            <a-form-item :label-col="{ span: 3 }" :wrapper-col="{ span: 16 }" :label="`身份证住址`">
+              <a-input
+                v-decorator="[
+                `realname`,
+                {
+                  rules: [{
+                    required: true,
+                    message: 'Input something!',
+                  }],
+                }
+              ]"
+                placeholder="请填写用户真实姓名"
+              />
+            </a-form-item>
 
             <a-form-item :label-col="{ span: 3 }" :wrapper-col="{ span: 16 }" :label="`联系方式`">
               <a-input
@@ -42,18 +70,7 @@
                 placeholder="placeholder"
               />
             </a-form-item>
-          </a-col>
-          <a-col :span="12">
-            <a-avatar :size="120" icon="user" />
-          </a-col>
-        </a-row>
-        <div class="account-settings-info-view">
-          <a-row type="flex" justify="start">
-            <a-col :md="12">
-              <a-form-item :label-col="{ span: 3 }" :wrapper-col="{ span: 16 }" label="用户名">
-                <a-input placeholder="给自己起个名字" />
-              </a-form-item>
-              <a-form-item
+            <a-form-item
                 :label-col="{ span: 3 }"
                 :wrapper-col="{ span: 16 }"
                 label="性别"
@@ -70,7 +87,14 @@
                   <a-radio :value="2">女</a-radio>
                 </a-radio-group>
               </a-form-item>
-
+          </a-col>
+          <a-col :span="12">
+            <a-avatar :size="120" icon="user" />
+          </a-col>
+        </a-row>
+        <div class="account-settings-info-view">
+          <a-row type="flex" justify="start">
+            <a-col :md="12">
               <a-form-item
                 :label-col="{ span: 3 }"
                 :wrapper-col="{ span: 16 }"
@@ -120,14 +144,6 @@
                 :required="false"
               >
                 <a-date-picker></a-date-picker>
-              </a-form-item>
-              <a-form-item
-                :label-col="{ span: 3 }"
-                :wrapper-col="{ span: 16 }"
-                label="地址"
-                :required="false"
-              >
-                <a-textarea rows="3" placeholder="You are not alone." />
               </a-form-item>
             </a-col>
           </a-row>

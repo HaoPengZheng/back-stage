@@ -141,7 +141,7 @@ export default {
         this.typeTitle = ''
         this.sign = ''
         this.newInstituteDrawerVisible = false
-        this.$message.success('添加成功')
+        this.$message.success('添加成功 ')
         this.init()
       })
     },

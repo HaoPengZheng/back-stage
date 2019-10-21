@@ -3,17 +3,30 @@
   以便样式的统一管理
 */
 
-
 //颜色变量
-@base-green:#009804;
-@base-blue:#1890ff;
-@base-red:#ff3d3d;
+@base-green: #009804;
+@base-blue: #1890ff;
+@base-red: #ff3d3d;
 @base-gray: #e9e9e9;
 
 // 主内容块
-@content-warp-bgColor:#fff;
-.content-warp{
-    padding: 10px 15px;
-    background: @content-warp-bgColor;
-    min-height: 65vh;
+@content-warp-bgColor: #fff;
+.content-warp {
+  padding: 10px 15px;
+  background: @content-warp-bgColor;
+  min-height: 65vh;
+}
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.column-center{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.margin-top-10{
+  margin-top: 10px;
 }

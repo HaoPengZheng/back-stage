@@ -34,6 +34,10 @@
         <a-button type="danger" size="small" style="margin-right:8px;">删除</a-button>
       </div>
 
+      <div slot="downShelvesTime" slot-scope="text" >
+        <down-shelves-time-tag :time="text"/>
+      </div>
+
       <div
         slot="filterDropdown"
         slot-scope="{ setSelectedKeys, selectedKeys, confirm, clearFilters, column }"
@@ -83,8 +87,11 @@
 
 <script>
 import { getGoods } from "@/api/good";
+import DownShelvesTimeTag from './DownShelvesTimeTag'
 export default {
-  components: {},
+  components: {
+    DownShelvesTimeTag
+  },
   data() {
     return {
       searchText: "",
@@ -135,7 +142,8 @@ export default {
         {
           title: "下架时间",
           dataIndex: "down_shelves_time",
-          key: "6"
+          key: "6",
+          scopedSlots: { customRender: "downShelvesTime" }
         },
         {
           title: "最近修改人",
