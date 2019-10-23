@@ -1,56 +1,133 @@
 <template>
-  <div>
-    <a-list
-      :grid="{ gutter: 16, xs: 1, sm: 2, md: 4, lg: 4, xl: 6, xxl: 6 }"
-      itemLayout="vertical"
-      size="large"
-      :pagination="pagination"
-      :dataSource="staffList"
-    >
-      <a-list-item slot="renderItem" slot-scope="item, index">
-        <a-card hoverable>
-          <img
-            alt="example"
-            src="http://test.00800.com.cn/pc/fc97322f333275886ff735f2d2d1214.jpg"
-            slot="cover"
-            width="100%"
-            height="200px"
-          />
-
-          <template class="ant-card-actions" slot="actions">
-            <a-icon type="setting" />
-            <a-icon type="edit" />
-            <a-icon type="ellipsis" />
+  <a-row>
+    <a-col :span="4">
+      <div>
+        <a-input-search style="margin-bottom: 8px" placeholder="Search" @change="onChange" />
+        <a-tree
+          @expand="onExpand"
+          :expandedKeys="expandedKeys"
+          :autoExpandParent="autoExpandParent"
+          :treeData="gData"
+        >
+          <template slot="title" slot-scope="{title}">
+            <span v-if="title.indexOf(searchValue) > -1">
+              {{title.substr(0, title.indexOf(searchValue))}}
+              <span
+                style="color: #f50"
+              >{{searchValue}}</span>
+              {{title.substr(title.indexOf(searchValue) + searchValue.length)}}
+            </span>
+            <span v-else>{{title}}</span>
           </template>
-          <a-card-meta title="职位：前端组长" description="姓名：黄瑞麟"></a-card-meta>
-        </a-card>
-      </a-list-item>
-    </a-list>
-  </div>
+        </a-tree>
+      </div>
+    </a-col>
+    <a-col :span="20">
+      <div class="employee-profile-warp">
+        <employee-profile></employee-profile>
+      </div>
+    </a-col>
+  </a-row>
 </template>
 
 <script>
-import { getStaff } from "@/api/staff";
-import { getCompany, getContactCompany, getUserInfo } from "@/api/auth";
+const x = 3;
+const y = 2;
+const z = 1;
+const gData = [];
+
+const generateData = (_level, _preKey, _tns) => {
+  const preKey = _preKey || "0";
+  const tns = _tns || gData;
+
+  const children = [];
+  for (let i = 0; i < x; i++) {
+    const key = `${preKey}-${i}`;
+    tns.push({ title: "春晖酒店" + key, key, scopedSlots: { title: "title" } });
+    if (i < y) {
+      children.push(key);
+    }
+  }
+  if (_level < 0) {
+    return tns;
+  }
+  const level = _level - 1;
+  children.forEach((key, index) => {
+    tns[index].children = [];
+    return generateData(level, key, tns[index].children);
+  });
+};
+generateData(z);
+
+const dataList = [];
+const generateList = data => {
+  for (let i = 0; i < data.length; i++) {
+    const node = data[i];
+    const key = node.key;
+    dataList.push({ key, title: "春晖酒店" + key });
+    if (node.children) {
+      generateList(node.children, node.key);
+    }
+  }
+};
+generateList(gData);
+
+const getParentKey = (key, tree) => {
+  let parentKey;
+  for (let i = 0; i < tree.length; i++) {
+    const node = tree[i];
+    if (node.children) {
+      if (node.children.some(item => item.key === key)) {
+        parentKey = node.key;
+      } else if (getParentKey(key, node.children)) {
+        parentKey = getParentKey(key, node.children);
+      }
+    }
+  }
+  return parentKey;
+};
+import EmployeeProfile from "./EmployeeProfile";
 export default {
   data() {
     return {
-      staffList: [],
-      pagination: {
-        onChange: page => {
-          console.log(page);
-        },
-        pageSize: 12
-      }
+      expandedKeys: [],
+      searchValue: "",
+      autoExpandParent: true,
+      gData
     };
   },
-  created() {
-    getStaff().then(res => {
-      this.staffList = res.data.result;
-    });
+  components: {
+    EmployeeProfile
+  },
+  methods: {
+    onExpand(expandedKeys) {
+      this.expandedKeys = expandedKeys;
+      this.autoExpandParent = false;
+    },
+    onChange(e) {
+      const value = e.target.value;
+      const expandedKeys = dataList
+        .map(item => {
+          if (item.key.indexOf(value) > -1) {
+            return getParentKey(item.key, gData);
+          }
+          return null;
+        })
+        .filter((item, i, self) => item && self.indexOf(item) === i);
+      Object.assign(this, {
+        expandedKeys,
+        searchValue: value,
+        autoExpandParent: true
+      });
+    }
   }
 };
 </script>
+<style scoped>
+.employee-profile-warp{
+  margin-left: 15px;
+  border-left:2px solid #e8e8e8;
+  padding-left: 15px;
 
-<style>
+}
 </style>

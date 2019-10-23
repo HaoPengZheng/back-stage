@@ -11,31 +11,40 @@
       <a slot="name" slot-scope="text" href="javascript:;">{{text}}</a>
       <!-- 操作单元格 -->
       <div slot="operator">
-        <a-button
-          type="default"
-          size="small"
-          style="margin-right:8px;background:#990033;color:#fff"
-        >下架</a-button>
-        <a-button
-          type="default"
-          size="small"
-          style="margin-right:8px;background:#9933FF;color:#fff"
-        >编辑</a-button>
-        <a-button
-          type="default"
-          size="small"
-          style="margin-right:8px;background:#FF0066;color:#fff"
-        >添加限购</a-button>
-        <a-button
-          type="default"
-          size="small"
-          style="margin-right:8px;background:#FFFF66;color:#000"
-        >销售数据</a-button>
-        <a-button type="danger" size="small" style="margin-right:8px;">删除</a-button>
+        <!-- <a-tooltip placement="bottom" title="上架">
+          <a-button type="link">
+            <my-icon class="icon" type="iconshangjia"  ></my-icon>
+          </a-button>
+        </a-tooltip> -->
+        <a-tooltip placement="bottom" title="下架">
+          <a-button type="link">
+            <my-icon class="icon" type="iconxiajia1" ></my-icon>
+          </a-button>
+        </a-tooltip>
+        <!-- <a-tooltip placement="bottom" title="編輯">
+          <a-button type="link">
+            <my-icon class="icon" type="iconbianji1" style="color:#a5a5a5" ></my-icon>
+          </a-button>
+        </a-tooltip> -->
+        <a-tooltip placement="bottom" title="限购">
+          <a-button type="link">
+            <my-icon class="icon" type="iconnavicon-xgzlsz" style="color:#f58b00" ></my-icon>
+          </a-button>
+        </a-tooltip>
+        <a-tooltip placement="bottom" title="销售数据">
+          <a-button type="link">
+            <my-icon class="icon" type="icontongji2" style="color:#327141" ></my-icon>
+          </a-button>
+        </a-tooltip>
+        <a-tooltip placement="bottom" title="删除">
+          <a-button type="link">
+            <my-icon class="icon" type="iconshanchu" style="color:#828281" ></my-icon>
+          </a-button>
+        </a-tooltip>
       </div>
 
-      <div slot="downShelvesTime" slot-scope="text" >
-        <down-shelves-time-tag :time="text"/>
+      <div slot="downShelvesTime" slot-scope="text">
+        <down-shelves-time-tag :time="text" />
       </div>
 
       <div
@@ -87,10 +96,15 @@
 
 <script>
 import { getGoods } from "@/api/good";
-import DownShelvesTimeTag from './DownShelvesTimeTag'
+import DownShelvesTimeTag from "./DownShelvesTimeTag";
+// import { Icon } from 'ant-design-vue';
+// const MyIcon = Icon.createFromIconfontCN({
+//   scriptUrl: "//at.alicdn.com/t/font_1315685_y7cb0fbbu5.js" // 在 iconfont.cn 上生成
+// });
 export default {
   components: {
     DownShelvesTimeTag
+    // MyIcon
   },
   data() {
     return {
@@ -269,5 +283,19 @@ export default {
 .highlight {
   background-color: rgb(255, 192, 105);
   padding: 0px;
+}
+</style>
+<style scoped>
+.icons-list >>> .anticon {
+  margin-right: 6px;
+  font-size: 24px;
+}
+</style>
+<style>
+.icon {
+  width: 1em;
+  height: 1em;
+  fill: currentColor;
+  vertical-align: -0.125em;
 }
 </style>

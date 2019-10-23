@@ -114,20 +114,6 @@
                 <a-form-item
                   :label-col="{ span: 3 }"
                   :wrapper-col="{ span: 16 }"
-                  label="电子邮箱"
-                  :required="false"
-                  v-decorator="[
-                `email`,
-                {
-                  rules: [],
-                }
-              ]"
-                >
-                  <a-input placeholder />
-                </a-form-item>
-                <a-form-item
-                  :label-col="{ span: 3 }"
-                  :wrapper-col="{ span: 16 }"
                   label="到职日期"
                   :required="false"
                 >
@@ -419,14 +405,14 @@ export default {
       else this.status = "";
       this.Base64JpgDisplay =
         "data:image/jpg;base64," + ret.resultContent.identityPic;
-      document.all["Base64JpgDisplay"].src =
-        "data:image/jpg;base64," + ret.resultContent.identityPic;
+      // document.all["Base64JpgDisplay"].src =
+      //   "data:image/jpg;base64," + ret.resultContent.identityPic;
       CertCtl.Base64Data2File(
         ret.resultContent.identityPic,
         "c:\\CertReader\\zp.jpg"
       );
-      document.all["Base64JpgFile"].src =
-        "file:///C:/CertReader/zp.jpg?a=" + pCardNo;
+      // document.all["Base64JpgFile"].src =
+      //   "file:///C:/CertReader/zp.jpg?a=" + pCardNo;
     },
 
     clearForm() {
@@ -460,7 +446,6 @@ export default {
         // Get this url from response in real world.
         getBase64(info.file.originFileObj, imageUrl => {
           this.Base64JpgDisplay = imageUrl;
-          console.log(imageUrl)
           this.loading = false;
         });
       }
@@ -469,14 +454,15 @@ export default {
     beforeUpload(file) {
       const isJPG = file.type === "image/jpeg";
       const isPNG = file.type === "image/png";
-      if (!(isJPG||isPNG)) {
-        this.$message.error("You can only upload JPG file!");
+      const isImage = file.type.indexOf('image')>-1
+      if (!isImage) {
+        this.$message.error("You can only upload image file!");
       }
-      const isLt2M = file.size / 1024 / 1024 < 10;
-      if (!isLt2M) {
+      const isLt10M = file.size / 1024 / 1024 < 10;
+      if (!isLt10M) {
         this.$message.error("Image must smaller than 10MB!");
       }
-      return isJPG && isLt2M;
+      return isImage && isLt10M;
     }
   }
 };

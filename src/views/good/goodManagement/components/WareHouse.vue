@@ -11,17 +11,49 @@
       <a slot="name" slot-scope="text" href="javascript:;">{{text}}</a>
       <!-- 操作单元格 -->
       <div slot="operator" slot-scope="text, record">
-          <a-button
+         <a-tooltip placement="bottom" title="上架">
+          <a-button type="link">
+            <my-icon class="icon" type="iconshangjia"  ></my-icon>
+          </a-button>
+        </a-tooltip>
+        <!-- <a-tooltip placement="bottom" title="下架">
+          <a-button type="link">
+            <my-icon class="icon" type="iconxiajia1" ></my-icon>
+          </a-button>
+        </a-tooltip> -->
+        <a-tooltip placement="bottom" title="編輯">
+          <a-button type="link"  @click="jumpToEdit(record)">
+            <my-icon class="icon" type="iconbianji1" style="color:#a5a5a5" ></my-icon>
+          </a-button>
+        </a-tooltip>
+        <a-tooltip placement="bottom" title="限购">
+          <a-button type="link">
+            <my-icon class="icon" type="iconnavicon-xgzlsz" style="color:#f58b00" ></my-icon>
+          </a-button>
+        </a-tooltip>
+        <a-tooltip placement="bottom" title="销售数据">
+          <a-button type="link">
+            <my-icon class="icon" type="icontongji2" style="color:#327141" ></my-icon>
+          </a-button>
+        </a-tooltip>
+           <a-popconfirm title="你确定要删除此商品吗?" @confirm="deleteGoodByNo(record.no)" okText="Yes" cancelText="No">
+        <a-tooltip placement="bottom" title="删除">
+          <a-button type="link">
+            <my-icon class="icon" type="iconshanchu" style="color:#828281" ></my-icon>
+          </a-button>
+        </a-tooltip>
+                </a-popconfirm>
+          <!-- <a-button
           type="default"
           size="small"
           style="margin-right:8px;background:#33CCFF;color:#fff"
-        >上架</a-button>
+        >上架</a-button> -->
         <!-- <a-button
           type="default"
           size="small"
           style="margin-right:8px;background:#990033;color:#fff"
         >下架</a-button> -->
-        <a-button
+        <!-- <a-button
           type="default"
           size="small"
           style="margin-right:8px;background:#9933FF;color:#fff"
@@ -36,10 +68,10 @@
           type="default"
           size="small"
           style="margin-right:8px;background:#FFFF66;color:#000"
-        >销售数据</a-button>
-        <a-popconfirm title="你确定要删除此商品吗?" @confirm="deleteGoodByNo(record.no)" okText="Yes" cancelText="No">
+        >销售数据</a-button> -->
+        <!-- <a-popconfirm title="你确定要删除此商品吗?" @confirm="deleteGoodByNo(record.no)" okText="Yes" cancelText="No">
             <a-button type="danger" size="small" style="margin-right:8px;">删除</a-button>
-        </a-popconfirm>
+        </a-popconfirm> -->
         
       </div>
 

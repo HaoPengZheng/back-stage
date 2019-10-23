@@ -384,6 +384,26 @@ export const asyncRouterMap = [
             }
           }
         ]
+      },
+      {
+        path: '/machine',
+        name: 'machine',
+        redirect: '/machine/management',
+        meta: {
+          title: '设备中心',
+          icon: 'tool'
+        },
+        component: RouteView,
+        children: [
+          {
+            path: '/machine/management',
+            name: 'machine-management',
+            component: () => import('@/views/machine/machineManagement/MachineManagement'),
+            meta: {
+              title: '设备管理'
+            }
+          }
+        ]
       }
     ]
   },

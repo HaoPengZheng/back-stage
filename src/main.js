@@ -21,6 +21,12 @@ const options = {
   storage: 'local', // storage name session, local, memory
 };
 
+ import { Icon } from 'ant-design-vue';
+const MyIcon = Icon.createFromIconfontCN({
+  scriptUrl: "//at.alicdn.com/t/font_1315685_hj3uqhqejsc.js" // 在 iconfont.cn 上生成
+});
+
+Vue.component('my-icon',MyIcon)
 Vue.config.productionTip = false
 Vue.prototype.$moment = Moment
 Vue.use(vcolorpicker)
