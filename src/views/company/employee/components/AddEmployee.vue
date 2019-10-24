@@ -16,7 +16,7 @@
         <a-button type="danger" style="margin-right:8px" @click="disconnect()">断开连接</a-button>读卡信息:
         <a-tag color="#f50" v-if="resultFlag">{{errorMsg}}</a-tag>
         <a-tag color="#87d068" v-else>{{errorMsg}}</a-tag>
-         <span>此页面功能需要控件才能正常使用,请使用360浏览器</span>
+        <span>此页面功能需要控件才能正常使用,请使用360浏览器</span>
       </div>
       <a-form layout="vertical">
         <div>
@@ -35,53 +35,45 @@
                   </a-radio-group>
                 </a-form-item>
                 <a-form-item :label-col="{ span: 3 }" :wrapper-col="{ span: 16 }" :label="`身份证号码`">
-                  <a-input placeholder="请填写用户真实姓名" v-model="CardNo" />
+                  <a-input placeholder="请填写身份证号码" v-model="CardNo" />
                 </a-form-item>
                 <a-form-item :label-col="{ span: 3 }" :wrapper-col="{ span: 16 }" :label="`民族`">
-                  <a-input placeholder="请填写用户真实姓名" v-model="Nation" />
+                  <a-input placeholder="请填写用户民族" v-model="Nation" />
                 </a-form-item>
                 <a-form-item :label-col="{ span: 3 }" :wrapper-col="{ span: 16 }" :label="`出生`">
-                  <a-input placeholder="请填写用户真实姓名" v-model="Born" />
+                  <!-- <a-input placeholder="请填写用户真实姓名" v-model="Born" /> -->
+                  <a-date-picker v-model="Born"></a-date-picker>
                 </a-form-item>
                 <a-form-item :label-col="{ span: 3 }" :wrapper-col="{ span: 16 }" :label="`地址`">
-                  <a-input placeholder="请填写用户真实姓名" v-model="Address" />
+                  <a-input placeholder="请填写用户地址" v-model="Address" />
                 </a-form-item>
                 <a-form-item :label-col="{ span: 3 }" :wrapper-col="{ span: 16 }" label="户口性质">
-                  <a-radio-group v-model="Sex">
+                  <a-radio-group v-model="accountProperties">
                     <a-radio :value="0">城镇户口</a-radio>
                     <a-radio :value="1">农村户口</a-radio>
                   </a-radio-group>
                 </a-form-item>
                 <a-form-item :label-col="{ span: 3 }" :wrapper-col="{ span: 16 }" label="婚姻状况">
-                  <a-radio-group v-model="Sex">
+                  <a-radio-group v-model="maritalStatus">
                     <a-radio :value="0">未知</a-radio>
                     <a-radio :value="1">已婚</a-radio>
                     <a-radio :value="2">未婚</a-radio>
                   </a-radio-group>
                 </a-form-item>
                 <a-form-item :label-col="{ span: 3 }" :wrapper-col="{ span: 16 }" label="学历">
-                  <a-radio-group v-model="Sex">
-                    <a-radio :value="0">初中</a-radio>
-                    <a-radio :value="1">高中</a-radio>
-                    <a-radio :value="2">大专</a-radio>
-                    <a-radio :value="3">本科</a-radio>
-                    <a-radio :value="4">硕士</a-radio>
-                    <a-radio :value="5">博士</a-radio>
+                  <a-radio-group v-model="education">
+                    <a-radio :value="0">小学</a-radio>
+                    <a-radio :value="1">初中</a-radio>
+                    <a-radio :value="2">中专</a-radio>
+                    <a-radio :value="3">高中</a-radio>
+                    <a-radio :value="4">大专</a-radio>
+                    <a-radio :value="5">本科</a-radio>
+                    <a-radio :value="6">硕士</a-radio>
+                    <a-radio :value="7">博士</a-radio>
                   </a-radio-group>
                 </a-form-item>
                 <a-form-item :label-col="{ span: 3 }" :wrapper-col="{ span: 16 }" :label="`联系方式`">
-                  <a-input
-                    v-decorator="[
-                `phone_number`,
-                {
-                  rules: [{
-                    required: true,
-                    message: 'Input something!',
-                  }],
-                }
-              ]"
-                    placeholder="placeholder"
-                  />
+                  <a-input v-model="phoneNumber" />
                 </a-form-item>
                 <a-form-item
                   :label-col="{ span: 3 }"
@@ -95,7 +87,7 @@
                 }
               ]"
                 >
-                  <a-input placeholder="exp@admin.com" />
+                  <a-input placeholder="员工登录的账号" v-model="account" />
                 </a-form-item>
                 <a-form-item
                   :label-col="{ span: 3 }"
@@ -109,7 +101,7 @@
                 }
               ]"
                 >
-                  <a-input placeholder />
+                  <a-input placeholder="员工登录的密码" v-model="password" />
                 </a-form-item>
                 <a-form-item
                   :label-col="{ span: 3 }"
@@ -117,7 +109,15 @@
                   label="到职日期"
                   :required="false"
                 >
-                  <a-date-picker></a-date-picker>
+                  <a-date-picker v-model="EOD"></a-date-picker>
+                </a-form-item>
+                <a-form-item
+                  :label-col="{ span: 3 }"
+                  :wrapper-col="{ span: 16 }"
+                  label="离职日期"
+                  :required="false"
+                >
+                  <a-date-picker v-model="TermDate"></a-date-picker>
                 </a-form-item>
               </a-col>
               <a-col :span="10">
@@ -136,9 +136,18 @@
                       </a-button>
                     </a-upload>
                   </div>
-                  <a-form-item :label-col="{ span: 3 }" :wrapper-col="{ span: 16 }" label="下放机器：" style="width:100%">
-                    <a-checkbox-group v-model="Sex">
-                      <a-checkbox :value="machine.id" :key="machine.id" v-for="machine in machineData">{{machine.name}}</a-checkbox>
+                  <a-form-item
+                    :label-col="{ span: 3 }"
+                    :wrapper-col="{ span: 16 }"
+                    label="下放机器："
+                    style="width:100%"
+                  >
+                    <a-checkbox-group v-model="machineSelect">
+                      <a-checkbox
+                        :value="machine.id"
+                        :key="machine.id"
+                        v-for="machine in machineData"
+                      >{{machine.name}}</a-checkbox>
                     </a-checkbox-group>
                   </a-form-item>
                 </div>
@@ -162,7 +171,7 @@
           </div>
           <div class="card-warp">
             <a-form-item>
-              <a-button type="primary" html-type="submit">提交</a-button>
+              <a-button type="primary" html-type="submit" @click="handleMechineSubmit">提交</a-button>
               <a-button style="margin-left: 8px">保存</a-button>
             </a-form-item>
           </div>
@@ -204,10 +213,7 @@ function getBase64(img, callback) {
   reader.addEventListener("load", () => callback(reader.result));
   reader.readAsDataURL(img);
 }
-import {
-  addMachine,
-  getMachineList
-} from "@/api/machine"
+import { addMachine, getMachineList,appAddPerson} from "@/api/machine";
 export default {
   data() {
     return {
@@ -216,10 +222,20 @@ export default {
       Name: "",
       Sex: "",
       Nation: "",
-      Born: "",
+      Born: this.$moment(),
       Address: "",
       CardNo: "",
       Police: "",
+      phoneNumber: "",
+      accountProperties: 0,
+      education: 0,
+      maritalStatus: 0,
+      account: "",
+      password: "",
+      EOD: this.$moment(),
+      TermDate:this.$moment(),
+      machineSelect: [],
+
       ActivityLFrom: "",
       ActivityLTo: "",
 
@@ -230,20 +246,21 @@ export default {
 
       Base64JpgDisplay: "",
       Base64JpgFile: "",
-      machineData:[]
+      machineData: []
     };
   },
-  created(){
-    this.initData()
+  created() {
+    this.initData();
   },
   methods: {
-    initData(){
+    initData() {
       let params = {
-        company:this.$ls.get("company").id,
-      }
-      getMachineList(params).then(res=>{
-        this.machineData=res.data.data
-      })
+        company: this.$ls.get("company").id
+      };
+      getMachineList(params).then(res => {
+        this.machineData = res.data.data;
+        this.machineSelect = this.machineData.map(ele=>ele.id)
+      });
     },
     calltest(result) {
       this.clearForm();
@@ -412,7 +429,9 @@ export default {
       this.Name = pName;
       this.Sex = pSex;
       this.Nation = pNation;
-      this.Born = pBorn;
+      this.Born = this.$moment(
+        pBorn.substr(0, 4) + "-" + pBorn.substr(4, 2) + "-" + pBorn.substr(6, 2)
+      );
       this.Address = pAddress;
       this.CardNo = pCardNo;
       this.Police = pPolice;
@@ -484,6 +503,33 @@ export default {
         this.$message.error("Image must smaller than 10MB!");
       }
       return isImage && isLt10M;
+    },
+    handleMechineSubmit(){
+      console.log(this.machineData)
+      console.log(this.machineSelect)
+      
+      let machine = this.machineSelect.map(id=>{
+          let obj = {}
+          this.machineData.forEach(machine=>{
+            if(machine.id == id){
+              obj.mac = machine.mac
+              obj.effectTime = ""
+              obj.timeLimit = ""
+            }
+          })
+          return obj
+      })
+      console.log(machine)
+      let mechineData = {
+        machine,
+        dept:[],
+        face:{
+          img:""
+        }
+      }
+      // appAddPerson().then(res=>{
+      //   console.log(res)
+      // })
     }
   }
 };

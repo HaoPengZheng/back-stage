@@ -26,12 +26,17 @@ export function deleteMachine(id) {
         method: 'Delete'
     })
 }
-export function getMachineOnline(macList) {
+export function getMachineOnline() {
     return request({
         url: `${ZULL}/faceMachine/api/v1/machines/online`,
         method: 'POST',
-        data: {
-            mac: macList
-        }
+    })
+}
+
+export function appAddPerson(data){
+    return request({
+        url: `${ZULL}/faceMachine/face/appAddPerson`,
+        method: 'POST',
+        data
     })
 }

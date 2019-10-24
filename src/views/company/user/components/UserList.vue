@@ -91,6 +91,7 @@
       :columns="columns"
       :loading="tableLoading"
       :rowSelection="rowSelection"
+      rowKey="id"
     >
       <div
         slot="filterDropdown"

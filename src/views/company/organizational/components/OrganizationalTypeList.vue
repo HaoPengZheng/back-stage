@@ -56,7 +56,7 @@
       </div>
       </a-drawer>
     </div>
-    <a-table :columns="columns" :dataSource="data" bordered>
+    <a-table :columns="columns" :dataSource="data" bordered rowKey="id">
       <template
         v-for="col in ['name', 'age', 'address']"
         :slot="col"
@@ -141,7 +141,7 @@ export default {
         this.typeTitle = ''
         this.sign = ''
         this.newInstituteDrawerVisible = false
-        this.$message.success('添加成功 ')
+        this.$message.success('添加成功')
         this.init()
       })
     },

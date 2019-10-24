@@ -65,7 +65,7 @@
         </div>
       </a-drawer>
     </div>
-    <a-table :columns="columns" :dataSource="data" bordered></a-table>
+    <a-table :columns="columns" :dataSource="data" bordered rowKey="id"></a-table>
   </div>
 </template>
 

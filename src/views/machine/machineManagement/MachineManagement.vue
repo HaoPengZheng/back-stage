@@ -81,9 +81,9 @@
         </div>
       </a-drawer>
     </div>
-    <a-table :columns="columns" :dataSource="data" bordered>
+    <a-table :columns="columns" :dataSource="data" bordered rowKey="id" >
         <span slot="status" slot-scope="text">
-        <a-badge :status="`processing`" :text="`运行中`" />
+        <a-badge :status="text|statusTypeFilter" :text="text|statusFilter" />
         <!-- <a-badge :status="text | statusTypeFilter" :text="text | statusFilter" /> -->
       </span>
       <span slot="shop" slot-scope="text">
@@ -97,25 +97,30 @@
 <script>
 const columns = [
   {
+    key:'id',
     title: "设备Id",
     dataIndex: "id"
   },
   {
+     key:'name',
     title: "设备名",
     dataIndex: "name"
   },
   {
+    key:'mac',
     title: "MAC",
     dataIndex: "mac"
   },
   {
+    key:'shop',
     title: "所属部门",
     dataIndex: "shop",
     scopedSlots:{customRender:"shop"}
   },
   {
+    key:'isOnline',
     title: "状态",
-    dataIndex: "status",
+    dataIndex: "isOnline",
     scopedSlots:{customRender:"status"}
   },
   {
@@ -128,19 +133,19 @@ const columns = [
 const statusMap = {
   0: {
     status: 'default',
-    text: '关闭'
+    text: '离线'
   },
   1: {
-    status: 'processing',
-    text: '运行中'
+    status: 'success',
+    text: '正常运行'
   },
   2: {
     status: 'success',
     text: '已上线'
   },
-  3: {
-    status: 'error',
-    text: '异常'
+  null: {
+    status: 'default',
+    text: '离线'
   }
 }
 
@@ -191,14 +196,9 @@ export default {
       }
       getMachineList(params).then(res=>{
         this.data=res.data.data
-        let macList = this.data.map(machine=>{
-          return machine.mac
-        })
-        getMachineOnline(macList).then(res=>{
-          console.log(res)
-        })
+        // this.keepQueryOnline(params)
       })
-      // this.keepQueryOnline()
+    
     },
     showDrawer() {
       this.newMachineDrawerVisible = true;
@@ -237,12 +237,15 @@ export default {
     },
     keepQueryOnline(){
       window.setInterval(() => {
-        setTimeout(this.queryOnline, 0)
-      }, 3000)
+        setTimeout(this.queryOnline(), 0)
+      }, 10000)
     },
     queryOnline(){
-      getMachineOnline().then(res=>{
-        console.log(res)
+       let params = {
+        company:this.$ls.get("company").id,
+      }
+      getMachineList(params).then(res=>{
+        this.data=res.data.data
       })
     }
   }
