@@ -18,50 +18,87 @@
         <a-tag color="#87d068" v-else>{{errorMsg}}</a-tag>
         <span>此页面功能需要控件才能正常使用,请使用360浏览器</span>
       </div>
-      <a-form layout="vertical">
+      <a-form layout="vertical" :form="form" @submit="handleMechineSubmit">
         <div>
           <div class="card-warp">
             <a-divider orientation="left">主要信息</a-divider>
             <a-row type="flex" justify="start">
               <a-col :span="14">
                 <a-form-item :label-col="{ span: 3 }" :wrapper-col="{ span: 16 }" :label="`姓名`">
-                  <a-input placeholder="请填写用户真实姓名" v-model="Name" />
+                  <a-input
+                    placeholder="请填写用户真实姓名"
+                    v-decorator="['Name', { rules: [{ required: true, message: '真实姓名是必须要填的!' }] }]"
+                  />
                 </a-form-item>
                 <a-form-item :label-col="{ span: 3 }" :wrapper-col="{ span: 16 }" label="性别">
-                  <a-radio-group v-model="Sex">
+                  <a-radio-group
+                    v-decorator="['Sex', { rules: [{ required: true, message: '性别是必须要填的!'}]}]"
+                  >
                     <a-radio :value="0">未知</a-radio>
                     <a-radio :value="1">男</a-radio>
                     <a-radio :value="2">女</a-radio>
                   </a-radio-group>
                 </a-form-item>
                 <a-form-item :label-col="{ span: 3 }" :wrapper-col="{ span: 16 }" :label="`身份证号码`">
-                  <a-input placeholder="请填写身份证号码" v-model="CardNo" />
+                  <a-input
+                    placeholder="请填写身份证号码"
+                    v-decorator="['CardNo', { rules: [{ required: true, message: '身份证号码是必须要填的!'}]}]"
+                  />
                 </a-form-item>
                 <a-form-item :label-col="{ span: 3 }" :wrapper-col="{ span: 16 }" :label="`民族`">
-                  <a-input placeholder="请填写用户民族" v-model="Nation" />
+                  <a-input
+                    placeholder="请填写用户民族"
+                    v-decorator="['Nation', { rules: [{ required: true, message: '民族是必须要填的!'}]}]"
+                  />
                 </a-form-item>
                 <a-form-item :label-col="{ span: 3 }" :wrapper-col="{ span: 16 }" :label="`出生`">
                   <!-- <a-input placeholder="请填写用户真实姓名" v-model="Born" /> -->
-                  <a-date-picker v-model="Born"></a-date-picker>
+                  <a-date-picker
+                    v-decorator="['Born', { rules: [{ required: true, message: '出生日期是必须要填的!'}]}]"
+                  ></a-date-picker>
                 </a-form-item>
                 <a-form-item :label-col="{ span: 3 }" :wrapper-col="{ span: 16 }" :label="`地址`">
-                  <a-input placeholder="请填写用户地址" v-model="Address" />
+                  <a-input
+                    placeholder="请填写用户地址"
+                    v-decorator="['Address', { rules: [{ required: true, message: '地址是必须要填的!'}]}]"
+                  />
+                </a-form-item>
+                <a-form-item :label-col="{ span: 3 }" :wrapper-col="{ span: 16 }" label="职位">
+                  <a-cascader
+                    :options="roleOptions"
+                    placeholder="Please select"
+                    v-decorator="['role', { rules: [{ required: true, message: '职位是必须要填的!'}]}]"
+                  />
+                </a-form-item>
+                <a-form-item :label-col="{ span: 3 }" :wrapper-col="{ span: 16 }" label="账号">
+                  <a-input
+                    placeholder="员工登录的账号"
+                    v-decorator="['account', { rules: [{ required: true, message: '账号是必须要填的(将作为员工查数据使用)!'}]}]"
+                  />
+                </a-form-item>
+                <a-form-item :label-col="{ span: 3 }" :wrapper-col="{ span: 16 }" label="密码">
+                  <a-input
+                    placeholder="员工登录的密码"
+                    v-decorator="['password', { rules: [{ required: true, message: '密码是必须要填的!'}]}]"
+                  />
                 </a-form-item>
                 <a-form-item :label-col="{ span: 3 }" :wrapper-col="{ span: 16 }" label="户口性质">
-                  <a-radio-group v-model="accountProperties">
+                  <a-radio-group
+                    v-decorator="['accountProperties', { rules: [{ required: false}]}]"
+                  >
                     <a-radio :value="0">城镇户口</a-radio>
                     <a-radio :value="1">农村户口</a-radio>
                   </a-radio-group>
                 </a-form-item>
                 <a-form-item :label-col="{ span: 3 }" :wrapper-col="{ span: 16 }" label="婚姻状况">
-                  <a-radio-group v-model="maritalStatus">
+                  <a-radio-group v-decorator="['maritalStatus', { rules: [{ required: false}]}]">
                     <a-radio :value="0">未知</a-radio>
                     <a-radio :value="1">已婚</a-radio>
                     <a-radio :value="2">未婚</a-radio>
                   </a-radio-group>
                 </a-form-item>
                 <a-form-item :label-col="{ span: 3 }" :wrapper-col="{ span: 16 }" label="学历">
-                  <a-radio-group v-model="education">
+                  <a-radio-group v-decorator="['education', { rules: [{ required: false}]}]">
                     <a-radio :value="0">小学</a-radio>
                     <a-radio :value="1">初中</a-radio>
                     <a-radio :value="2">中专</a-radio>
@@ -73,43 +110,16 @@
                   </a-radio-group>
                 </a-form-item>
                 <a-form-item :label-col="{ span: 3 }" :wrapper-col="{ span: 16 }" :label="`联系方式`">
-                  <a-input v-model="phoneNumber" />
+                  <a-input v-decorator="['phoneNumber', { rules: [{ required: false}]}]" />
                 </a-form-item>
-                <a-form-item
-                  :label-col="{ span: 3 }"
-                  :wrapper-col="{ span: 16 }"
-                  label="账号"
-                  :required="false"
-                  v-decorator="[
-                `account`,
-                {
-                  rules: [],
-                }
-              ]"
-                >
-                  <a-input placeholder="员工登录的账号" v-model="account" />
-                </a-form-item>
-                <a-form-item
-                  :label-col="{ span: 3 }"
-                  :wrapper-col="{ span: 16 }"
-                  label="密码"
-                  :required="false"
-                  v-decorator="[
-                `password`,
-                {
-                  rules: [],
-                }
-              ]"
-                >
-                  <a-input placeholder="员工登录的密码" v-model="password" />
-                </a-form-item>
+
                 <a-form-item
                   :label-col="{ span: 3 }"
                   :wrapper-col="{ span: 16 }"
                   label="到职日期"
                   :required="false"
                 >
-                  <a-date-picker v-model="EOD"></a-date-picker>
+                  <a-date-picker v-decorator="['EOD', { rules: [{ required:false}]}]"></a-date-picker>
                 </a-form-item>
                 <a-form-item
                   :label-col="{ span: 3 }"
@@ -117,7 +127,7 @@
                   label="离职日期"
                   :required="false"
                 >
-                  <a-date-picker v-model="TermDate"></a-date-picker>
+                  <a-date-picker v-decorator="['TermDate', { rules: [{ required:false}]}]"></a-date-picker>
                 </a-form-item>
               </a-col>
               <a-col :span="10">
@@ -127,9 +137,12 @@
                     <a-upload
                       name="file"
                       :multiple="false"
-                      action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
                       :beforeUpload="beforeUpload"
                       @change="handleChange"
+                      :data="uploadAddData"
+                      :headers="uploadHeader"
+                      :action="uploadUrl"
+                      :remove="handleImageRemove"
                     >
                       <a-button>
                         <a-icon type="upload" />重新上传
@@ -151,16 +164,6 @@
                     </a-checkbox-group>
                   </a-form-item>
                 </div>
-                <!-- <img :src="Base64JpgDisplay" /> -->
-                <!-- <a-form-item :label-col="{ span: 4 }" :wrapper-col="{ span: 16 }" :label="`错误信息：`">
-                  <a-tag color="#f50" v-if="resultFlag">{{errorMsg}}</a-tag>
-                  <a-tag color="#87d068" v-else>{{errorMsg}}</a-tag>
-                </a-form-item>
-                <a-form-item
-                  :label-col="{ span: 4 }"
-                  :wrapper-col="{ span: 16 }"
-                  :label="`status：`"
-                >{{status}}</a-form-item>-->
               </a-col>
             </a-row>
             <div class="account-settings-info-view">
@@ -171,8 +174,7 @@
           </div>
           <div class="card-warp">
             <a-form-item>
-              <a-button type="primary" html-type="submit" @click="handleMechineSubmit">提交</a-button>
-              <a-button style="margin-left: 8px">保存</a-button>
+              <a-button type="primary" html-type="submit" @click="handleMechineSubmit">新增员工</a-button>
             </a-form-item>
           </div>
         </div>
@@ -213,10 +215,16 @@ function getBase64(img, callback) {
   reader.addEventListener("load", () => callback(reader.result));
   reader.readAsDataURL(img);
 }
-import { addMachine, getMachineList,appAddPerson} from "@/api/machine";
+import { addMachine, getMachineList, appAddPerson } from "@/api/machine";
+import { createEmployee } from "@/api/staff";
+import { getInstitutions } from "@/api/institutions";
+import { deleteAttach, addAttach } from "@/api/attach";
 export default {
   data() {
     return {
+      uploadUrl: "http://192.168.101.115:8089/api/attach",
+
+      form: this.$form.createForm(this, { name: "addEmployee" }),
       loadding: false,
       recv: "",
       Name: "",
@@ -233,7 +241,7 @@ export default {
       account: "",
       password: "",
       EOD: this.$moment(),
-      TermDate:this.$moment(),
+      TermDate: this.$moment(),
       machineSelect: [],
 
       ActivityLFrom: "",
@@ -246,11 +254,27 @@ export default {
 
       Base64JpgDisplay: "",
       Base64JpgFile: "",
-      machineData: []
+      employeePictrue:'',
+      machineData: [],
+
+      role: [],
+      roleOptions: []
     };
   },
   created() {
     this.initData();
+  },
+  computed: {
+    uploadAddData() {
+      return {
+        module: "employee"
+      };
+    },
+    uploadHeader() {
+      return {
+        company: this.$ls.get("company").id
+      };
+    }
   },
   methods: {
     initData() {
@@ -259,7 +283,38 @@ export default {
       };
       getMachineList(params).then(res => {
         this.machineData = res.data.data;
-        this.machineSelect = this.machineData.map(ele=>ele.id)
+        this.machineSelect = this.machineData.map(ele => ele.id);
+      });
+      getInstitutions().then(res => {
+        this.roleOptions = this.generateOption(res.data.data);
+      });
+    },
+    generateOption(data) {
+      if (!data instanceof Array || data.length == 0) {
+        return [];
+      }
+      return data.map(institution => {
+        return {
+          value: "institution-" + institution.id,
+          label: institution.name,
+          slots: {
+            icon: "institution"
+          },
+          children: this.generateOption(institution.children.data).concat(
+            this.generateRole(institution.roles)
+          )
+        };
+      });
+    },
+    generateRole(roles) {
+      return roles.map(role => {
+        return {
+          value: "role-" + role.id,
+          label: role.title,
+          slots: {
+            icon: "zhiwei"
+          }
+        };
       });
     },
     calltest(result) {
@@ -426,6 +481,21 @@ export default {
       var pActivityLFrom = ret.resultContent.effDate;
       var pActivityLTo = ret.resultContent.expDate;
 
+      this.form.setFieldsValue({
+        Name: pName,
+        Sex: pSex,
+        Nation: pNation,
+        Born: this.$moment(
+          pBorn.substr(0, 4) +
+            "-" +
+            pBorn.substr(4, 2) +
+            "-" +
+            pBorn.substr(6, 2)
+        ),
+        Address: pAddress,
+        CardNo: pCardNo,
+        Police: pPolice
+      });
       this.Name = pName;
       this.Sex = pSex;
       this.Nation = pNation;
@@ -447,12 +517,11 @@ export default {
         "data:image/jpg;base64," + ret.resultContent.identityPic;
       // document.all["Base64JpgDisplay"].src =
       //   "data:image/jpg;base64," + ret.resultContent.identityPic;
+      // this.dataURLtoFile()
       CertCtl.Base64Data2File(
         ret.resultContent.identityPic,
         "c:\\CertReader\\zp.jpg"
       );
-      // document.all["Base64JpgFile"].src =
-      //   "file:///C:/CertReader/zp.jpg?a=" + pCardNo;
     },
 
     clearForm() {
@@ -486,6 +555,7 @@ export default {
         // Get this url from response in real world.
         getBase64(info.file.originFileObj, imageUrl => {
           this.Base64JpgDisplay = imageUrl;
+          console.log(imageUrl);
           this.loading = false;
         });
       }
@@ -504,32 +574,84 @@ export default {
       }
       return isImage && isLt10M;
     },
-    handleMechineSubmit(){
-      console.log(this.machineData)
-      console.log(this.machineSelect)
-      
-      let machine = this.machineSelect.map(id=>{
-          let obj = {}
-          this.machineData.forEach(machine=>{
-            if(machine.id == id){
-              obj.mac = machine.mac
-              obj.effectTime = ""
-              obj.timeLimit = ""
-            }
-          })
-          return obj
-      })
-      console.log(machine)
-      let mechineData = {
-        machine,
-        dept:[],
-        face:{
-          img:""
+    handleMechineSubmit(e) {
+      e.preventDefault();
+      this.form.validateFields((err, values) => {
+        if (!err) {
+          console.log("Received values of form: ", values);
+          this.loadding = true;
+
+          let role = values.role[values.role.length - 1].split("-")[1];
+          let employee = {
+            name: values.Name,
+            sex: values.Sex,
+            account: values.account,
+            password: values.password,
+            role,
+            identity_card: values.CardNo,
+            nation: values.Nation,
+            birth: values.Born && values.Born.format("L").replace(/\//g, "-"),
+            address: values.Address,
+            household_register_type: values.accountProperties,
+            marital_status: values.maritalStatus,
+            education: values.education,
+            contact: values.phoneNumber,
+            enter_office_date:
+              values.EOD && values.EOD.format("L").replace(/\//g, "-"),
+            arrival_date:
+              values.TermDate && values.TermDate.format("L").replace(/\//g, "-")
+          };
+          createEmployee(employee).then(res => {
+            this.$message.success("添加成功！");
+            let machine = this.machineSelect.map(id => {
+              let obj = {};
+              this.machineData.forEach(machine => {
+                if (machine.id == id) {
+                  obj.mac = machine.mac;
+                  obj.effectTime = values.TermDate.valueOf();
+                  obj.timeLimit =
+                    "000000000000000000000000000000000000000000000000";
+                }
+              });
+              return obj;
+            });
+            let mechineData = {
+              machine,
+              dept: [],
+              face: {
+                img: this.Base64JpgDisplay.substr(22),
+                faceName: this.Name,
+                wgCardNo: "",
+                flag: 0,
+                platformId: this.CardNo,
+                company: this.$ls.get("company").id
+              }
+            };
+            appAddPerson(mechineData).then(res => {
+              console.log(res);
+            });
+          });
         }
+      });
+    },
+    handleImageRemove(file) {
+      let attachId;
+      if (file.hasOwnProperty("response")) {
+        attachId = file.response.data.attach_id;
+      } else if (file.hasOwnProperty("attach_id")) {
+        attachId = file.attach_id;
       }
-      // appAddPerson().then(res=>{
-      //   console.log(res)
-      // })
+      deleteAttach(attachId).then(res => {
+        this.$message.success("删除成功！");
+      });
+    },
+    dataURLtoFile(dataurl, filename) {//将base64转换为文件
+        var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
+            bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+        while(n--){
+            u8arr[n] = bstr.charCodeAt(n);
+        }
+        return new File([u8arr], filename, {type:mime});
     }
   }
 };

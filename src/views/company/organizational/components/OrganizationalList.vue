@@ -31,9 +31,9 @@
             </a-col>
           </a-row>
           <a-row :gutter="16">
-            <a-col :span="24" v-model="parentId">
+            <a-col :span="24">
               <a-form-item label="上级机构">
-                <a-select  style="width: 100%">
+                <a-select  style="width: 100%"  v-model="parentId">
                   <a-select-option key="no" value="">
                     无上级
                   </a-select-option>
@@ -97,7 +97,7 @@ export default {
       instituteName: "",
       institutionTypeOption: [],
       typeId:'',
-      parentId:''
+      parentId:null
     };
   },
   created() {
@@ -120,10 +120,11 @@ export default {
     },
     //处理提交按钮
     handleAddInstitution(){
+      console.log(this.parentId)
       let data = {
         type_id:this.typeId,
         name:this.instituteName,
-        parentId:this.parentId
+        parent_id:this.parentId
       }
       addInsitutions(data).then(res=>{
         if(res.status==201){

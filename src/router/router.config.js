@@ -104,6 +104,12 @@ export const asyncRouterMap = [
             meta: { title: '机构管理', icon: '' }
           },
           {
+            path: '/company/job/management',
+            name: 'job-management',
+            component: () => import('@/views/company/job/JobManagement'),
+            meta: { title: '职位管理', icon: '' }
+          },
+          {
             path: '/company/user/management/list',
             name: 'user-management',
             component: () => import('@/views/company/user/UserManagement'),

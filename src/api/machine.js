@@ -1,9 +1,6 @@
 import request from '@/utils/request'
 import { ZULL, USER_BASE_URL } from '../constant'
 
-/**
- * 
- */
 export function addMachine(data) {
     return request({
         url: `${ZULL}/faceMachine/api/v1/machines`,
@@ -35,8 +32,17 @@ export function getMachineOnline() {
 
 export function appAddPerson(data){
     return request({
-        url: `${ZULL}/faceMachine/face/appAddPerson`,
+        url: `${ZULL}/faceMachine/api/v1/faces/appAddPerson`,
         method: 'POST',
+        data
+    })
+}
+
+// 添加时间段
+export function addTimeQuantum(data){
+    return request({
+        url:`${ZULL}/`,
+        method:'POST',
         data
     })
 }

@@ -1,7 +1,8 @@
 <template>
-  <a-row>
-    <a-col :span="4">
-       <div>
+  <div class="content-warp">
+    <a-row>
+      <a-col :span="4">
+        <div>
           <a-input-search style="margin-bottom: 8px" v-model="searchValue" placeholder="Search" @change="onChange" />
           <a-tree
             @expand="onExpand"
@@ -27,13 +28,14 @@
             </template>
           </a-tree>
         </div>
-    </a-col>
-    <a-col :span="20">
-      <div class="employee-profile-warp">
-        <employee-profile></employee-profile>
-      </div>
-    </a-col>
-  </a-row>
+      </a-col>
+      <a-col :span="16">
+        <div class="employee-profile-warp">
+          <job-profile :type="selectType" :id="selectId" :title="selectValue" @refresh="refresh"></job-profile>
+        </div>
+      </a-col>
+    </a-row>
+  </div>
 </template>
 
 <script>
@@ -51,7 +53,7 @@ const getParentKey = (key, tree) => {
   }
   return parentKey;
 };
-import EmployeeProfile from "./EmployeeProfile";
+import JobProfile from "./components/JobProfile";
 import { getInstitutions } from "@/api/institutions";
 export default {
   data() {
@@ -69,7 +71,7 @@ export default {
     };
   },
   components: {
-    EmployeeProfile
+    JobProfile
   },
   created() {
     this.init();
@@ -174,10 +176,10 @@ export default {
 };
 </script>
 <style scoped>
-.employee-profile-warp{
+.employee-profile-warp {
   margin-left: 15px;
-  border-left:2px solid #e8e8e8;
+  border-left: 2px solid #e8e8e8;
   padding-left: 15px;
-
+  min-height: 600px;
 }
 </style>

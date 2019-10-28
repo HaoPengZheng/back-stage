@@ -4,7 +4,7 @@ import { GOOD_BASE_URL,USER_BASE_URL } from '../constant'
 export function getInstitutions() {
     return request(
         {
-            url: `${USER_BASE_URL}/user/public/api/institutions`,
+            url: `${USER_BASE_URL}/user/public/api/institutions?include=children.roles,roles`,
             method: 'get',
         }
     )

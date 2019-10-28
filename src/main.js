@@ -23,7 +23,7 @@ const options = {
 
  import { Icon } from 'ant-design-vue';
 const MyIcon = Icon.createFromIconfontCN({
-  scriptUrl: "//at.alicdn.com/t/font_1315685_hj3uqhqejsc.js" // 在 iconfont.cn 上生成
+  scriptUrl: "//at.alicdn.com/t/font_1315685_qibfgadjwt9.js" // 在 iconfont.cn 上生成
 });
 
 Vue.component('my-icon',MyIcon)
