@@ -96,7 +96,7 @@ export default {
       }
     },
     generateData(data) {
-      if (!data instanceof Array || data.length == 0) {
+      if (!(data instanceof Array) || data.length == 0) {
         return [];
       }
       return data.map(institution => {
@@ -111,7 +111,7 @@ export default {
             title:'title'
           },
           children: this.generateData(institution.children.data).concat(
-            this.generateRole(institution.roles)
+            this.generateRole(institution.roles.data)
           )
         };
       });
@@ -161,7 +161,7 @@ export default {
       })
       return title
     },
-    onSelect(value, e) {
+    onSelect(value) {
       let map = value[0].split("-");
       this.selectValue = this.findTitleByKey(value[0]);
       this.selectType = map[0];

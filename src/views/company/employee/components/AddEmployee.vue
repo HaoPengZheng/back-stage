@@ -155,13 +155,32 @@
                     label="下放机器："
                     style="width:100%"
                   >
+                    <!-- <div :value="machine.id" :key="machine.id" v-for="machine in machineData">
+                      <span>{{machine.name}}:</span>
+
+                      <a-checkbox
+                        :value="time.id"
+                        :key="`time${time.id}`"
+                        v-for="time in machine.timeRange"
+                      >{{time.sjdName}}</a-checkbox>
+                    </div>
                     <a-checkbox-group v-model="machineSelect">
                       <a-checkbox
                         :value="machine.id"
                         :key="machine.id"
                         v-for="machine in machineData"
-                      >{{machine.name}}</a-checkbox>
-                    </a-checkbox-group>
+                      >{{machine.name}}{{machine}}</a-checkbox>
+                    </a-checkbox-group>-->
+                    <a-tree
+                      checkable
+                      @expand="onExpand"
+                      :expandedKeys="expandedKeys"
+                      :autoExpandParent="autoExpandParent"
+                      v-model="checkedKeys"
+                      @select="onSelect"
+                      :selectedKeys="selectedKeys"
+                      :treeData="treeData"
+                    />
                   </a-form-item>
                 </div>
               </a-col>
@@ -179,32 +198,6 @@
           </div>
         </div>
       </a-form>
-      <!-- <table border="0" cellpadding="0" cellspacing="0">
-      <tr>
-        <td>
-          <a-input type="button" name="透传" value="透传" @click="extTransData()" />
-        </td>
-        <td align="right">发送数据：</td>
-        <td>
-          <a-input type="text" name="send"  />
-        </td>
-        <td align="right">接收数据：</td>
-        <td>
-          <a-input type="text" name="recv"  />
-        </td>
-      </tr>
-      </table>-->
-
-      <!-- <table border="0" cellpadding="0" cellspacing="0">
-      <tr>
-        <td>
-          <a-input type="button" name="开始读卡" value="开始读卡" @click="startReadCard()" />
-        </td>
-        <td>
-          <a-input type="button" name="停止读卡" value="停止读卡" @click="stopReadCard()" />
-        </td>
-      </tr>
-      </table>-->
     </div>
   </a-spin>
 </template>
@@ -223,7 +216,6 @@ export default {
   data() {
     return {
       uploadUrl: "http://192.168.101.115:8089/api/attach",
-
       form: this.$form.createForm(this, { name: "addEmployee" }),
       loadding: false,
       recv: "",
@@ -254,12 +246,87 @@ export default {
 
       Base64JpgDisplay: "",
       Base64JpgFile: "",
-      employeePictrue:'',
+      employeePictrue: "",
       machineData: [],
 
       role: [],
-      roleOptions: []
+      roleOptions: [],
+
+      treeData: [
+        {
+          title: "0-0",
+          key: "0-0",
+          children: [
+            {
+              title: "0-0-0",
+              key: "0-0-0"
+            },
+            {
+              title: "0-0-1",
+              key: "0-0-1",
+              children: [
+                { title: "0-0-1-0", key: "0-0-1-0" },
+                { title: "0-0-1-1", key: "0-0-1-1" },
+                { title: "0-0-1-2", key: "0-0-1-2" }
+              ]
+            },
+            {
+              title: "0-0-2",
+              key: "0-0-2"
+            }
+          ]
+        },
+        {
+          title: "0-1",
+          key: "0-1",
+          children: [
+            { title: "0-1-0-0", key: "0-1-0-0" },
+            { title: "0-1-0-1", key: "0-1-0-1" },
+            { title: "0-1-0-2", key: "0-1-0-2" }
+          ]
+        },
+        {
+          title: "0-2",
+          key: "0-2"
+        }
+      ],
+      expandedKeys: [],
+      autoExpandParent: true,
+      checkedKeys: [],
+      selectedKeys: []
     };
+  },
+  watch: {
+    checkedKeys(val) {
+      console.log("onCheck", val);
+      let machineMap = new Map();
+      val.forEach(obj => {
+        let keyValue = obj.split("-");
+        if (keyValue[0] == "machine") {
+          machineMap.set(keyValue[1], []);
+        } else {
+          if (machineMap.get(keyValue[0])) {
+            machineMap.get(keyValue[0]).push(keyValue[1]);
+          } else {
+            machineMap.set(keyValue[0], []);
+          }
+        }
+      });
+      // for (let key of machineMap.entries()) {
+      //   console.log(key);
+      //   this.machineData.forEach(machineEle => {
+      //     let obj = {};
+      //     if (machineEle.id == key[0]) {
+      //       console.log(123);
+      //       obj.mac = machineEle.mac;
+      //       obj.effectbTime = Math.floor(values.EOD.valueOf() / 1000);
+      //       obj.effectTime = Math.floor(values.TermDate.valueOf() / 1000);
+      //       obj.timeLimit = this.getTimeLimitById(machineMap.get(key));
+      //     }
+      //     machine.push(obj);
+      //   });
+      // }
+    }
   },
   created() {
     this.initData();
@@ -284,6 +351,22 @@ export default {
       getMachineList(params).then(res => {
         this.machineData = res.data.data;
         this.machineSelect = this.machineData.map(ele => ele.id);
+        this.treeData = this.machineData.map(machine => {
+          return {
+            title: machine.name,
+            key: `machine-${machine.id}`,
+            children: machine.timeRange.map(time => {
+              console.log(time)
+              let disabled = time.state != 1
+              let title = disabled?`${time.sjdName}(未同步)`:time.sjdName
+              return {
+                title,
+                key: `${machine.id}-${time.id}`,
+                disabled
+              };
+            })
+          };
+        });
       });
       getInstitutions().then(res => {
         this.roleOptions = this.generateOption(res.data.data);
@@ -301,7 +384,7 @@ export default {
             icon: "institution"
           },
           children: this.generateOption(institution.children.data).concat(
-            this.generateRole(institution.roles)
+            this.generateRole(institution.roles.data)
           )
         };
       });
@@ -319,7 +402,7 @@ export default {
     },
     calltest(result) {
       this.clearForm();
-      this.loadding = true;
+      // this.loadding = true;
       // document.all["ret"].innerHTML = result;
 
       var ret = JStrToObj(result);
@@ -380,7 +463,7 @@ export default {
 
     readCert() {
       this.clearForm();
-      this.loadding = true;
+      // this.loadding = true;
       setTimeout(() => {
         this.loadding = false;
       }, 1500);
@@ -517,7 +600,24 @@ export default {
         "data:image/jpg;base64," + ret.resultContent.identityPic;
       // document.all["Base64JpgDisplay"].src =
       //   "data:image/jpg;base64," + ret.resultContent.identityPic;
-      // this.dataURLtoFile()
+      let data = new FormData();
+      data.append("module", "employee");
+      data.append(
+        "file",
+        this.dataURLtoFile(this.Base64JpgDisplay, pCardNo + ".jpg")
+      );
+      addAttach(data)
+        .then(res => {
+          this.$message.success("上传成功");
+          console.log(res);
+          this.employeePictrue = res.data.data.file_url;
+          console.log(res.data);
+          console.log(this.employeePictrue);
+        })
+        .catch(err => {
+          this.$message.error("上传失败");
+        });
+
       CertCtl.Base64Data2File(
         ret.resultContent.identityPic,
         "c:\\CertReader\\zp.jpg"
@@ -555,7 +655,8 @@ export default {
         // Get this url from response in real world.
         getBase64(info.file.originFileObj, imageUrl => {
           this.Base64JpgDisplay = imageUrl;
-          console.log(imageUrl);
+          this.employeePictrue = info.file.response.data.file_url;
+          console.log(this.employeePictrue);
           this.loading = false;
         });
       }
@@ -579,7 +680,7 @@ export default {
       this.form.validateFields((err, values) => {
         if (!err) {
           console.log("Received values of form: ", values);
-          this.loadding = true;
+          // this.loadding = true;
 
           let role = values.role[values.role.length - 1].split("-")[1];
           let employee = {
@@ -601,36 +702,87 @@ export default {
             arrival_date:
               values.TermDate && values.TermDate.format("L").replace(/\//g, "-")
           };
-          createEmployee(employee).then(res => {
-            this.$message.success("添加成功！");
-            let machine = this.machineSelect.map(id => {
-              let obj = {};
-              this.machineData.forEach(machine => {
-                if (machine.id == id) {
-                  obj.mac = machine.mac;
-                  obj.effectTime = values.TermDate.valueOf();
-                  obj.timeLimit =
-                    "000000000000000000000000000000000000000000000000";
-                }
-              });
-              return obj;
-            });
-            let mechineData = {
-              machine,
-              dept: [],
-              face: {
-                img: this.Base64JpgDisplay.substr(22),
-                faceName: this.Name,
-                wgCardNo: "",
-                flag: 0,
-                platformId: this.CardNo,
-                company: this.$ls.get("company").id
+          this.$message.success("添加成功！");
+          let machine = [];
+          let machineMap = new Map();
+          this.checkedKeys.forEach(obj => {
+            let keyValue = obj.split("-");
+            if (keyValue[0] == "machine") {
+              machineMap.set(keyValue[1], []);
+            } else {
+              if (machineMap.get(keyValue[0])) {
+                machineMap.get(keyValue[0]).push(keyValue[1]);
+              } else {
+                machineMap.set(keyValue[0], []);
               }
-            };
-            appAddPerson(mechineData).then(res => {
-              console.log(res);
-            });
+            }
           });
+          console.log(machineMap.keys());
+          for (let key of machineMap.entries()) {
+            console.log(key);
+            this.machineData.forEach(machineEle => {
+              let obj = {};
+              if (machineEle.id == key[0]) {
+                console.log(123);
+                obj.mac = machineEle.mac;
+                obj.effectbTime = Math.floor(values.EOD.valueOf() / 1000);
+                obj.effectTime = Math.floor(values.TermDate.valueOf() / 1000);
+                obj.timeLimit = this.getTimeLimitById(machineMap.get(key[0]));
+                machine.push(obj);
+              }
+            });
+          }
+          // createEmployee(employee).then(res => {
+          //   this.$message.success("添加成功！");
+          //   let machine = [];
+          //   let machineMap = new Map();
+
+          //   this.checkedKeys.forEach(obj => {
+          //     let keyValue = obj.split("-");
+          //     console.log(keyValue);
+          //     console.log(keyValue[0]);
+          //     if (keyValue[0] == "machine") {
+          //       machineMap.set(keyValue[1], []);
+          //     } else {
+          //       console.log(machineMap.get(keyValue[0]));
+          //       if (machineMap.get(keyValue[0])) {
+          //         console.log("push");
+          //         machineMap.get(keyValue[0]).push(keyValue[1]);
+          //       } else {
+          //         machineMap.set(keyValue[0], []);
+          //       }
+          //     }
+          //   });
+          //   for (key in machineMap.keys()) {
+          //     this.machineData.forEach(machine => {
+          //       console.log(machine);
+          //       let obj = {};
+          //       if (machine.id == key) {
+          //         obj.mac = machine.mac;
+          //         obj.effectbTime = Math.floor(values.EOD.valueOf() / 1000);
+          //         obj.effectTime = Math.floor(values.TermDate.valueOf() / 1000);
+          //         obj.timeLimit = this.getTimeLimitById(machineMap.get(key));
+          //       }
+          //     });
+          //     machine.push(obj);
+          //   }
+          let mechineData = {
+            machine,
+            dept: [],
+            face: {
+              img: this.Base64JpgDisplay.substr(22),
+              faceName: this.Name,
+              wgCardNo: "",
+              flag: 0,
+              platformId: this.CardNo,
+              company: this.$ls.get("company").id
+            }
+          };
+          appAddPerson(mechineData).then(res => {
+            console.log(res);
+            this.loadding = false;
+          });
+          // });
         }
       });
     },
@@ -645,13 +797,44 @@ export default {
         this.$message.success("删除成功！");
       });
     },
-    dataURLtoFile(dataurl, filename) {//将base64转换为文件
-        var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
-            bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
-        while(n--){
-            u8arr[n] = bstr.charCodeAt(n);
-        }
-        return new File([u8arr], filename, {type:mime});
+    dataURLtoFile(dataurl, filename) {
+      //将base64转换为文件
+      var arr = dataurl.split(","),
+        mime = arr[0].match(/:(.*?);/)[1],
+        bstr = atob(arr[1]),
+        n = bstr.length,
+        u8arr = new Uint8Array(n);
+      while (n--) {
+        u8arr[n] = bstr.charCodeAt(n);
+      }
+      return new File([u8arr], filename, { type: mime });
+    },
+
+    onExpand(expandedKeys) {
+      console.log("onExpand", expandedKeys);
+      // if not set autoExpandParent to false, if children expanded, parent can not collapse.
+      // or, you can remove all expanded children keys.
+      this.expandedKeys = expandedKeys;
+      this.autoExpandParent = false;
+    },
+    onCheck(checkedKeys) {
+      console.log("onCheck", checkedKeys);
+      this.checkedKeys = checkedKeys;
+    },
+    onSelect(selectedKeys, info) {
+      console.log("onSelect", info);
+      this.selectedKeys = selectedKeys;
+    },
+    getTimeLimitById(idList) {
+      let timeLimit = "000000000000000000000000000000000000000000000000";
+      if(!idList){
+        return timeLimit
+      }
+      let timeLimitList = timeLimit.split("");
+      idList.forEach(id => {
+        timeLimitList[id] = 1;
+      });
+      return timeLimitList.join("");
     }
   }
 };

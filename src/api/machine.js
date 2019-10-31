@@ -38,10 +38,11 @@ export function appAddPerson(data){
     })
 }
 
+
 // 添加时间段
 export function addTimeQuantum(data){
     return request({
-        url:`${ZULL}/`,
+        url:`${ZULL}/faceMachine/api/v1/machines/sjd`,
         method:'POST',
         data
     })

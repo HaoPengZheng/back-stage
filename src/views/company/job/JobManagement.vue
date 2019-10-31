@@ -113,7 +113,7 @@ export default {
             title:'title'
           },
           children: this.generateData(institution.children.data).concat(
-            this.generateRole(institution.roles)
+            this.generateRole(institution.roles.data)
           )
         };
       });
