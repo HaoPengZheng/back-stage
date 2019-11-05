@@ -90,11 +90,21 @@
       </span>
       <span slot="operation" slot-scope="text,record">
         <a-button type="primary" @click="handleAddTimeClick(record)">添加时间段</a-button>
+        <a-popconfirm
+          title="删除后所有时间段都会被删除，确认删除嘛?"
+          @confirm="handleDeleteTimeClick(record)"
+          @cancel="cancel"
+          okText="确定"
+          cancelText="取消"
+        >
+          <a-button type="danger" style="margin-left:8px">删除时间段</a-button>
+        </a-popconfirm>
+         <!-- <a-button type="danger" style="margin-left:8px" @click="handleSearchFace">查看设备人脸</a-button> -->
       </span>
       <p slot="expandedRowRender" slot-scope="text,record" style="margin: 0">
         <a-timeline>
           <a-timeline-item :key="`range-${range.id}`" v-for="range in text.timeRange">
-            <time-range :data="range" ></time-range>
+            <time-range :data="range"></time-range>
           </a-timeline-item>
         </a-timeline>
       </p>
@@ -183,9 +193,12 @@ import {
   addMachine,
   getMachineList,
   getMachineOnline,
-  addTimeQuantum
+  addTimeQuantum,
+  deleteTimeQuantum,
+  getFaceById
 } from "@/api/machine";
 import TimeRange from "./components/TimeRange";
+import { inoutFaceList,machinesLogList } from "@/api/machine";
 export default {
   components: {
     TimeRange
@@ -212,6 +225,7 @@ export default {
     };
   },
   created() {
+    this.dayCheckedList = this.dayOptions
     this.initData();
   },
   filters: {
@@ -273,7 +287,7 @@ export default {
     keepQueryOnline() {
       window.setInterval(() => {
         setTimeout(this.queryOnline(), 0);
-      }, 10000);
+      }, 1000);
     },
     queryOnline() {
       let params = {
@@ -287,22 +301,34 @@ export default {
       this.addTimeVisible = true;
       this.selectMachine = record;
     },
+    handleDeleteTimeClick(record) {
+      deleteTimeQuantum(record.mac)
+        .then(res => {
+          this.$message.success("删除成功");
+          this.initData()
+        })
+        .catch(err => {
+          console.log(err);
+          this.$message.warn("删除失败");
+        });
+    },
+
     handleCancel() {
       this.addTimeVisible = false;
     },
     getNoRepeatId(machine) {
-      let idList = machine.timeRange.map(ele=>ele.id)
+      let idList = machine.timeRange.map(ele => ele.sjdBh);
       let flag = 1;
-      let id 
-      while(flag&&flag<=48){
-        if(!idList.includes(flag)){
-          id = flag
-          flag = 0
-        }else{
-          flag++
+      let id;
+      while (flag && flag <= 48) {
+        if (!idList.includes(flag)) {
+          id = flag;
+          flag = 0;
+        } else {
+          flag++;
         }
-        
       }
+      return id;
       console.log(id);
     },
     handleOk() {
@@ -323,9 +349,22 @@ export default {
       data.append("xq5", 1);
       data.append("xq6", 1);
       data.append("xq7", 1);
-      // addTimeQuantum(data).then(res => {
-      //   console.log(res)
-      // });
+      addTimeQuantum(data).then(res => {
+        console.log(res);
+        this.initData();
+        this.$message.success("添加成功");
+        this.addTimeVisible = false;
+      });
+    },
+    cancel(e) {
+      this.$message.error("Click on No");
+    },
+    handleSearchFace(){
+      let id = '440582199704036138'
+      console.log(id)
+      getFaceById(id).then(res=>{
+        console.log(res)
+      })
     }
   }
 };

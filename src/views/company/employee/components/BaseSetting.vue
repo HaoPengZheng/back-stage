@@ -3,16 +3,22 @@
     <a-row :gutter="16">
       <a-col :md="24" :lg="16">
         <div style="margin-left:10px">
-          <a-form layout="vertical">
+          <a-form layout="vertical" :form="form" @submit="handleSubmit">
             <div>
               <div class="card-warp">
+                <a-divider orientation="left">主要信息</a-divider>
                 <a-row type="flex" justify="start">
                   <a-col :span="24">
                     <a-form-item :label-col="{ span: 3 }" :wrapper-col="{ span: 16 }" :label="`姓名`">
-                      <a-input placeholder="请填写用户真实姓名" v-model="Name" />
+                      <a-input
+                        placeholder="请填写用户真实姓名"
+                        v-decorator="['Name', { rules: [{ required: true, message: '真实姓名是必须要填的!' }] }]"
+                      />
                     </a-form-item>
                     <a-form-item :label-col="{ span: 3 }" :wrapper-col="{ span: 16 }" label="性别">
-                      <a-radio-group v-model="Sex">
+                      <a-radio-group
+                        v-decorator="['Sex', { rules: [{ required: true, message: '性别是必须要填的!'}]}]"
+                      >
                         <a-radio :value="0">未知</a-radio>
                         <a-radio :value="1">男</a-radio>
                         <a-radio :value="2">女</a-radio>
@@ -23,33 +29,57 @@
                       :wrapper-col="{ span: 16 }"
                       :label="`身份证号码`"
                     >
-                      <a-input placeholder="请填写身份证号码" v-model="CardNo" />
+                      <a-input
+                        placeholder="请填写身份证号码"
+                        :disabled="true"
+                        v-decorator="['CardNo', { rules: [{ required: true, message: '身份证号码是必须要填的!'}]}]"
+                      />
                     </a-form-item>
                     <a-form-item :label-col="{ span: 3 }" :wrapper-col="{ span: 16 }" :label="`民族`">
-                      <a-input placeholder="请填写用户民族" v-model="Nation" />
+                      <a-input
+                        placeholder="请填写用户民族"
+                        v-decorator="['Nation', { rules: [{ required: true, message: '民族是必须要填的!'}]}]"
+                      />
                     </a-form-item>
                     <a-form-item :label-col="{ span: 3 }" :wrapper-col="{ span: 16 }" :label="`出生`">
-                      <!-- <a-input placeholder="请填写用户真实姓名" v-model="Born" /> -->
-                      <a-date-picker v-model="Born"></a-date-picker>
+                      <!-- <a-input placeholder="请填写用户真实姓名" v-model="Birth" /> -->
+                      <a-date-picker
+                        v-decorator="['Birth', { rules: [{ required: true, message: '出生日期是必须要填的!'}]}]"
+                      ></a-date-picker>
                     </a-form-item>
                     <a-form-item :label-col="{ span: 3 }" :wrapper-col="{ span: 16 }" :label="`地址`">
-                      <a-input placeholder="请填写用户地址" v-model="Address" />
+                      <a-input
+                        placeholder="请填写用户地址"
+                        v-decorator="['Address', { rules: [{ required: true, message: '地址是必须要填的!'}]}]"
+                      />
                     </a-form-item>
+                    <a-form-item :label-col="{ span: 3 }" :wrapper-col="{ span: 16 }" label="账号">
+                      <a-input
+                        :disabled="true"
+                        placeholder="员工登录的账号"
+                        v-decorator="['account', { rules: [{ required: true, message: '账号是必须要填的(将作为员工查数据使用)!'}]}]"
+                      />
+                    </a-form-item>
+
                     <a-form-item :label-col="{ span: 3 }" :wrapper-col="{ span: 16 }" label="户口性质">
-                      <a-radio-group v-model="accountProperties">
+                      <a-radio-group
+                        v-decorator="['accountProperties', { rules: [{ required: false}]}]"
+                      >
                         <a-radio :value="0">城镇户口</a-radio>
                         <a-radio :value="1">农村户口</a-radio>
                       </a-radio-group>
                     </a-form-item>
                     <a-form-item :label-col="{ span: 3 }" :wrapper-col="{ span: 16 }" label="婚姻状况">
-                      <a-radio-group v-model="maritalStatus">
+                      <a-radio-group
+                        v-decorator="['maritalStatus', { rules: [{ required: false}]}]"
+                      >
                         <a-radio :value="0">未知</a-radio>
                         <a-radio :value="1">已婚</a-radio>
                         <a-radio :value="2">未婚</a-radio>
                       </a-radio-group>
                     </a-form-item>
                     <a-form-item :label-col="{ span: 3 }" :wrapper-col="{ span: 16 }" label="学历">
-                      <a-radio-group v-model="education">
+                      <a-radio-group v-decorator="['education', { rules: [{ required: false}]}]">
                         <a-radio :value="0">小学</a-radio>
                         <a-radio :value="1">初中</a-radio>
                         <a-radio :value="2">中专</a-radio>
@@ -65,43 +95,16 @@
                       :wrapper-col="{ span: 16 }"
                       :label="`联系方式`"
                     >
-                      <a-input v-model="phoneNumber" />
+                      <a-input v-decorator="['phoneNumber', { rules: [{ required: false}]}]" />
                     </a-form-item>
-                    <a-form-item
-                      :label-col="{ span: 3 }"
-                      :wrapper-col="{ span: 16 }"
-                      label="账号"
-                      :required="false"
-                      v-decorator="[
-                `account`,
-                {
-                  rules: [],
-                }
-              ]"
-                    >
-                      <a-input placeholder="员工登录的账号" v-model="account" />
-                    </a-form-item>
-                    <a-form-item
-                      :label-col="{ span: 3 }"
-                      :wrapper-col="{ span: 16 }"
-                      label="密码"
-                      :required="false"
-                      v-decorator="[
-                `password`,
-                {
-                  rules: [],
-                }
-              ]"
-                    >
-                      <a-input placeholder="员工登录的密码" v-model="password" />
-                    </a-form-item>
+
                     <a-form-item
                       :label-col="{ span: 3 }"
                       :wrapper-col="{ span: 16 }"
                       label="到职日期"
                       :required="false"
                     >
-                      <a-date-picker v-model="EOD"></a-date-picker>
+                      <a-date-picker v-decorator="['EOD', { rules: [{ required:false}]}]"></a-date-picker>
                     </a-form-item>
                     <a-form-item
                       :label-col="{ span: 3 }"
@@ -109,7 +112,7 @@
                       label="离职日期"
                       :required="false"
                     >
-                      <a-date-picker v-model="TermDate"></a-date-picker>
+                      <a-date-picker v-decorator="['TermDate', { rules: [{ required:false}]}]"></a-date-picker>
                     </a-form-item>
                   </a-col>
                 </a-row>
@@ -121,8 +124,10 @@
               </div>
               <div class="card-warp">
                 <a-form-item>
-                  <a-button type="primary" html-type="submit">提交</a-button>
-                  <a-button style="margin-left: 8px">保存</a-button>
+                  <a-button type="primary" html-type="submit">保存</a-button>
+                   <a-popconfirm title="注意，这不是离职操作，确认彻底删除此条信息吗？" okText="确定" cancelText="取消"  @confirm="confirmDeleteEmployee">
+                   <a-button type="danger" style="margin-left:8px" >删除</a-button>
+                   </a-popconfirm>
                 </a-form-item>
               </div>
             </div>
@@ -146,9 +151,14 @@
 
 <script>
 import AvatarModal from "./AvatarModal";
+import { deleteEmployee,updateEmployee } from "@/api/staff";
 export default {
   components: {
     AvatarModal
+  },
+  props: {
+    baseInfo: Object,
+    id: String || Number
   },
   data() {
     return {
@@ -171,11 +181,13 @@ export default {
         fixedNumber: [1, 1]
       },
 
-       recv: "",
+      form: this.$form.createForm(this, { name: "addEmployee" }),
+
+      recv: "",
       Name: "",
       Sex: "",
       Nation: "",
-      Born: this.$moment(),
+      Birth: this.$moment(),
       Address: "",
       CardNo: "",
       Police: "",
@@ -186,14 +198,83 @@ export default {
       account: "",
       password: "",
       EOD: this.$moment(),
-      TermDate:this.$moment(),
-      machineSelect: [],
-
+      TermDate: this.$moment(),
+      machineSelect: []
     };
   },
   methods: {
+    confirmDeleteEmployee(){
+      deleteEmployee(this.id).then(res=>{
+        console.log(this.$message.success('删除成功'))
+        this.$emit('refresh')
+      })
+    },
     setavatar(url) {
       this.option.img = url;
+    },
+    handleSubmit(e) {
+      e.preventDefault();
+      this.form.validateFields((err, values) => {
+        if (!err) {
+          let updateData = {
+            realname: values.Name,
+            sex: values.Sex,
+            account: values.account,
+            identify_card: values.CardNo,
+            nation: values.Nation,
+            birth: values.Birth && values.Birth.format("L").replace(/\//g, "-"),
+            address: values.Address,
+            household_register_type: values.accountProperties,
+            marital_status: values.maritalStatus,
+            education: values.education,
+            contact: values.phoneNumber,
+            enter_office_date:
+              values.EOD && values.EOD.format("L").replace(/\//g, "-"),
+            arrival_date:
+              values.TermDate &&
+              values.TermDate.format("L").replace(/\//g, "-"),
+            identify_card_url: this.option.img
+          };
+          updateEmployee(updateData, this.id).then(res => {
+            this.$message.success("修改成功");
+          });
+        }
+      });
+    }
+  },
+  watch: {
+    baseInfo: {
+      deep: true,
+      handler: function(val) {
+        console.log(val.Sex == "男");
+        let Sex = 0;
+        if (val.Sex == "男") {
+          Sex = 1;
+        } else if (val.Sex == "女") {
+          Sex = 2;
+        } else {
+          Sex = 0;
+        }
+        console.log(val.Sex);
+        this.form.setFieldsValue({
+          Name: val.Name,
+          Sex: Sex,
+          account: val.account,
+          CardNo: val.CardNo,
+          Nation: val.Nation,
+          Birth: this.$moment(val.Birth),
+          Address: val.Address,
+          accountProperties: val.accountProperties,
+          maritalStatus: val.maritalStatus,
+          education: val.education,
+          phoneNumber: val.phoneNumber,
+          EOD: this.$moment(val.EOD),
+          TermDate: this.$moment(val.TermDate),
+          employeePictrueres: val.employeePictrueres
+        });
+        this.$set(this.option, "img", val.employeePictrueres);
+        // this.option = val.employeePictrueres
+      }
     }
   }
 };

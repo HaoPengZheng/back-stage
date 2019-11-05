@@ -47,3 +47,71 @@ export function addTimeQuantum(data){
         data
     })
 }
+
+export function deleteTimeQuantum(mac){
+    return request({
+        url:`${ZULL}/faceMachine/api/v1/machines/sjd/${mac}`,
+        method:'DELETE'
+    })
+}
+
+export function machinesLogList(params){
+    return request({
+        url:`${ZULL}/faceMachine/api/v1/logs/list`,
+        method:'GET',
+        params
+    })
+}
+
+export function getFace(wgCard,data){
+    return request({
+        url:`${ZULL}/faceMachine/api/v1/faces/${wgCard}`,
+        method:'PUT',
+        data
+    })
+}
+
+export function updateFace(wgCard,data){
+    return request({
+        url:`${ZULL}/faceMachine/api/v1/faces/${wgCard}`,
+        method:'PUT',
+        data
+    })
+}
+
+export function deleteFace(machineId,faceId){
+    return request({
+        url:`${ZULL}/faceMachine/api/v1/machines/${machineId}/faces/${faceId}`,
+        method:'Delete',
+    })
+}
+
+export function deleteFaceByMac(data){
+    return request({
+        url:`${ZULL}/faceMachine/api/v1/faces/machines`,
+        method:'DELETE',
+    })
+}
+
+
+export function inoutFaceList(params){
+    return request({
+        url:`${ZULL}/faceMachine/api/v1/logs/list?page=1&limit=11&sort=desc&platformId=440582199704036138&startTime=2019-01-01 00:00:00&endTime=2020-01-01 00:00:00`,
+        method:'GET',
+        params
+    })
+}
+
+// export function machinesLogList(){
+//     return request({
+//         url:`${ZULL}/faceMachine/api/v1/logs/test`,
+//         method:'GET',
+        
+//     })
+// }
+export function getFaceById(id){
+    return request({
+        url:`${ZULL}/faceMachine/api/v1/faces/${id}`,
+        method:'GET'
+    })
+}

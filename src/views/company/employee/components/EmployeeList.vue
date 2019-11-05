@@ -1,6 +1,6 @@
 <template>
   <a-row>
-    <a-col :span="4">
+    <a-col :span="6">
        <div>
           <a-input-search style="margin-bottom: 8px" v-model="searchValue" placeholder="Search" @change="onChange" />
           <a-tree
@@ -15,6 +15,7 @@
             <a-icon slot="smile" type="smile-o" />
             <my-icon slot="institution" type="icondepart" />
             <my-icon slot="zhiwei" type="iconzhiwei" />
+            <my-icon slot="renyuan" type="iconrenyuan" />
             <template slot="title" slot-scope="{title}">
               <span v-if="title.indexOf(searchValue) > -1">
                 {{title.substr(0, title.indexOf(searchValue))}}
@@ -28,9 +29,9 @@
           </a-tree>
         </div>
     </a-col>
-    <a-col :span="20">
+    <a-col :span="18">
       <div class="employee-profile-warp">
-        <employee-profile></employee-profile>
+        <employee-profile :id="activeUserId" @refresh="refresh"></employee-profile>
       </div>
     </a-col>
   </a-row>
@@ -53,6 +54,7 @@ const getParentKey = (key, tree) => {
 };
 import EmployeeProfile from "./EmployeeProfile";
 import { getInstitutions } from "@/api/institutions";
+import { getInstitutionsAuthorization } from "@/api/institutions";
 export default {
   data() {
     return {
@@ -65,7 +67,8 @@ export default {
       selectType: "",
       selectId: "",
       selectValue: "",
-      dataList: []
+      dataList: [],
+      activeUserId:''
     };
   },
   components: {
@@ -73,13 +76,16 @@ export default {
   },
   created() {
     this.init();
+    getInstitutionsAuthorization().then(res=>{
+      console.log(res)
+    })
   },
   methods: {
     init() {
       this.initInstitution();
     },
     initInstitution() {
-      getInstitutions().then(res => {
+      getInstitutionsAuthorization().then(res => {
         this.institutionData = res.data.data;
         this.treeData = this.generateData(res.data.data);
         this.generateList(this.treeData);
@@ -100,6 +106,8 @@ export default {
         return [];
       }
       return data.map(institution => {
+        let children = institution.children.data
+        let roles = institution.positions.data
         return {
           key: "institution-" + institution.id,
           title: institution.name,
@@ -110,8 +118,8 @@ export default {
           scopedSlots:{
             title:'title'
           },
-          children: this.generateData(institution.children.data).concat(
-            this.generateRole(institution.roles.data)
+          children: this.generateData(children).concat(
+            this.generateRoleAndUser(roles)
           )
         };
       });
@@ -127,9 +135,47 @@ export default {
           },
           scopedSlots:{
             title:'title'
-          }
+          },
         };
       });
+    },
+    generateRoleAndUser(roles){
+    
+       return roles.map(role => {
+        return {
+          key: "role-" + role.id,
+          title: role.title,
+          slots: {
+            icon: "zhiwei",
+            title:"title"
+          },
+          scopedSlots:{
+            title:'title'
+          },
+          children: this.generateUsers(role.staffs.data)
+        };
+      });
+    },
+    generateUsers(users){
+      return users.map(user =>{
+        let name 
+        if(user.authorization){
+          name = user.authorization.name
+        }else{
+          name = user.name+'（非实名）'
+        }
+        return {
+          key: "user-" + user.id,
+          title: name,
+          slots: {
+            icon: "renyuan",
+            title:"title"
+          },
+          scopedSlots:{
+            title:'title'
+          },
+        }
+      })
     },
     onExpand(expandedKeys) {
       this.expandedKeys = expandedKeys;
@@ -166,6 +212,9 @@ export default {
       this.selectValue = this.findTitleByKey(value[0]);
       this.selectType = map[0];
       this.selectId = map[1];
+      if(this.selectType == 'user'){
+        this.activeUserId = this.selectId
+      }
     },
     refresh() {
       this.init();

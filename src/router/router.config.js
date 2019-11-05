@@ -408,6 +408,14 @@ export const asyncRouterMap = [
             meta: {
               title: '设备管理'
             }
+          },
+          {
+            path: '/machine/inout',
+            name: 'inout-management',
+            component: () => import('@/views/machine/inoutPage/InoutListPage'),
+            meta: {
+              title: '进出记录'
+            }
           }
         ]
       }

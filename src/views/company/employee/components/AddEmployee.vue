@@ -52,9 +52,9 @@
                   />
                 </a-form-item>
                 <a-form-item :label-col="{ span: 3 }" :wrapper-col="{ span: 16 }" :label="`出生`">
-                  <!-- <a-input placeholder="请填写用户真实姓名" v-model="Born" /> -->
+                  <!-- <a-input placeholder="请填写用户真实姓名" v-model="Birth" /> -->
                   <a-date-picker
-                    v-decorator="['Born', { rules: [{ required: true, message: '出生日期是必须要填的!'}]}]"
+                    v-decorator="['Birth', { rules: [{ required: true, message: '出生日期是必须要填的!'}]}]"
                   ></a-date-picker>
                 </a-form-item>
                 <a-form-item :label-col="{ span: 3 }" :wrapper-col="{ span: 16 }" :label="`地址`">
@@ -222,7 +222,7 @@ export default {
       Name: "",
       Sex: "",
       Nation: "",
-      Born: this.$moment(),
+      Birth: this.$moment(),
       Address: "",
       CardNo: "",
       Police: "",
@@ -252,44 +252,7 @@ export default {
       role: [],
       roleOptions: [],
 
-      treeData: [
-        {
-          title: "0-0",
-          key: "0-0",
-          children: [
-            {
-              title: "0-0-0",
-              key: "0-0-0"
-            },
-            {
-              title: "0-0-1",
-              key: "0-0-1",
-              children: [
-                { title: "0-0-1-0", key: "0-0-1-0" },
-                { title: "0-0-1-1", key: "0-0-1-1" },
-                { title: "0-0-1-2", key: "0-0-1-2" }
-              ]
-            },
-            {
-              title: "0-0-2",
-              key: "0-0-2"
-            }
-          ]
-        },
-        {
-          title: "0-1",
-          key: "0-1",
-          children: [
-            { title: "0-1-0-0", key: "0-1-0-0" },
-            { title: "0-1-0-1", key: "0-1-0-1" },
-            { title: "0-1-0-2", key: "0-1-0-2" }
-          ]
-        },
-        {
-          title: "0-2",
-          key: "0-2"
-        }
-      ],
+      treeData: [],
       expandedKeys: [],
       autoExpandParent: true,
       checkedKeys: [],
@@ -356,12 +319,12 @@ export default {
             title: machine.name,
             key: `machine-${machine.id}`,
             children: machine.timeRange.map(time => {
-              console.log(time)
-              let disabled = time.state != 1
-              let title = disabled?`${time.sjdName}(未同步)`:time.sjdName
+              console.log(time);
+              let disabled = time.state != 1;
+              let title = disabled ? `${time.sjdName}(未同步)` : time.sjdName;
               return {
                 title,
-                key: `${machine.id}-${time.id}`,
+                key: `${machine.id}-${time.sjdBh}`,
                 disabled
               };
             })
@@ -384,7 +347,7 @@ export default {
             icon: "institution"
           },
           children: this.generateOption(institution.children.data).concat(
-            this.generateRole(institution.roles.data)
+            this.generateRole(institution.positions.data)
           )
         };
       });
@@ -568,7 +531,7 @@ export default {
         Name: pName,
         Sex: pSex,
         Nation: pNation,
-        Born: this.$moment(
+        Birth: this.$moment(
           pBorn.substr(0, 4) +
             "-" +
             pBorn.substr(4, 2) +
@@ -582,7 +545,7 @@ export default {
       this.Name = pName;
       this.Sex = pSex;
       this.Nation = pNation;
-      this.Born = this.$moment(
+      this.Birth = this.$moment(
         pBorn.substr(0, 4) + "-" + pBorn.substr(4, 2) + "-" + pBorn.substr(6, 2)
       );
       this.Address = pAddress;
@@ -629,7 +592,7 @@ export default {
       this.Name = "";
       this.Sex = "";
       this.Nation = "";
-      this.Born = "";
+      this.Birth = "";
       this.Address = "";
       this.CardNo = "";
       this.Police = "";
@@ -684,14 +647,14 @@ export default {
 
           let role = values.role[values.role.length - 1].split("-")[1];
           let employee = {
-            name: values.Name,
+            realname: values.Name,
             sex: values.Sex,
             account: values.account,
             password: values.password,
             role,
-            identity_card: values.CardNo,
+            identify_card: values.CardNo,
             nation: values.Nation,
-            birth: values.Born && values.Born.format("L").replace(/\//g, "-"),
+            birth: values.Birth && values.Birth.format("L").replace(/\//g, "-"),
             address: values.Address,
             household_register_type: values.accountProperties,
             marital_status: values.maritalStatus,
@@ -700,89 +663,59 @@ export default {
             enter_office_date:
               values.EOD && values.EOD.format("L").replace(/\//g, "-"),
             arrival_date:
-              values.TermDate && values.TermDate.format("L").replace(/\//g, "-")
+              values.TermDate && values.TermDate.format("L").replace(/\//g, "-"),
+            identify_card_url:this.employeePictrue
           };
-          this.$message.success("添加成功！");
-          let machine = [];
-          let machineMap = new Map();
-          this.checkedKeys.forEach(obj => {
-            let keyValue = obj.split("-");
-            if (keyValue[0] == "machine") {
-              machineMap.set(keyValue[1], []);
-            } else {
-              if (machineMap.get(keyValue[0])) {
-                machineMap.get(keyValue[0]).push(keyValue[1]);
+
+          createEmployee(employee).then(res => {
+            this.$message.success("添加成功！");
+            this.$emit('refresh')
+            let machine = [];
+            let machineMap = new Map();
+            this.checkedKeys.forEach(obj => {
+              let keyValue = obj.split("-");
+              if (keyValue[0] == "machine") {
+                // machineMap.set(keyValue[1], []);
               } else {
-                machineMap.set(keyValue[0], []);
-              }
-            }
-          });
-          console.log(machineMap.keys());
-          for (let key of machineMap.entries()) {
-            console.log(key);
-            this.machineData.forEach(machineEle => {
-              let obj = {};
-              if (machineEle.id == key[0]) {
-                console.log(123);
-                obj.mac = machineEle.mac;
-                obj.effectbTime = Math.floor(values.EOD.valueOf() / 1000);
-                obj.effectTime = Math.floor(values.TermDate.valueOf() / 1000);
-                obj.timeLimit = this.getTimeLimitById(machineMap.get(key[0]));
-                machine.push(obj);
+                if (machineMap.get(keyValue[0])) {
+                  machineMap.get(keyValue[0]).push(keyValue[1]);
+                } else {
+                  machineMap.set(keyValue[0], []);
+                  machineMap.get(keyValue[0]).push(keyValue[1]);
+                }
               }
             });
-          }
-          // createEmployee(employee).then(res => {
-          //   this.$message.success("添加成功！");
-          //   let machine = [];
-          //   let machineMap = new Map();
-
-          //   this.checkedKeys.forEach(obj => {
-          //     let keyValue = obj.split("-");
-          //     console.log(keyValue);
-          //     console.log(keyValue[0]);
-          //     if (keyValue[0] == "machine") {
-          //       machineMap.set(keyValue[1], []);
-          //     } else {
-          //       console.log(machineMap.get(keyValue[0]));
-          //       if (machineMap.get(keyValue[0])) {
-          //         console.log("push");
-          //         machineMap.get(keyValue[0]).push(keyValue[1]);
-          //       } else {
-          //         machineMap.set(keyValue[0], []);
-          //       }
-          //     }
-          //   });
-          //   for (key in machineMap.keys()) {
-          //     this.machineData.forEach(machine => {
-          //       console.log(machine);
-          //       let obj = {};
-          //       if (machine.id == key) {
-          //         obj.mac = machine.mac;
-          //         obj.effectbTime = Math.floor(values.EOD.valueOf() / 1000);
-          //         obj.effectTime = Math.floor(values.TermDate.valueOf() / 1000);
-          //         obj.timeLimit = this.getTimeLimitById(machineMap.get(key));
-          //       }
-          //     });
-          //     machine.push(obj);
-          //   }
-          let mechineData = {
-            machine,
-            dept: [],
-            face: {
-              img: this.Base64JpgDisplay.substr(22),
-              faceName: this.Name,
-              wgCardNo: "",
-              flag: 0,
-              platformId: this.CardNo,
-              company: this.$ls.get("company").id
+            for (let key of machineMap.entries()) {
+              this.machineData.forEach(machineEle => {
+                let obj = {};
+                if (machineEle.id == key[0]) {
+  
+                  obj.mac = machineEle.mac;
+                  obj.effectbTime = Math.floor(values.EOD.valueOf() / 1000);
+                  obj.effectTime = Math.floor(values.TermDate.valueOf() / 1000);
+                  obj.timeLimit = this.getTimeLimitById(machineMap.get(key[0]));
+                  machine.push(obj);
+                }
+              });
             }
-          };
-          appAddPerson(mechineData).then(res => {
-            console.log(res);
-            this.loadding = false;
+
+            let mechineData = {
+              machine,
+              dept: [],
+              face: {
+                img: this.Base64JpgDisplay.substr(this.Base64JpgDisplay.indexOf(',')+1),
+                faceName:  values.Name,
+                wgCardNo: "",
+                flag: 0,
+                platformId: values.CardNo,
+                company: this.$ls.get("company").id
+              }
+            };
+            appAddPerson(mechineData).then(res => {
+              this.loadding = false;
+            });
+            // });
           });
-          // });
         }
       });
     },
@@ -827,12 +760,12 @@ export default {
     },
     getTimeLimitById(idList) {
       let timeLimit = "000000000000000000000000000000000000000000000000";
-      if(!idList){
-        return timeLimit
+      if (!idList) {
+        return timeLimit;
       }
       let timeLimitList = timeLimit.split("");
       idList.forEach(id => {
-        timeLimitList[id] = 1;
+        timeLimitList[id - 1] = 1;
       });
       return timeLimitList.join("");
     }

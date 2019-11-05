@@ -44,3 +44,28 @@ export function createEmployee(data){
     })
 }
 
+
+// 获取员工信息
+export function getEmployee(userId){
+    return request({
+        url:`${USER_BASE_URL}/user/public/api/staffs/${userId}?include=authorization,staffInformation`,
+        method:'GET'
+    })
+}
+
+//更新员工信息
+export function updateEmployee(updateEmployee,userId){
+    return request({
+        url:`${USER_BASE_URL}/user/public/api/staffs/${userId}`,
+        method:'patch',
+        data:updateEmployee
+    })
+}
+
+//删除员工
+export function deleteEmployee(userId){
+    return request({
+        url:`${USER_BASE_URL}/user/public/api/staffs/${userId}`,
+        method:'delete'
+    })
+}

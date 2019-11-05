@@ -2,10 +2,10 @@
   <div class="content-warp">
     <a-tabs defaultActiveKey="1">
       <a-tab-pane tab="员工列表" key="1">
-        <employee-list></employee-list>
+        <employee-list ref="employeeList"></employee-list>
       </a-tab-pane>
       <a-tab-pane tab="添加员工" key="2" forceRender>
-        <add-employee></add-employee>
+        <add-employee @refresh="refresh"></add-employee >
       </a-tab-pane>
     </a-tabs>
   </div>
@@ -23,71 +23,15 @@ export default {
   mixins: [mixinDevice],
   data() {
     return {
-      mode: "inline",
-      openKeys: [],
-      selectedKeys: [],
-      // cropper
-      preview: {},
-      option: {
-        img: "/avatar2.jpg",
-        info: true,
-        size: 1,
-        outputType: "jpeg",
-        canScale: false,
-        autoCrop: true,
-        // 只有自动截图开启 宽度高度才生效
-        autoCropWidth: 180,
-        autoCropHeight: 180,
-        fixedBox: true,
-        // 开启宽度和高度比例
-        fixed: true,
-        fixedNumber: [1, 1]
-      },
-      pageTitle: "",
-      loading: true,
-      tags: ["很有想法的", "专注设计", "辣~", "大长腿", "川妹子", "海纳百川"],
-      tagInputVisible: false,
-      tagInputValue: "",
-      teams: [],
-      teamSpinning: true,
-      tabListNoTitle: [
-        {
-          key: "notification",
-          tab: "通知"
-        },
-        {
-          key: "message",
-          tab: "消息"
-        },
-        {
-          key: "backlog",
-          tab: "待办"
-        }
-      ],
-      noTitleKey: "notification"
+     
     };
   },
   created() {
-    this.updateMenu();
+    
   },
   methods: {
-    onOpenChange(openKeys) {
-      this.openKeys = openKeys;
-    },
-    updateMenu() {
-      const routes = this.$route.matched.concat();
-      this.selectedKeys = [routes.pop().path];
-    },
-    showTagInput() {
-      this.tagInputVisible = true;
-      this.$nextTick(() => {
-        this.$refs.tagInput.focus();
-      });
-    },
-    getUserInfo() {
-      setTimeout(() => {
-        this.loading = false;
-      }, 1000);
+    refresh(){
+      this.$refs.employeeList.refresh()
     }
   }
 };

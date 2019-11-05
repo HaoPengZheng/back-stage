@@ -72,7 +72,7 @@
           <template v-else>{{text}}</template>
         </div>
       </template>
-      <template slot="operation" slot-scope="text, record, index">
+      <!-- <template slot="operation" slot-scope="text, record, index">
         <div class="editable-row-operations">
           <span v-if="record.editable">
             <a @click="() => save(record.key)">Save</a>
@@ -84,7 +84,7 @@
             <a @click="() => edit(record.key)">Edit</a>
           </span>
         </div>
-      </template>
+      </template> -->
     </a-table>
   </div>
 </template>
@@ -99,11 +99,11 @@ const columns = [
     title: "title",
     dataIndex: "title",
   },
-  {
-    title: "operation",
-    dataIndex: "operation",
-    scopedSlots: { customRender: "operation" }
-  }
+  // {
+  //   title: "operation",
+  //   dataIndex: "operation",
+  //   scopedSlots: { customRender: "operation" }
+  // }
 ];
 
 import { getInstitutionType,createInstitution } from "@/api/institutions";

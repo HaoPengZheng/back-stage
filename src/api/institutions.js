@@ -4,12 +4,23 @@ import { GOOD_BASE_URL,USER_BASE_URL } from '../constant'
 export function getInstitutions() {
     return request(
         {
-            url: `${USER_BASE_URL}/user/public/api/institutions?include=children.roles,roles`,
+            url: `${USER_BASE_URL}/user/public/api/institutions?include=positions,children.positions`,
             method: 'get',
         }
     )
 }
 
+export function getInstitutionsAuthorization(){
+    return request(
+        {
+            url: `${USER_BASE_URL}/user/public/api/institutions?include=positions.staffs,children.positions.staffs`,
+            method: 'get',
+        }
+    )
+}
+
+
+// roles.users.authorization,children.roles.users.authorization
 
 /**
  * 获取机构类别列表
