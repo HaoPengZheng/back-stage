@@ -11,14 +11,14 @@ export function login(data){
 
 export function captchas(){
   return request({
-    url:`${USER_BASE_URL}/user/public/api/captchas`,
+    url:`${USER_BASE_URL}/api/captchas`,
     method:'post'
   })
 }
 
 export function authorizations(data){
   return request({
-    url:`${USER_BASE_URL}/user/public/api/authorizations`,
+    url:`${USER_BASE_URL}/api/authorizations`,
     method:'post',
     data
   })
@@ -33,21 +33,21 @@ export function getCompany(){
 
 export function getContactCompany(){
   return request({
-    url:`${USER_BASE_URL}/user/public/api/users/contact-companies`,
+    url:`${USER_BASE_URL}/api/users/contact-companies`,
     method:'get'
   })
 }
 
 export function getUserInfo(){
   return  request({
-    url:`${USER_BASE_URL}/user/public/api/users/current?include=roles,permissions,client.statistics,credit,authorization.contact`,
+    url:`${USER_BASE_URL}/api/users/current?include=roles,permissions,client.statistics,credit,authorization.contact`,
     method:'get'
   })
 }
 
 export function updateToken(){
   return request({
-    url:`${USER_BASE_URL}/user/public/api/users/current`,
+    url:`${USER_BASE_URL}/api/users/current`,
     method:'post'
   })
 }

@@ -4,7 +4,7 @@ import { GOOD_BASE_URL,USER_BASE_URL } from '../constant'
 export function getInstitutions() {
     return request(
         {
-            url: `${USER_BASE_URL}/user/public/api/institutions?include=positions,children.positions`,
+            url: `${USER_BASE_URL}/api/institutions?include=positions,children.positions`,
             method: 'get',
         }
     )
@@ -13,7 +13,7 @@ export function getInstitutions() {
 export function getInstitutionsAuthorization(){
     return request(
         {
-            url: `${USER_BASE_URL}/user/public/api/institutions?include=positions.staffs,children.positions.staffs`,
+            url: `${USER_BASE_URL}/api/institutions?include=positions.staffs,children.positions.staffs`,
             method: 'get',
         }
     )
@@ -27,7 +27,7 @@ export function getInstitutionsAuthorization(){
  */
 export function getInstitutionType(){
     return request({
-        url:`${USER_BASE_URL}/user/public/api/institution-types`,
+        url:`${USER_BASE_URL}/api/institution-types`,
         method:'get'
     })
 }
@@ -38,7 +38,7 @@ export function getInstitutionType(){
  */
 export function createInstitution(data){
     return request({
-        url:`${USER_BASE_URL}/user/public/api/institution-types`,
+        url:`${USER_BASE_URL}/api/institution-types`,
         method:'post',
         data
     })
@@ -50,7 +50,7 @@ export function createInstitution(data){
  */
 export function addInsitutions(data){
     return request({
-        url:`${USER_BASE_URL}/user/public/api/institutions`,
+        url:`${USER_BASE_URL}/api/institutions`,
         method:'post',
         data
     })
@@ -62,7 +62,7 @@ export function addInsitutions(data){
  */
 export function getInstitutionTypes(params){
     return request({
-        url:`${USER_BASE_URL}/user/public/api/institution-types`,
+        url:`${USER_BASE_URL}/api/institution-types`,
         method:'get',
         params:params
     })

@@ -15,7 +15,7 @@ export function getStaff() {
  */
 export function createStaff(data){
     return request({
-        url:`${USER_BASE_URL}/user/public/api/roles`,
+        url:`${USER_BASE_URL}/api/roles`,
         method:'post',
         data
     })
@@ -23,7 +23,7 @@ export function createStaff(data){
 
 export function updateStaff(data,id){
     return request({
-        url:`${USER_BASE_URL}/user/public/api/roles/${id}`,
+        url:`${USER_BASE_URL}/api/roles/${id}`,
         method:'patch',
         data
     })
@@ -31,14 +31,14 @@ export function updateStaff(data,id){
 
 export function deleteStaff(id){
     return request({
-        url:`${USER_BASE_URL}/user/public/api/roles/${id}`,
+        url:`${USER_BASE_URL}/api/roles/${id}`,
         method:'delete',
     })
 }
 
 export function createEmployee(data){
     return request({
-        url:`${USER_BASE_URL}/user/public/api/staffs`,
+        url:`${USER_BASE_URL}/api/staffs`,
         method:'post',
         data
     })
@@ -48,7 +48,7 @@ export function createEmployee(data){
 // 获取员工信息
 export function getEmployee(userId){
     return request({
-        url:`${USER_BASE_URL}/user/public/api/staffs/${userId}?include=authorization,staffInformation`,
+        url:`${USER_BASE_URL}/api/staffs/${userId}?include=authorization,staffInformation`,
         method:'GET'
     })
 }
@@ -56,7 +56,7 @@ export function getEmployee(userId){
 //更新员工信息
 export function updateEmployee(updateEmployee,userId){
     return request({
-        url:`${USER_BASE_URL}/user/public/api/staffs/${userId}`,
+        url:`${USER_BASE_URL}/api/staffs/${userId}`,
         method:'patch',
         data:updateEmployee
     })
@@ -65,7 +65,7 @@ export function updateEmployee(updateEmployee,userId){
 //删除员工
 export function deleteEmployee(userId){
     return request({
-        url:`${USER_BASE_URL}/user/public/api/staffs/${userId}`,
+        url:`${USER_BASE_URL}/api/staffs/${userId}`,
         method:'delete'
     })
 }
