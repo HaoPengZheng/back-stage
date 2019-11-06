@@ -140,7 +140,7 @@
           <div class="mask">
             <a-icon type="plus" />
           </div>
-          <img :src="option.img" />
+          <img :src="option.img"  style=""/>
         </div>
       </a-col>
     </a-row>
@@ -290,6 +290,7 @@ export default {
   margin: 0 auto;
   width: 100%;
   max-width: 180px;
+  max-height: 180px;
   border-radius: 50%;
   box-shadow: 0 0 4px #ccc;
   .upload-icon {
@@ -325,6 +326,7 @@ export default {
   .mask {
     width: 100%;
     max-width: 180px;
+    max-height: 180px;
     height: 100%;
     border-radius: 50%;
     overflow: hidden;

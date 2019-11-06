@@ -13,7 +13,7 @@
           <a-row :gutter="16">
             <a-col :span="24">
               <a-form-item label="机构类别">
-                <a-select  style="width: 100%" v-model="typeId">
+                <a-select style="width: 100%" v-model="typeId">
                   <a-select-option
                     :key="type.id"
                     :value="type.id"
@@ -33,10 +33,8 @@
           <a-row :gutter="16">
             <a-col :span="24">
               <a-form-item label="上级机构">
-                <a-select  style="width: 100%"  v-model="parentId">
-                  <a-select-option key="no" value="">
-                    无上级
-                  </a-select-option>
+                <a-select style="width: 100%" v-model="parentId">
+                  <a-select-option key="no" value>无上级</a-select-option>
                   <a-select-option
                     :key="institution.id"
                     :value="institution.id"
@@ -65,38 +63,69 @@
         </div>
       </a-drawer>
     </div>
-    <!-- <a-table :columns="columns" :dataSource="data" bordered rowKey="id">
-       <p slot="expandedRowRender" slot-scope="record" style="margin: 0">{{record}}</p>
-    </a-table> -->
-    <organizational-table :data="data"></organizational-table>
+    <a-table :columns="columns" :dataSource="data" bordered rowKey="id">
+     
+    </a-table>
+    <!-- <organizational-table :data="data"></organizational-table> -->
   </div>
 </template>
 
 <script>
-import OrganizationalTable from './OrganizationalTable'
-import { getInstitutions, getInstitutionType,addInsitutions } from "@/api/institutions";
+import OrganizationalTable from "./OrganizationalTable";
+import {
+  getInstitutions,
+  getInstitutionType,
+  addInsitutions
+} from "@/api/institutions";
 export default {
-  components:{
+  components: {
     OrganizationalTable
   },
   data() {
     return {
       data: [],
+      columns: [
+        {
+          title: "id",
+          dataIndex: "id"
+        },
+        {
+          title: "name",
+          dataIndex: "name"
+        },
+        {
+          title: "operation",
+          dataIndex: "operation",
+          scopedSlots: { customRender: "operation" }
+        }
+      ],
       newInstituteDrawerVisible: false,
       typeTitle: "",
       instituteName: "",
       institutionTypeOption: [],
-      typeId:'',
-      parentId:null
+      typeId: "",
+      parentId: null
     };
   },
   created() {
     this.initData();
   },
   methods: {
+    formatData(data) {
+      data.forEach(item => {
+        item.key = item.id;
+        if (item.children && item.children.data && item.children.data.length) {
+          this.formatData(item.children.data);
+          item.children = item.children.data;
+        } else {
+          delete item.children;
+        }
+      });
+      return data
+    },
     initData() {
       getInstitutions().then(res => {
-        this.data = res.data.data;
+        this.data = this.formatData(res.data.data);
       });
       getInstitutionType().then(res => {
         this.institutionTypeOption = res.data.data;
@@ -109,22 +138,22 @@ export default {
       this.newInstituteDrawerVisible = false;
     },
     //处理提交按钮
-    handleAddInstitution(){
-      console.log(this.parentId)
+    handleAddInstitution() {
+      console.log(this.parentId);
       let data = {
-        type_id:this.typeId,
-        name:this.instituteName,
-        parent_id:this.parentId
-      }
-      addInsitutions(data).then(res=>{
-        if(res.status==201){
-          this.$message.success('创建成功');
-          this.newInstituteDrawerVisible = false
-          this.initData()
-        }else{
-          this.$message.error('创建失败')
+        type_id: this.typeId,
+        name: this.instituteName,
+        parent_id: this.parentId
+      };
+      addInsitutions(data).then(res => {
+        if (res.status == 201) {
+          this.$message.success("创建成功");
+          this.newInstituteDrawerVisible = false;
+          this.initData();
+        } else {
+          this.$message.error("创建失败");
         }
-      })
+      });
     }
   }
 };

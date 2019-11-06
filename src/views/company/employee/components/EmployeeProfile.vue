@@ -6,7 +6,7 @@
           <base-setting :baseInfo="baseInfo" :id="id" @refresh="refresh"></base-setting>
         </a-tab-pane>
         <a-tab-pane tab="人脸信息" key="2">
-          <face-info :faceId="baseInfo.CardNo"></face-info>
+          <face-info :platformId="baseInfo.CardNo"></face-info>
         </a-tab-pane>
         <a-tab-pane tab="出入记录" key="3">
           <inout-list-page :faceId="baseInfo.CardNo"></inout-list-page>
