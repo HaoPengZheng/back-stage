@@ -117,17 +117,17 @@
                   :label-col="{ span: 3 }"
                   :wrapper-col="{ span: 16 }"
                   label="到职日期"
-                  :required="false"
+                  :required="true"
                 >
-                  <a-date-picker v-decorator="['EOD', { rules: [{ required:false}]}]"></a-date-picker>
+                  <a-date-picker v-decorator="['EOD', { rules: [{ required:true}]}]"></a-date-picker>
                 </a-form-item>
                 <a-form-item
                   :label-col="{ span: 3 }"
                   :wrapper-col="{ span: 16 }"
                   label="离职日期"
-                  :required="false"
+                  :required="true"
                 >
-                  <a-date-picker v-decorator="['TermDate', { rules: [{ required:false}]}]"></a-date-picker>
+                  <a-date-picker v-decorator="['TermDate', { rules: [{ required:true}]}]"></a-date-picker>
                 </a-form-item>
               </a-col>
               <a-col :span="10">

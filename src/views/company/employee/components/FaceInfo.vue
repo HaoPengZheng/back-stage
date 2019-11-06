@@ -301,8 +301,8 @@ export default {
         console.log(getRes);
         _this.option.img = getRes;
         let face = {
-          // faceName: _this.faceName,
-          faceName: "郑浩鹏",
+          faceName: _this.faceName,
+          // faceName: "郑浩鹏",
           img: getRes.substr(getRes.indexOf(",") + 1),
           wgCardNo:'',
           flag: 0,
@@ -316,6 +316,8 @@ export default {
         updateFace(_this.platformId, updateData).then(res => {
           console.log(res);
           _this.$message.success("修改成功");
+          _this.visible = false
+          
         });
       };
       console.log(url);
