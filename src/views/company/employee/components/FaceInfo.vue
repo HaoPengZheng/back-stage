@@ -2,66 +2,72 @@
   <div>
     <a-empty v-show="isEmpty" />
     <a-spin :spinning="loading">
-    <div v-show="!isEmpty">
-      <a-alert message="如果有修改人脸需要重新下发才生效" banner />
-      <div>平台号：{{platformId}}</div>
-      <div>{{faceName}}</div>
-      <div class="ant-upload-preview" @click="$refs.modal.edit(1)">
-        <a-icon type="cloud-upload-o" class="upload-icon" />
-        <div class="mask">
-          <a-icon type="plus" />
+      <div v-show="!isEmpty">
+        <a-alert message="如果有修改人脸需要重新下发才生效" banner />
+        <div>平台号：{{platformId}}</div>
+        <div>{{faceName}}</div>
+        <div class="ant-upload-preview" @click="$refs.modal.edit(1)">
+          <a-icon type="cloud-upload-o" class="upload-icon" />
+          <div class="mask">
+            <a-icon type="plus" />
+          </div>
+          <img :src="option.img" style="max-height:180px" />
         </div>
-        <img :src="option.img" style="max-height:180px" />
+
+        <a-button type="primary" @click="pushMachineVisible = true">重新下发人脸</a-button>
+
+        <a-table :columns="columns" :dataSource="face_machine" rowKey="mac">
+          <span
+            slot="effectbTime"
+            slot-scope="effectbTime"
+          >{{$moment(new Date(effectbTime*1000)).format('YYYY-MM-DD HH:mm:ss')}}</span>
+          <span
+            slot="effectTime"
+            slot-scope="effectTime"
+          >{{$moment(new Date(effectTime*1000)).format('YYYY-MM-DD HH:mm:ss')}}</span>
+          <span
+            slot="syncTime"
+            slot-scope="syncTime"
+          >{{$moment(new Date(syncTime*1000)).format('YYYY-MM-DD HH:mm:ss')}}</span>
+          <p slot="expandedRowRender" slot-scope="text" style="margin: 0">
+            <a-timeline>
+              <template v-for="range in text.timeRange">
+                <a-timeline-item
+                  :key="`range-${range.id}`"
+                  v-if="isInTimeRange(text.timeLimit,range.sjdBh)"
+                >
+                  {{range.sjdBh}}
+                  <time-range :data="range"></time-range>
+                </a-timeline-item>
+              </template>
+            </a-timeline>
+          </p>
+          <span slot="operation" slot-scope="text">
+            <a-button type="danger" @click="handleDeleteFace(text.machineId,text.faceID)">删除人脸信息</a-button>
+          </span>
+        </a-table>
       </div>
-      
-      <a-button type="primary" @click="pushMachineVisible = true">重新下发人脸</a-button>
-    
-      <a-table :columns="columns" :dataSource="face_machine" rowKey="mac">
-        <span
-          slot="effectbTime"
-          slot-scope="effectbTime"
-        >{{$moment(new Date(effectbTime*1000)).format('YYYY-MM-DD HH:mm:ss')}}</span>
-        <span
-          slot="effectTime"
-          slot-scope="effectTime"
-        >{{$moment(new Date(effectTime*1000)).format('YYYY-MM-DD HH:mm:ss')}}</span>
-        <span
-          slot="syncTime"
-          slot-scope="syncTime"
-        >{{$moment(new Date(syncTime*1000)).format('YYYY-MM-DD HH:mm:ss')}}</span>
-        <p slot="expandedRowRender" slot-scope="text" style="margin: 0">
-          <a-timeline>
-            <template v-for="range in text.timeRange">
-              <a-timeline-item
-                :key="`range-${range.id}`"
-                v-if="isInTimeRange(text.timeLimit,range.sjdBh)"
-              >
-                {{range.sjdBh}}
-                <time-range :data="range"></time-range>
-              </a-timeline-item>
-            </template>
-          </a-timeline>
-        </p>
-        <span slot="operation" slot-scope="text">
-          <a-button type="danger" @click="handleDeleteFace(text.machineId,text.faceID)">删除人脸信息</a-button>
-        </span>
-      </a-table>
-    </div>
-    <avatar-modal ref="modal" @ok="setavatar" />
-    <a-modal title="修改人脸信息" v-model="pushMachineVisible" @ok="handlePushFaceToMachine">
-      <div>开始时间：<a-date-picker v-model="EOD"></a-date-picker></div>
-      <div>结束时间：<a-date-picker v-model="TermDate"></a-date-picker></div>
-      <a-tree
-        checkable
-        @expand="onExpand"
-        :expandedKeys="expandedKeys"
-        :autoExpandParent="autoExpandParent"
-        v-model="checkedKeys"
-        @select="onSelect"
-        :selectedKeys="selectedKeys"
-        :treeData="treeData"
-      />
-    </a-modal>
+      <avatar-modal ref="modal" @ok="setavatar" />
+      <a-modal title="修改人脸信息" v-model="pushMachineVisible" @ok="handlePushFaceToMachine">
+        <div>
+          开始时间：
+          <a-date-picker v-model="EOD"></a-date-picker>
+        </div>
+        <div>
+          结束时间：
+          <a-date-picker v-model="TermDate"></a-date-picker>
+        </div>
+        <a-tree
+          checkable
+          @expand="onExpand"
+          :expandedKeys="expandedKeys"
+          :autoExpandParent="autoExpandParent"
+          v-model="checkedKeys"
+          @select="onSelect"
+          :selectedKeys="selectedKeys"
+          :treeData="treeData"
+        />
+      </a-modal>
     </a-spin>
   </div>
 </template>
@@ -88,14 +94,14 @@ export default {
     return {
       facePath: "",
       faceName: "",
-      faceId:"",
+      faceId: "",
       faceInfo: "",
       company: "",
       isEmpty: true,
       face_machine: [],
       machineData: [],
       confirmLoading: false,
-      loading:false,
+      loading: false,
       visible: false,
       preview: {},
       option: {
@@ -161,8 +167,8 @@ export default {
       selectedKeys: [],
       machineSelect: [],
       treeData: [],
-      EOD:null,
-      TermDate:null
+      EOD: null,
+      TermDate: null
     };
   },
   created() {
@@ -173,7 +179,7 @@ export default {
       deep: true,
       immediate: true,
       handler: function(val) {
-        this.handleSearchFace();
+        if (val != "") this.handleSearchFace();
       }
     }
   },
@@ -214,18 +220,17 @@ export default {
           }
         });
       }
-      pushFashToMachine(this.faceId,machine).then(res=>{
-        
-        this.pushMachineVisible = false
-      })
+      pushFashToMachine(this.faceId, machine).then(res => {
+        this.pushMachineVisible = false;
+      });
     },
     initData() {
       let params = {
         company: this.$ls.get("company").id
       };
-      this.loading = true
+      this.loading = true;
       getMachineList(params).then(res => {
-        this.loading = false
+        this.loading = false;
         this.machineData = res.data.data;
         this.machineSelect = this.machineData.map(ele => ele.id);
         this.treeData = this.machineData.map(machine => {
@@ -247,7 +252,6 @@ export default {
     },
     doSearchFace() {
       getFaceById(this.platformId).then(res => {
-        ;
         this.faceInfo = res.data;
         if (res.data.data) {
           this.isEmpty = false;
@@ -255,7 +259,7 @@ export default {
           this.option.img = this.facePath;
           // this.platformId = res.data.data.face.platformId;
           this.faceName = res.data.data.face.faceName;
-          this.faceId = res.data.data.face.id
+          this.faceId = res.data.data.face.id;
           this.company = res.data.data.face.company;
           this.face_machine = res.data.data.face_machine.map(machine => {
             machine.macName = this.getKeyByMac("name", machine.mac);
@@ -312,7 +316,7 @@ export default {
           faceName: _this.faceName,
           // faceName: "郑浩鹏",
           img: getRes.substr(getRes.indexOf(",") + 1),
-          wgCardNo:'',
+          wgCardNo: "",
           flag: 0,
           company: _this.company
         };
@@ -322,13 +326,10 @@ export default {
           face
         };
         updateFace(_this.platformId, updateData).then(res => {
-          ;
           _this.$message.success("修改成功");
-          _this.visible = false
-          
+          _this.visible = false;
         });
       };
-      console.log(url);
     },
     onSelect(selectedKeys, info) {
       console.log("onSelect", info);
@@ -345,10 +346,8 @@ export default {
       });
       return timeLimitList.join("");
     },
-    handleDeleteFace(machineId,faceID){
-      deleteFace(machineId,faceID).then(res=>{
-        
-      })
+    handleDeleteFace(machineId, faceID) {
+      deleteFace(machineId, faceID).then(res => {});
     }
   }
 };

@@ -674,7 +674,7 @@ export default {
 
           createEmployee(employee).then(res => {
             this.$message.success("添加成功！");
-            
+            this.form.resetFields()
             let machine = [];
             let machineMap = new Map();
             this.checkedKeys.forEach(obj => {

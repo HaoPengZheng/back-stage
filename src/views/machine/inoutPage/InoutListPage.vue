@@ -35,7 +35,7 @@
           <a-icon type="smile-o" />Name
         </span>
         <span slot="time" slot-scope="time">
-          {{$moment(new Date(time*1000)).format('YYYY-MM-DD HH:mm:ss')}}
+          {{$moment(new Date(time)).format('YYYY-MM-DD HH:mm:ss')}}
         </span>
       </a-table>
     </div>

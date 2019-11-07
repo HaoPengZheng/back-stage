@@ -85,8 +85,10 @@ export default {
   watch: {
     $route(val) {},
     id: {
-      handler: function() {
-        this.handleGetEmployeeInfo();
+      handler: function(val) {
+        if(val!=''){
+          this.handleGetEmployeeInfo();
+        }
       }
     }
   }
