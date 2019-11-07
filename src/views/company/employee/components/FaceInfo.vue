@@ -11,6 +11,7 @@
         </div>
         <img :src="option.img" style="max-height:180px" />
       </div>
+      
       <a-button type="primary" @click="pushMachineVisible = true">重新下发人脸</a-button>
       <a-table :columns="columns" :dataSource="face_machine" rowKey="mac">
         <span
@@ -44,7 +45,7 @@
       </a-table>
     </div>
     <avatar-modal ref="modal" @ok="setavatar" />
-    <a-modal title="Basic Modal" v-model="pushMachineVisible" @ok="handlePushFaceToMachine">
+    <a-modal title="修改人脸信息" v-model="pushMachineVisible" @ok="handlePushFaceToMachine">
       <div>开始时间：<a-date-picker v-model="EOD"></a-date-picker></div>
       <div>结束时间：<a-date-picker v-model="TermDate"></a-date-picker></div>
       <a-tree
@@ -209,7 +210,8 @@ export default {
         });
       }
       pushFashToMachine(this.faceId,machine).then(res=>{
-        console.log(res)
+        
+        this.pushMachineVisible = false
       })
     },
     initData() {
@@ -224,7 +226,6 @@ export default {
             title: machine.name,
             key: `machine-${machine.id}`,
             children: machine.timeRange.map(time => {
-              console.log(time);
               let disabled = time.state != 1;
               let title = disabled ? `${time.sjdName}(未同步)` : time.sjdName;
               return {
@@ -239,7 +240,7 @@ export default {
     },
     doSearchFace() {
       getFaceById(this.platformId).then(res => {
-        console.log(res);
+        ;
         this.faceInfo = res.data;
         if (res.data.data) {
           this.isEmpty = false;
@@ -314,7 +315,7 @@ export default {
           face
         };
         updateFace(_this.platformId, updateData).then(res => {
-          console.log(res);
+          ;
           _this.$message.success("修改成功");
           _this.visible = false
           
@@ -339,7 +340,7 @@ export default {
     },
     handleDeleteFace(machineId,faceID){
       deleteFace(machineId,faceID).then(res=>{
-        console.log(res)
+        
       })
     }
   }

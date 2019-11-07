@@ -67,12 +67,12 @@ export default {
      
       if(this.type == 'role'){
         updateStaff({title:this.Name},this.id).then(res=>{
-          console.log(res)
+          
            this.$emit('refresh')
         })
       }else{
          createStaff(data).then(res=>{
-          console.log(res)
+          
           this.$emit('refresh')
         })
       }

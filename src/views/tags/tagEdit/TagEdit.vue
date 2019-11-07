@@ -65,7 +65,7 @@ export default {
       });
       getTags().then(res => {
         this.tagOptions = res.data;
-        console.log(res);
+        ;
         console.log(this.tagOptions);
       });
     },

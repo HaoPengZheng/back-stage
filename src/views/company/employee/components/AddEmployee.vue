@@ -127,7 +127,7 @@
                   label="离职日期"
                   :required="true"
                 >
-                  <a-date-picker v-decorator="['TermDate', { rules: [{ required:true}]}]"></a-date-picker>
+                  <a-date-picker v-decorator="['TermDate', { rules: [{ required:false}]}]"></a-date-picker>
                 </a-form-item>
               </a-col>
               <a-col :span="10">
@@ -260,6 +260,9 @@ export default {
     };
   },
   watch: {
+    $route: function(newVal) {
+      this.initData()
+    },
     checkedKeys(val) {
       console.log("onCheck", val);
       let machineMap = new Map();
@@ -319,7 +322,6 @@ export default {
             title: machine.name,
             key: `machine-${machine.id}`,
             children: machine.timeRange.map(time => {
-              console.log(time);
               let disabled = time.state != 1;
               let title = disabled ? `${time.sjdName}(未同步)` : time.sjdName;
               return {
@@ -572,7 +574,7 @@ export default {
       addAttach(data)
         .then(res => {
           this.$message.success("上传成功");
-          console.log(res);
+          ;
           this.employeePictrue = res.data.data.file_url;
           console.log(res.data);
           console.log(this.employeePictrue);
@@ -619,7 +621,6 @@ export default {
         getBase64(info.file.originFileObj, imageUrl => {
           this.Base64JpgDisplay = imageUrl;
           this.employeePictrue = info.file.response.data.file_url;
-          console.log(this.employeePictrue);
           this.loading = false;
         });
       }
@@ -646,6 +647,10 @@ export default {
           // this.loadding = true;
 
           let role = values.role[values.role.length - 1].split("-")[1];
+          console.log(values.TermDate)
+          if(!values.TermDate){
+            values.TermDate = this.$moment(`${new Date().getFullYear()+100}-${new Date().getMonth()}-${new Date().getDate()}`)
+          }
           let employee = {
             realname: values.Name,
             sex: values.Sex,
@@ -669,7 +674,7 @@ export default {
 
           createEmployee(employee).then(res => {
             this.$message.success("添加成功！");
-            this.$emit('refresh')
+            
             let machine = [];
             let machineMap = new Map();
             this.checkedKeys.forEach(obj => {
@@ -713,8 +718,8 @@ export default {
             };
             appAddPerson(mechineData).then(res => {
               this.loadding = false;
+              this.$emit('refresh')
             });
-            // });
           });
         }
       });
@@ -745,8 +750,6 @@ export default {
 
     onExpand(expandedKeys) {
       console.log("onExpand", expandedKeys);
-      // if not set autoExpandParent to false, if children expanded, parent can not collapse.
-      // or, you can remove all expanded children keys.
       this.expandedKeys = expandedKeys;
       this.autoExpandParent = false;
     },

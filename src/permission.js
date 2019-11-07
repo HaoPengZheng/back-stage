@@ -22,7 +22,7 @@ router.beforeEach((to, from, next) => {
   if (token) {
     if (company) {
       getUserInfo().then(res => {
-        console.log(res)
+        
       })
       // has token
       // todo 如果未选公司的,跳到选择公司
@@ -68,7 +68,7 @@ router.beforeEach((to, from, next) => {
         next('/dashboard/statistics')
       } else {
         console.log(company)
-        next({ name: 'company-choose' })
+        // next({ name: 'company-choose' })
       }
 
     } else {

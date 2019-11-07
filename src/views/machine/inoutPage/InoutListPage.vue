@@ -167,6 +167,9 @@ export default {
           this.$message.error(res.data.msg);
         } else {
           this.tableData = res.data.data.list;
+          if(this.tableData.length == 0){
+            this.$message.success('暂无数据')
+          }
           this.$set(this.pagination, "total", res.data.data.total);
         }
       });

@@ -901,7 +901,7 @@ export default {
         attachId = file.attach_id;
       }
       deleteAttach(attachId).then(res => {
-        console.log(res);
+        ;
       });
     },
     handleChange(info) {
@@ -1031,7 +1031,7 @@ export default {
         if (!id) {
           //还没有这个标签
           addTag({ tag_name: inputValue }).then(res => {
-            console.log(res);
+            ;
           });
         }
         this.$store.commit("SET_FORM", {

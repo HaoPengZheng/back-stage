@@ -350,7 +350,7 @@ export default {
       data.append("xq6", 1);
       data.append("xq7", 1);
       addTimeQuantum(data).then(res => {
-        console.log(res);
+        ;
         this.initData();
         this.$message.success("添加成功");
         this.addTimeVisible = false;
@@ -363,7 +363,7 @@ export default {
       let id = '440582199704036138'
       console.log(id)
       getFaceById(id).then(res=>{
-        console.log(res)
+        
       })
     }
   }

@@ -21,7 +21,7 @@ export default {
                 limit:20
             }
             getUserList(params).then(res=>{
-                console.log(res)
+                
             })
         }
     }

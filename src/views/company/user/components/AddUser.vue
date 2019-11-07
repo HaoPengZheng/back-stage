@@ -246,7 +246,7 @@ export default {
           }
           console.log(userModel)
           addUser(userModel).then(res=>{
-            console.log(res)
+            
           })
         }
       });

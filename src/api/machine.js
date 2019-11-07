@@ -1,9 +1,9 @@
 import request from '@/utils/request'
-import { ZULL, USER_BASE_URL } from '../constant'
+import { ZUUL, USER_BASE_URL } from '../constant'
 
 export function addMachine(data) {
     return request({
-        url: `${ZULL}/faceMachine/api/v1/machines`,
+        url: `${ZUUL}/faceMachine/api/v1/machines`,
         method: 'POST',
         data
     })
@@ -11,7 +11,7 @@ export function addMachine(data) {
 
 export function getMachineList(params) {
     return request({
-        url: `${ZULL}/faceMachine/api/v1/machines`,
+        url: `${ZUUL}/faceMachine/api/v1/machines`,
         method: 'get',
         params
     })
@@ -19,20 +19,20 @@ export function getMachineList(params) {
 
 export function deleteMachine(id) {
     return request({
-        url: `${ZULL}/faceMachine/api/v1/machines/${id}`,
+        url: `${ZUUL}/faceMachine/api/v1/machines/${id}`,
         method: 'Delete'
     })
 }
 export function getMachineOnline() {
     return request({
-        url: `${ZULL}/faceMachine/api/v1/machines/online`,
+        url: `${ZUUL}/faceMachine/api/v1/machines/online`,
         method: 'POST',
     })
 }
 
 export function appAddPerson(data) {
     return request({
-        url: `${ZULL}/faceMachine/api/v1/faces/appAddPerson`,
+        url: `${ZUUL}/faceMachine/api/v1/faces/appAddPerson`,
         method: 'POST',
         data
     })
@@ -42,7 +42,7 @@ export function appAddPerson(data) {
 // 添加时间段
 export function addTimeQuantum(data) {
     return request({
-        url: `${ZULL}/faceMachine/api/v1/machines/sjd`,
+        url: `${ZUUL}/faceMachine/api/v1/machines/sjd`,
         method: 'POST',
         data
     })
@@ -50,14 +50,14 @@ export function addTimeQuantum(data) {
 
 export function deleteTimeQuantum(mac) {
     return request({
-        url: `${ZULL}/faceMachine/api/v1/machines/sjd/${mac}`,
+        url: `${ZUUL}/faceMachine/api/v1/machines/sjd/${mac}`,
         method: 'DELETE'
     })
 }
 
 export function machinesLogList(params) {
     return request({
-        url: `${ZULL}/faceMachine/api/v1/logs/list`,
+        url: `${ZUUL}/faceMachine/api/v1/logs/list`,
         method: 'GET',
         params
     })
@@ -65,7 +65,7 @@ export function machinesLogList(params) {
 
 // export function getFace(wgCard,data){
 //     return request({
-//         url:`${ZULL}/faceMachine/api/v1/faces/${wgCard}`,
+//         url:`${ZUUL}/faceMachine/api/v1/faces/${wgCard}`,
 //         method:'PUT',
 //         data
 //     })
@@ -73,7 +73,7 @@ export function machinesLogList(params) {
 
 export function updateFace(wgCard, data) {
     return request({
-        url: `${ZULL}/faceMachine/api/v1/faces/${wgCard}`,
+        url: `${ZUUL}/faceMachine/api/v1/faces/${wgCard}`,
         method: 'PUT',
         data,
         headers: {
@@ -84,14 +84,14 @@ export function updateFace(wgCard, data) {
 
 export function deleteFace(machineId, faceId) {
     return request({
-        url: `${ZULL}/faceMachine/api/v1/machines/${machineId}/faces/${faceId}`,
+        url: `${ZUUL}/faceMachine/api/v1/machines/${machineId}/faces/${faceId}`,
         method: 'Delete',
     })
 }
 
 export function deleteFaceByMac(data) {
     return request({
-        url: `${ZULL}/faceMachine/api/v1/faces/machines`,
+        url: `${ZUUL}/faceMachine/api/v1/faces/machines`,
         method: 'DELETE',
     })
 }
@@ -99,7 +99,7 @@ export function deleteFaceByMac(data) {
 
 export function inoutFaceList(params) {
     return request({
-        url: `${ZULL}/faceMachine/api/v1/logs/list?page=1&limit=11&sort=desc&platformId=440582199704036138&startTime=2019-01-01 00:00:00&endTime=2020-01-01 00:00:00`,
+        url: `${ZUUL}/faceMachine/api/v1/logs/list?page=1&limit=11&sort=desc&platformId=440582199704036138&startTime=2019-01-01 00:00:00&endTime=2020-01-01 00:00:00`,
         method: 'GET',
         params
     })
@@ -107,14 +107,14 @@ export function inoutFaceList(params) {
 
 // export function machinesLogList(){
 //     return request({
-//         url:`${ZULL}/faceMachine/api/v1/logs/test`,
+//         url:`${ZUUL}/faceMachine/api/v1/logs/test`,
 //         method:'GET',
 
 //     })
 // }
 export function getFaceById(id) {
     return request({
-        url: `${ZULL}/faceMachine/api/v1/faces/${id}`,
+        url: `${ZUUL}/faceMachine/api/v1/faces/${id}`,
         method: 'GET'
     })
 }
@@ -122,7 +122,7 @@ export function getFaceById(id) {
 //根据faceid发放人脸到机子
 export function pushFashToMachine(id, data) {
     return request({
-        url: `${ZULL}/faceMachine/api/v1/faces/${id}/machines`,
+        url: `${ZUUL}/faceMachine/api/v1/faces/${id}/machines`,
         method: 'POST',
         data: JSON.stringify(data),
         headers: {

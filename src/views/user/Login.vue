@@ -172,7 +172,7 @@ export default {
     //获取图片验证码（已启用）
     getCaptch() {
       captchas().then(res => {
-        console.log(res);
+        ;
         this.captchaImg = res.data.captcha_image_content;
         this.captchaKey = res.data.captchaKey;
       });
@@ -200,7 +200,7 @@ export default {
               if (res.data) {
                 let token = `${res.data.token_type} ${res.data.access_token}`;
                 let expires_in = res.data.expires_in;
-                console.log(res);
+                ;
                 
                 let permissions = res.data.data;
                 this.$store.commit("SET_TOKEN", token);

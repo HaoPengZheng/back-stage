@@ -58,7 +58,7 @@ export default {
     handleGetEmployeeInfo() {
       this.isLoadding = true;
       getEmployee(this.id).then(res => {
-        console.log(res);
+        ;
         this.isLoadding = false;
         this.baseInfo.Name = res.data.authorization.name;
         this.baseInfo.Sex = res.data.sex;

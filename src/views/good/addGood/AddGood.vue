@@ -63,7 +63,7 @@ export default {
         this.$store.commit("SET_FORM", {
           loadding: false
         });
-        console.log(res);
+        ;
         let goodDetail = res.data.data;
         this.handlerGoodHtml(goodDetail.attachs,goodDetail.domain)
         this.$store.commit("SET_FORM", {

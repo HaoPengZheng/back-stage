@@ -112,7 +112,6 @@ export default {
   methods: {
     confirmDelete (typeId) {
       deleteRoomTypesById(typeId).then(res=>{
-        console.log(res)
         this.$message.success(res.data.message)
         this.initData();
       })

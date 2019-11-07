@@ -76,7 +76,7 @@ export default {
       updateGoodDesc(this.goodId,{
         desc:this.msg
       }).then(res=>{
-        console.log(res)
+        
       })
     }
   }

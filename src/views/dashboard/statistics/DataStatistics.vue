@@ -30,7 +30,7 @@ export default {
   },
   created() {
     getUserInfo().then(res=>{
-      console.log(res)
+      
     })
   }
 };

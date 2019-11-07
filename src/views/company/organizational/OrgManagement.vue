@@ -22,7 +22,7 @@ export default {
   },
   created() {
     getInstitutions().then(res => {
-      console.log(res);
+      ;
     });
   }
 };

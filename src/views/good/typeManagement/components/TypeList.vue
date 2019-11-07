@@ -241,7 +241,7 @@ export default {
           image_id: this.image_id
         };
         addGoodType(data).then(res => {
-          console.log(res);
+          ;
           this.$message.success("添加成功");
           this.initData();
           this.newGoodTypeDrawerVisible = false;

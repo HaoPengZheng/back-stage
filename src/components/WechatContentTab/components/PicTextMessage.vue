@@ -69,7 +69,7 @@ export default {
     }
   },
   created() {
-    console.log(this.data);
+
   },
   methods: {
     changeSecondLevelToTime(time) {
@@ -80,7 +80,7 @@ export default {
   watch: {
     data: {
       handler: function(val) {
-        console.log(val);
+
       }
     }
   }

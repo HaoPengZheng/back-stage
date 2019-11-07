@@ -77,7 +77,7 @@ export default {
   created() {
     this.init();
     getInstitutionsAuthorization().then(res=>{
-      console.log(res)
+      
     })
   },
   methods: {

@@ -176,7 +176,7 @@ export default {
       console.log(media_id);
       let id = 3;
       getMaterial(id, mediaList).then(res => {
-        console.log(res);
+        ;
         this.preview = res.data[0].news_contents[0].content;
         this.settingData = {
           type: "media",

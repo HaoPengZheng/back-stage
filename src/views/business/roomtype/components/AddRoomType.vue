@@ -66,7 +66,6 @@ export default {
   methods: {
     initInstitutions(){
         getInstitutions().then(res=>{
-            console.log(res)
             this.institutions = res.data.data
         })
     },
@@ -82,7 +81,6 @@ export default {
           let shop_id = values.shop_id
           
           addRoomTypes(data,shop_id).then(res=>{
-              console.log(res)
               this.$message.success('添加成功')
           })
         }

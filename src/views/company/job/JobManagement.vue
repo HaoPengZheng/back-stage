@@ -3,7 +3,12 @@
     <a-row>
       <a-col :span="4">
         <div>
-          <a-input-search style="margin-bottom: 8px" v-model="searchValue" placeholder="Search" @change="onChange" />
+          <a-input-search
+            style="margin-bottom: 8px"
+            v-model="searchValue"
+            placeholder="Search"
+            @change="onChange"
+          />
           <a-tree
             @expand="onExpand"
             @select="onSelect"
@@ -107,10 +112,10 @@ export default {
           title: institution.name,
           slots: {
             icon: "institution",
-            title:"title"
+            title: "title"
           },
-          scopedSlots:{
-            title:'title'
+          scopedSlots: {
+            title: "title"
           },
           children: this.generateData(institution.children.data).concat(
             this.generateRole(institution.positions.data)
@@ -125,10 +130,10 @@ export default {
           title: role.title,
           slots: {
             icon: "zhiwei",
-            title:"title"
+            title: "title"
           },
-          scopedSlots:{
-            title:'title'
+          scopedSlots: {
+            title: "title"
           }
         };
       });
@@ -139,7 +144,7 @@ export default {
     },
     onChange(e) {
       const value = e.target.value;
-      this.searchValue = value
+      this.searchValue = value;
       const expandedKeys = this.dataList
         .map(item => {
           if (item.title.indexOf(value) > -1) {
@@ -154,14 +159,14 @@ export default {
         autoExpandParent: true
       });
     },
-    findTitleByKey(key){
-      let title
-      this.dataList.forEach(ele=>{
-        if(ele.key == key){
-          title=ele.title
+    findTitleByKey(key) {
+      let title;
+      this.dataList.forEach(ele => {
+        if (ele.key == key) {
+          title = ele.title;
         }
-      })
-      return title
+      });
+      return title;
     },
     onSelect(value, e) {
       let map = value[0].split("-");
@@ -170,6 +175,11 @@ export default {
       this.selectId = map[1];
     },
     refresh() {
+      this.init();
+    }
+  },
+  watch: {
+    $route: function(newVal) {
       this.init();
     }
   }
