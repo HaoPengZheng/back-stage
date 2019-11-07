@@ -1,7 +1,9 @@
 <template>
   <div>
     <a-empty v-show="isEmpty" />
+    <a-spin :spinning="loading">
     <div v-show="!isEmpty">
+      <a-alert message="如果有修改人脸需要重新下发才生效" banner />
       <div>平台号：{{platformId}}</div>
       <div>{{faceName}}</div>
       <div class="ant-upload-preview" @click="$refs.modal.edit(1)">
@@ -13,6 +15,7 @@
       </div>
       
       <a-button type="primary" @click="pushMachineVisible = true">重新下发人脸</a-button>
+    
       <a-table :columns="columns" :dataSource="face_machine" rowKey="mac">
         <span
           slot="effectbTime"
@@ -59,6 +62,7 @@
         :treeData="treeData"
       />
     </a-modal>
+    </a-spin>
   </div>
 </template>
 
@@ -91,6 +95,7 @@ export default {
       face_machine: [],
       machineData: [],
       confirmLoading: false,
+      loading:false,
       visible: false,
       preview: {},
       option: {
@@ -218,7 +223,9 @@ export default {
       let params = {
         company: this.$ls.get("company").id
       };
+      this.loading = true
       getMachineList(params).then(res => {
+        this.loading = false
         this.machineData = res.data.data;
         this.machineSelect = this.machineData.map(ele => ele.id);
         this.treeData = this.machineData.map(machine => {

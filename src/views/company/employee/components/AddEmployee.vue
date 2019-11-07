@@ -34,9 +34,9 @@
                   <a-radio-group
                     v-decorator="['Sex', { rules: [{ required: true, message: '性别是必须要填的!'}]}]"
                   >
-                    <a-radio :value="0">未知</a-radio>
+                    <a-radio :value="2">未知</a-radio>
                     <a-radio :value="1">男</a-radio>
-                    <a-radio :value="2">女</a-radio>
+                    <a-radio :value="0">女</a-radio>
                   </a-radio-group>
                 </a-form-item>
                 <a-form-item :label-col="{ span: 3 }" :wrapper-col="{ span: 16 }" :label="`身份证号码`">
