@@ -99,9 +99,9 @@
         >
           <a-button type="danger" style="margin-left:8px">删除时间段</a-button>
         </a-popconfirm>
-         <!-- <a-button type="danger" style="margin-left:8px" @click="handleSearchFace">查看设备人脸</a-button> -->
+        <!-- <a-button type="danger" style="margin-left:8px" @click="handleSearchFace">查看设备人脸</a-button> -->
       </span>
-      <p slot="expandedRowRender" slot-scope="text,record" style="margin: 0">
+      <p slot="expandedRowRender" slot-scope="text" style="margin: 0">
         <a-timeline>
           <a-timeline-item :key="`range-${range.id}`" v-for="range in text.timeRange">
             <time-range :data="range"></time-range>
@@ -198,7 +198,7 @@ import {
   getFaceById
 } from "@/api/machine";
 import TimeRange from "./components/TimeRange";
-import { inoutFaceList,machinesLogList } from "@/api/machine";
+import { inoutFaceList, machinesLogList } from "@/api/machine";
 export default {
   components: {
     TimeRange
@@ -225,7 +225,7 @@ export default {
     };
   },
   created() {
-    this.dayCheckedList = this.dayOptions
+    this.dayCheckedList = this.dayOptions;
     this.initData();
   },
   filters: {
@@ -234,6 +234,11 @@ export default {
     },
     statusTypeFilter(type) {
       return statusMap[type].status;
+    }
+  },
+  watch: {
+    $route: function(newVal) {
+      this.initData();
     }
   },
   methods: {
@@ -305,7 +310,7 @@ export default {
       deleteTimeQuantum(record.mac)
         .then(res => {
           this.$message.success("删除成功");
-          this.initData()
+          this.initData();
         })
         .catch(err => {
           console.log(err);
@@ -350,7 +355,6 @@ export default {
       data.append("xq6", 1);
       data.append("xq7", 1);
       addTimeQuantum(data).then(res => {
-        ;
         this.initData();
         this.$message.success("添加成功");
         this.addTimeVisible = false;
@@ -359,12 +363,10 @@ export default {
     cancel(e) {
       this.$message.error("Click on No");
     },
-    handleSearchFace(){
-      let id = '440582199704036138'
-      console.log(id)
-      getFaceById(id).then(res=>{
-        
-      })
+    handleSearchFace() {
+      let id = "440582199704036138";
+      console.log(id);
+      getFaceById(id).then(res => {});
     }
   }
 };

@@ -217,6 +217,7 @@ export default {
       }
     },
     refresh() {
+      this.activeUserId = ''
       this.init();
     }
   }
