@@ -187,9 +187,9 @@ export const asyncRouterMap = [
         path: '/wechat',
         name: 'wechat',
         redirect: '/wechat/AutoResponse',
-        meta: {
+        meta: { 
           title: '微信设置', icon: 'wechat',
-          // permission: ['wechat'] 
+          // permission: ['company'] 
         },
         component: RouteView,
         children: [

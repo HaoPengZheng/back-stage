@@ -2,7 +2,9 @@
   <div class="content-warp">
     <a-row>
       <a-col :span="4">
-        <div>
+        <div
+          style="max-height:70vh;overflow:auto;border-right:2px solid #e8e8e8;padding-right:5px;"
+        >
           <a-input-search
             style="margin-bottom: 8px"
             v-model="searchValue"
@@ -188,7 +190,6 @@ export default {
 <style scoped>
 .employee-profile-warp {
   margin-left: 15px;
-  border-left: 2px solid #e8e8e8;
   padding-left: 15px;
   min-height: 600px;
 }

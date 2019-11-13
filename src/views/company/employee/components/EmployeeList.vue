@@ -1,7 +1,7 @@
 <template>
   <a-row>
     <a-col :span="6">
-       <div>
+       <div style="max-height:70vh;overflow:auto;border-right:2px solid #e8e8e8;padding-right:5px;">
           <a-input-search style="margin-bottom: 8px" v-model="searchValue" placeholder="Search" @change="onChange" />
           <a-tree
             @expand="onExpand"
@@ -226,7 +226,6 @@ export default {
 <style scoped>
 .employee-profile-warp{
   margin-left: 15px;
-  border-left:2px solid #e8e8e8;
   padding-left: 15px;
 
 }

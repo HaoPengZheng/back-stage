@@ -73,7 +73,7 @@ export default {
     })
   },
   created() {
-    console.log(this.isMobile());
+
   },
   methods: {
     ...mapActions(["setSidebar"]),
@@ -86,7 +86,6 @@ export default {
   },
   watch: {
     sidebar(val) {
-      console.log(val);
       this.collapsed = val;
     }
   }

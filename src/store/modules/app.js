@@ -1,6 +1,7 @@
 // import Vue from 'vue'
 import router from '@/router'
 import {resetRouter} from '@/router'
+import Vue from 'vue'
 const app = {
   state: {
     sidebar: true,//左边菜单
@@ -9,6 +10,8 @@ const app = {
     company:null,//公司ID
     companyName:'',//公司姓名
     shop:'',//店Id
+    isShowPermissionDialog:false,//无权提示框
+    isPageLoadding:false
     // theme: '',
     // layout: '',
     // contentWidth: '',
@@ -24,6 +27,8 @@ const app = {
     getToken: state => state.token,
     getCompany:state=>state.company,
     getShop:state=>state.shop,
+    getIsShowPermissionDialog:state=>state.isShowPermissionDialog,
+    getIsPageLoadding:state=>state.isPageLoadding
   },
   mutations: {
     SET_SIDEBAR_TYPE: (state, type) => {
@@ -43,7 +48,14 @@ const app = {
     },
     SET_SHOP:(state,shopId) =>{
       state.shopId = shopId
+    },
+    SET_IS_SHOW_PERMISSION_DIALOG:(state,isShowPermissionDialog)=>{
+      state.isShowPermissionDialog = isShowPermissionDialog
+    },
+    SET_IS_PAGE_LOADDING:(state,isPageLoadding)=>{
+      state.isPageLoadding = isPageLoadding
     }
+
   },
   actions: {
     setSidebar ({ commit }, type) {
@@ -66,7 +78,8 @@ const app = {
       })
     },
     logout(){
-      router.push('login')
+      Vue.ls.clear()
+      router.push('/login')
     },
     
   }

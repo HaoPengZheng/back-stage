@@ -1043,9 +1043,9 @@ export default {
     },
 
     initTagData: async function() {
-      await getTags().then(res => {
-        this.tagSet = res.data.data;
-      });
+      // await getTags().then(res => {
+      //   this.tagSet = res.data.data;
+      // });
     },
 
     addLightspot() {

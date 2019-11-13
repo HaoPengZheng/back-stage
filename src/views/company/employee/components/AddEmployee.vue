@@ -66,7 +66,7 @@
                 <a-form-item :label-col="{ span: 3 }" :wrapper-col="{ span: 16 }" label="职位">
                   <a-cascader
                     :options="roleOptions"
-                    placeholder="Please select"
+                    placeholder="没有职位的部门将选择不了"
                     v-decorator="['role', { rules: [{ required: true, message: '职位是必须要填的!'}]}]"
                   />
                 </a-form-item>
@@ -125,7 +125,7 @@
                   :label-col="{ span: 3 }"
                   :wrapper-col="{ span: 16 }"
                   label="离职日期"
-                  :required="true"
+                  :required="false"
                 >
                   <a-date-picker v-decorator="['TermDate', { rules: [{ required:false}]}]"></a-date-picker>
                 </a-form-item>
@@ -342,9 +342,12 @@ export default {
         return [];
       }
       return data.map(institution => {
+        let isDisable = false
+        if(institution.positions.data.length==0&&institution.children.data.length==0){isDisable = true}
         return {
           value: "institution-" + institution.id,
           label: institution.name,
+          disabled:isDisable,
           slots: {
             icon: "institution"
           },
@@ -571,16 +574,16 @@ export default {
         "file",
         this.dataURLtoFile(this.Base64JpgDisplay, pCardNo + ".jpg")
       );
+      this.loadding = true
       addAttach(data)
         .then(res => {
+          this.loadding=false
           this.$message.success("上传成功");
-          ;
           this.employeePictrue = res.data.data.file_url;
-          console.log(res.data);
-          console.log(this.employeePictrue);
+
         })
         .catch(err => {
-          this.$message.error("上传失败");
+          this.$message.error("上传失败,请联系管理员");
         });
 
       CertCtl.Base64Data2File(

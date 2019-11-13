@@ -12,6 +12,8 @@ const service = axios.create({
 })
 
 service.interceptors.request.use(config => {
+  //loadding
+  store.commit('SET_IS_PAGE_LOADDING', true)
   let token = Vue.ls.get('Access-Token')
   if (token) {
     const TIME_OFFSET = 0.1
@@ -33,14 +35,14 @@ service.interceptors.request.use(config => {
 
   if (!config.headers.hasOwnProperty('company')) {
     let company = Vue.ls.get('company')
-    if(company){
-      config.headers['company'] =  company.id
+    if (company) {
+      config.headers['company'] = company.id
     }
     // config.headers['company'] = 1
   }
   if (!config.headers.hasOwnProperty('shop')) {
     let shop = Vue.ls.get('shop')
-    if(shop){
+    if (shop) {
       config.headers['shop'] = store.getters.getShop
     }
   }
@@ -52,24 +54,32 @@ service.interceptors.request.use(config => {
 
 service.interceptors.response.use(
   response => {
+    //loadding
+    store.commit('SET_IS_PAGE_LOADDING', false)
     return response
   },
   error => {
+    //loadding
+    store.commit('SET_IS_PAGE_LOADDING', false)
     let msg = ''
     try {
 
       msg = error.response.data.message
-     
-      if(error.response.status === 401){
-        Vue.prototype.$confirm({
-          title: '错误信息',
-          content: '您的登录凭证已失效，是否重新登录？',
-          okText: '确认',
-          cancelText: '取消',
-          onOk(){
-            store.dispatch('logout')
-          },
-        });
+      console.log(store.getters.getIsShowPermissionDialog)
+      if (error.response.status === 401) {
+        if (!store.getters.getIsShowPermissionDialog) {
+          store.commit('SET_IS_SHOW_PERMISSION_DIALOG', true)
+          Vue.prototype.$confirm({
+            title: '错误信息',
+            content: '您的登录凭证已失效，是否重新登录？',
+            okText: '确认',
+            onOk() {
+              store.commit('SET_IS_SHOW_PERMISSION_DIALOG', false)
+              store.dispatch('logout')
+            },
+          });
+        }
+
       }
     } catch (e) {
       msg = error.message

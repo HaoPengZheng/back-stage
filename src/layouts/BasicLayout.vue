@@ -1,5 +1,6 @@
 <template>
   <a-layout class="layout" id="layout">
+    <a-spin :spinning="isPageLoadding" tip="数据加载中,请稍后..." :delay="200">
     <a-layout id="components-layout-demo-custom-trigger">
       <a-drawer
         v-if="isMobile()"
@@ -40,6 +41,7 @@
         </a-layout-footer>
       </a-layout>
     </a-layout>
+    </a-spin>
   </a-layout>
 </template>
 <script>
@@ -69,11 +71,12 @@ export default {
   },
   computed: {
     ...mapState({
-      sidebar: state => state.app.sidebar
+      sidebar: state => state.app.sidebar,
+      isPageLoadding:state => state.app.isPageLoadding
     })
   },
   created() {
-    console.log(this.isMobile());
+    
   },
   methods: {
     ...mapActions(["setSidebar"]),
@@ -86,7 +89,6 @@ export default {
   },
   watch: {
     sidebar(val) {
-      console.log(val);
       this.collapsed = val;
     }
   }

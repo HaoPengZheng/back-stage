@@ -102,8 +102,8 @@
           <a-tag color="#f50">2019大假期</a-tag>
           <div style="float:right">{{value.format('YYYY-MM-DD')}}</div>
           <div>
-            <a-input addonBefore="价格：" style="margin:3px 0" size="small"></a-input>
-            <a-input addonBefore="库存：" style="margin:2px 0" size="small"></a-input>
+            <a-input addonBefore="价格：" style="margin:3px 0" size="small" :disabled="isDisable(value)"></a-input>
+            <a-input addonBefore="库存：" style="margin:2px 0" size="small" :disabled="isDisable(value)"></a-input>
           </div>
         </div>
         <template slot="monthCellRender" slot-scope="value">
@@ -346,6 +346,9 @@ export default {
         currentClass.weekend = true;
       }
       return currentClass;
+    },
+    isDisable(value){
+      return value < this.$moment();
     }
   }
 };
