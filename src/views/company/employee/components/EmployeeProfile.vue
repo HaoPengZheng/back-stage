@@ -1,6 +1,6 @@
 <template>
   <div class="page-header-index-wide">
-    <a-spin :delay="500" :spinning="isLoadding">
+    <!-- <a-spin :delay="500" :spinning="isLoadding"> -->
       <a-tabs type="card">
         <a-tab-pane tab="基本设置" key="1">
           <base-setting :baseInfo="baseInfo" :id="id" @refresh="refresh"></base-setting>
@@ -13,7 +13,7 @@
         </a-tab-pane>
         <a-tab-pane tab key="4">Content of Tab Pane 3</a-tab-pane>
       </a-tabs>
-    </a-spin>
+    <!-- </a-spin> -->
   </div>
 </template>
 
@@ -56,10 +56,10 @@ export default {
   created() {},
   methods: {
     handleGetEmployeeInfo() {
-      this.isLoadding = true;
+      // this.isLoadding = true;
       getEmployee(this.id).then(res => {
         ;
-        this.isLoadding = false;
+        // this.isLoadding = false;
         this.baseInfo.Name = res.data.authorization.name;
         this.baseInfo.Sex = res.data.sex;
         this.baseInfo.account = res.data.account;

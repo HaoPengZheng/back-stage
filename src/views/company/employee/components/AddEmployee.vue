@@ -1,5 +1,5 @@
 <template>
-  <a-spin :spinning="loadding">
+  <!-- <a-spin :spinning="loadding"> -->
     <div>
       <object type="application/cert-reader" id="CertCtl" width="0" height="0">找不到控件</object>
       <div class="idCardReader-control">
@@ -199,7 +199,7 @@
         </div>
       </a-form>
     </div>
-  </a-spin>
+  <!-- </a-spin> -->
 </template>
 
 <script>
