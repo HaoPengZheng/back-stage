@@ -404,7 +404,7 @@ export default {
       if (ret.status != null) this.status = ret.status;
       else this.status = "";
       this.Base64JpgDisplay =
-        "data:image/jpg;base64," + ret.resultContent.identityPic;
+        "data:image/jpg;base64," + ret.resultContent.identityPic;  
       // document.all["Base64JpgDisplay"].src =
       //   "data:image/jpg;base64," + ret.resultContent.identityPic;
       CertCtl.Base64Data2File(
@@ -452,8 +452,8 @@ export default {
     },
 
     beforeUpload(file) {
-      const isJPG = file.type === "image/jpeg";
-      const isPNG = file.type === "image/png";
+      // const isJPG = file.type === "image/jpeg";
+      // const isPNG = file.type === "image/png";
       const isImage = file.type.indexOf('image')>-1
       if (!isImage) {
         this.$message.error("You can only upload image file!");

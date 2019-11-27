@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <title>幸运抽奖盘</title>
+    <script type="text/javascript"
+        src="http://test.00800.com.cn/data/upload/lottery/template/static/jquery.min.js"></script>
+    <script type="text/javascript"
+        src="http://test.00800.com.cn/data/upload/lottery/template/static/awardRotate.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css"
+        integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"
+        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+        crossorigin="anonymous"></script>
+    <style>
+        body {
+            min-height: 100vh;
+            background: #be1e3c;
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+
+        .container {
+            margin: 0 auto;
+        }
+
+        .content {
+            position: absolute;
+            top: 0;
+            /*z-index: 2;*/
+            width: 100%;
+            margin: 0px auto;
+            margin-top: 65%;
+        }
+
+        body,
+        ul,
+        ol,
+        li,
+        p,
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+        form,
+        fieldset,
+        table,
+        td,
+        img,
+        div {
+            margin: 0;
+            padding: 0;
+            border: 0;
+        }
+
+        /*body{color:#333; font-size:12px;font-family:"Microsoft YaHei"}*/
+        ul,
+        ol {
+            list-style-type: none;
+        }
+
+        select,
+        input,
+        img,
+        select {
+            vertical-align: middle;
+        }
+
+        input {
+            font-size: 12px;
+        }
+
+        .clear {
+            clear: both;
+        }
+
+        /* 大转盘样式 */
+        /*.banner{width:85%;margin-left:auto;margin-right:auto;margin-bottom: 20px;display: flex;justify-content: center;align-items: center;height:100vh;position: relative}*/
+        .banner {
+            width: 85%;
+            margin-left: auto;
+            margin-right: auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative
+        }
+
+        .banner .turnplate {
+            display: block;
+            width: 100%;
+            position: relative;
+        }
+
+        .banner .turnplate canvas.item {
+            width: 100%;
+        }
+
+        .banner .turnplate img.pointer {
+            position: absolute;
+            width: 34%;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -63%);
+        }
+
+        #sbtn {
+            position: absolute;
+            top: 0;
+            z-index: 1;
+            text-align: center;
+            width: 100%;
+            margin-top: 105%;
+        }
+
+        #sbtn img {
+            width: 24%;
+            margin: 0 20px;
+        }
+
+        .modal_warp {
+            display: none;
+        }
+    </style>
+    <style>
+        .modal-body {
+            padding: 0
+        }
+
+        ::-webkit-scrollbar {
+            display: none;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 640px;
+            margin: 0 auto;
+            color: #ddd;
+            font-size: 14px;
+        }
+
+        .header {
+            position: fixed;
+            top: 0;
+            z-index: 100;
+            width: 100%;
+            max-width: 640px;
+            height: 45px;
+            line-height: 45px;
+            font-size: 16px;
+            text-align: center;
+        }
+
+        .header .link-back {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 45px;
+            height: 45px;
+            background: url('__APP__/image/icon_back.png') no-repeat center center;
+            background-size: 20px;
+        }
+
+        .main {
+            border-top: 1px solid transparent;
+        }
+
+
+        .user-input {
+            display: table;
+            width: calc(100% - 20px);
+            margin: 20px 10px;
+            padding: 0;
+            border-radius: 5px;
+            overflow: hidden;
+            list-style: none;
+            box-sizing: border-box;
+            /*box-shadow: 1px 2px 2px 1px #999; */
+        }
+
+        .user-input .inp {
+            width: 100%;
+            height: 45px;
+            padding: 0 10px;
+            margin: 0;
+            border: none;
+            background: none;
+            color: #000;
+            border: 1px solid #ddd;
+            box-sizing: border-box;
+            font-size: 14px;
+            vertical-align: top;
+        }
+
+        .user-input li {
+            display: block;
+            margin: 10px 0;
+            height: 45px;
+        }
+
+        .user-input li .left {
+            display: table-cell;
+            width: 80px;
+            text-align: center;
+            vertical-align: middle;
+            font-size: 14px;
+            background: #eee;
+        }
+
+        .user-input li .right {
+            display: table-cell;
+            width: calc(100% - 80px);
+            vertical-align: middle;
+            font-size: 0;
+        }
+
+
+        .user-input .area-code {
+            width: 80px;
+        }
+
+        .user-input .inp-phone {
+            width: calc(100% - 80px);
+        }
+
+        .user-input .inp-verify {
+            width: calc(100% - 120px);
+        }
+
+        .user-input .btn-verify {
+            display: inline-block;
+            width: 120px;
+            height: 45px;
+            line-height: 36px;
+            background: #d33a3d;
+            text-align: center;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        .user-input .txt {
+            display: inline-block;
+            height: 45px;
+            line-height: 45px;
+            padding: 0 10px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+
+        .user-input .txt-phone {
+            width: calc(100% - 80px);
+        }
+
+        .actions {
+            position: fixed;
+            bottom: 0px;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            width: calc(100% - 20px);
+            max-width: calc(640px - 20px);
+            margin: 10px;
+            border-radius: 23px;
+            overflow: hidden;
+        }
+
+        .actions .btn {
+            height: 40px;
+            line-height: 40px;
+            text-align: center;
+            background: #d33a3d;
+            color: #fff;
+            font-size: 14px;
+            text-align: center;
+            box-sizing: border-box;
+            cursor: pointer;
+        }
+
+        .actions .btn-activate {
+            width: 100%;
+        }
+
+        .actions .btn-green {
+            background: #62c462;
+        }
+
+        .actions .btn-blue {
+            background: #007DDB;
+        }
+
+        .share-mask {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 110;
+            width: 100%;
+            height: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+            background: rgba(0, 0, 0, 0.6) url('__THEME__/image/share_arrow.png') no-repeat calc(100% - 10px) 10px;
+            background-size: 65vw;
+        }
+
+        .share-mask .txt {
+            position: fixed;
+            top: 110vw;
+            left: 0;
+            z-index: 111;
+            width: 100%;
+            text-align: center;
+            color: #000;
+        }
+
+        canvas {
+            vertical-align: top !important;
+        }
+    </style>
+
+    <style>
+        .cake {
+            animation: move 5s 2s infinite;
+            -webkit-animation: move 5s 2s infinite;
+            transform-origin: bottom;
+            -webkit-transform-origin: bottom;
+            display: block;
+        }
+
+        @keyframes move {
+
+            0%,
+            25% {
+                transform-origin: center top;
+                -webkit-transform: rotate(0deg);
+                transform: rotate(0deg);
+            }
+
+            50% {
+                transform-origin: center top;
+                -webkit-transform: rotate(-10deg);
+                transform: rotate(-10deg);
+            }
+
+            75% {
+                transform-origin: center top;
+                -webkit-transform: rotate(-10deg);
+                transform: rotate(-10deg);
+            }
+
+            100% {
+                transform-origin: center top;
+                -webkit-transform: rotate(0deg);
+                transform: rotate(0deg);
+            }
+        }
+
+        @-webkit-keyframes move {
+
+            0%,
+            25% {
+                transform-origin: center top;
+                -webkit-transform: rotate(0deg);
+                transform: rotate(0deg);
+            }
+
+            50% {
+                transform-origin: center top;
+                -webkit-transform: rotate(-10deg);
+                transform: rotate(-10deg);
+            }
+
+            75% {
+                transform-origin: center top;
+                -webkit-transform: rotate(-10deg);
+                transform: rotate(-10deg);
+            }
+
+            100% {
+                transform-origin: center top;
+                -webkit-transform: rotate(0deg);
+                transform: rotate(0deg);
+            }
+        }
+
+        .cake2 {
+            animation: move 5s 2s infinite;
+            -webkit-animation: move2 5s 2s infinite;
+            transform-origin: bottom;
+            -webkit-transform-origin: bottom;
+            display: block;
+        }
+
+        @keyframes move2 {
+
+            0%,
+            25% {
+                transform-origin: center top;
+                -webkit-transform: rotate(0deg);
+                transform: rotate(0deg);
+            }
+
+            50% {
+                transform-origin: center top;
+                -webkit-transform: rotate(10deg);
+                transform: rotate(10deg);
+            }
+
+            75% {
+                transform-origin: center top;
+                -webkit-transform: rotate(10deg);
+                transform: rotate(10deg);
+            }
+
+            100% {
+                transform-origin: center top;
+                -webkit-transform: rotate(0deg);
+                transform: rotate(0deg);
+            }
+        }
+
+        @-webkit-keyframes move2 {
+
+            0%,
+            25% {
+                transform-origin: center top;
+                -webkit-transform: rotate(0deg);
+                transform: rotate(0deg);
+            }
+
+            50% {
+                transform-origin: center top;
+                -webkit-transform: rotate(10deg);
+                transform: rotate(10deg);
+            }
+
+            75% {
+                transform-origin: center top;
+                -webkit-transform: rotate(10deg);
+                transform: rotate(10deg);
+            }
+
+            100% {
+                transform-origin: center top;
+                -webkit-transform: rotate(0deg);
+                transform: rotate(0deg);
+            }
+        }
+
+        .info {
+            font-weight: 600;
+            font-size: 28px;
+            font-family: "黑体";
+            color: #8c888b;
+            background: -webkit-linear-gradient(45deg, #70f7fe, #fbd7c6, #fdefac, #bfb5dd, #bed5f5);
+            color: transparent;
+            /*设置字体颜色透明*/
+            -webkit-background-clip: text;
+            /*背景裁剪为文本形式*/
+            animation: ran 10s linear infinite;
+
+        }
+    </style>
+</head>
+
+<body>
+    <div class="content">
+        <!--    <img src="__THEME__/image/lottery/6.png" id="zuliao-img" style="display:none;" />-->
+        <!--    <img src="__THEME__/image/lottery/3.png" id="baowen-img" style="display:none;" />-->
+        <!--    <img src="__THEME__/image/lottery/5.png" id="yundou-img" style="display:none;" />-->
+        <!--    <img src="__THEME__/image/lottery/7.png" id="ganlan-img" style="display:none;" />-->
+        <div class="banner">
+            <div class="turnplate"
+                style="background-image:url('http://test.00800.com.cn/data/upload/lottery/game-bg3.png');background-size:100%;background-repeat: no-repeat;">
+                <canvas class="item" id="wheelcanvas" width="422px" height="422px"></canvas>
+                <img class="pointer" src="http://test.00800.com.cn/data/upload/lottery/turnplate-pointer.png" />
+                <div id="sbtn">
+                    <!--    <a href="#"><img src="__THEME__/image/lottery/btn-rule.png" alt=""></a>-->
+                    <!--    <a href="#"><img src="__THEME__/image/lottery/btn-zjcx.png" alt=""></a>-->
+                    <a href="#" id="btn-showCoupon"><img src="http://test.00800.com.cn/data/upload/lottery/btn-yhq.png"
+                            alt="" style="width: 40%;"></a>
+                    <div class="info" style="
+    font-size: 16px;
+">抽奖后，请关注公众号<br>在个人中心可查看到优惠券</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

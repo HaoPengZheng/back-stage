@@ -60,7 +60,7 @@
       <template
         v-for="col in ['name', 'age', 'address']"
         :slot="col"
-        slot-scope="text, record, index"
+        slot-scope="text, record"
       >
         <div :key="col">
           <a-input
@@ -72,19 +72,6 @@
           <template v-else>{{text}}</template>
         </div>
       </template>
-      <!-- <template slot="operation" slot-scope="text, record, index">
-        <div class="editable-row-operations">
-          <span v-if="record.editable">
-            <a @click="() => save(record.key)">Save</a>
-            <a-popconfirm title="Sure to cancel?" @confirm="() => cancel(record.key)">
-              <a>Cancel</a>
-            </a-popconfirm>
-          </span>
-          <span v-else>
-            <a @click="() => edit(record.key)">Edit</a>
-          </span>
-        </div>
-      </template> -->
     </a-table>
   </div>
 </template>
@@ -99,11 +86,6 @@ const columns = [
     title: "title",
     dataIndex: "title",
   },
-  // {
-  //   title: "operation",
-  //   dataIndex: "operation",
-  //   scopedSlots: { customRender: "operation" }
-  // }
 ];
 
 import { getInstitutionType,createInstitution } from "@/api/institutions";
@@ -137,7 +119,7 @@ export default {
         title:this.typeTitle,
         sign:this.sign
       }
-      createInstitution(data).then(res=>{
+      createInstitution(data).then(()=>{
         this.typeTitle = ''
         this.sign = ''
         this.newInstituteDrawerVisible = false

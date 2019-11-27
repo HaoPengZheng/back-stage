@@ -2,7 +2,6 @@ import axios from 'axios'
 // import router from '@/router'
 import Vue from 'vue'
 import store from '@/store'
-import Modal from 'ant-design-vue'
 // import sysConfig from '@/utils/sysConfig'
 
 const service = axios.create({

@@ -71,7 +71,7 @@
 </template>
 
 <script>
-import OrganizationalTable from "./OrganizationalTable";
+// import OrganizationalTable from "./OrganizationalTable";
 import {
   getInstitutions,
   getInstitutionType,
@@ -79,7 +79,7 @@ import {
 } from "@/api/institutions";
 export default {
   components: {
-    OrganizationalTable
+    // OrganizationalTable
   },
   data() {
     return {

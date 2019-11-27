@@ -1,7 +1,7 @@
 <template>
   <a-layout class="layout" id="layout">
     <a-spin :spinning="isPageLoadding" tip="数据加载中,请稍后..." :delay="200">
-    <a-layout id="components-layout-demo-custom-trigger">
+    <a-layout id="components-layout-demo-custom-trigger" style="min-height:100vh">
       <a-drawer
         v-if="isMobile()"
         :wrapClassName="`drawer-sider`"

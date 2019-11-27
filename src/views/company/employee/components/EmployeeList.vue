@@ -53,7 +53,7 @@ const getParentKey = (key, tree) => {
   return parentKey;
 };
 import EmployeeProfile from "./EmployeeProfile";
-import { getInstitutions } from "@/api/institutions";
+// import { getInstitutions } from "@/api/institutions";
 import { getInstitutionsAuthorization } from "@/api/institutions";
 export default {
   data() {
@@ -76,9 +76,13 @@ export default {
   },
   created() {
     this.init();
-    getInstitutionsAuthorization().then(res=>{
+    this.$store.commit('SET_IS_PAGE_LOADDING', true)
+    getInstitutionsAuthorization().then(()=>{
       
     })
+  },
+  mounted(){
+    this.$store.commit('SET_IS_PAGE_LOADDING', false)
   },
   methods: {
     init() {

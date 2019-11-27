@@ -418,6 +418,26 @@ export const asyncRouterMap = [
             }
           }
         ]
+      },
+      {
+        path:'lottery',
+        name:'lottery',
+        redirect: '/machine/management',
+        meta: {
+          title: '抽奖中心',
+          icon: 'tool'
+        },
+        component: RouteView,
+        children:[
+          {
+            path: '/lottery/management',
+            name: 'lottery-management',
+            component: () => import('@/views/lottery/lotteryManagement/LotteryManagement'),
+            meta: {
+              title: '抽奖中心'
+            }
+          },
+        ]
       }
     ]
   },

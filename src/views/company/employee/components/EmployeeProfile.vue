@@ -21,7 +21,7 @@
 import BaseSetting from "./BaseSetting";
 import FaceInfo from "./FaceInfo";
 import InoutListPage from "@/views/machine/inoutPage/InoutListPage";
-import { getEmployee, updateEmployee } from "@/api/staff";
+import { getEmployee } from "@/api/staff";
 export default {
   components: {
     BaseSetting,
@@ -58,7 +58,6 @@ export default {
     handleGetEmployeeInfo() {
       // this.isLoadding = true;
       getEmployee(this.id).then(res => {
-        ;
         // this.isLoadding = false;
         this.baseInfo.Name = res.data.authorization.name;
         this.baseInfo.Sex = res.data.sex;
@@ -83,7 +82,7 @@ export default {
     }
   },
   watch: {
-    $route(val) {},
+    // $route(val) {},
     id: {
       handler: function(val) {
         if(val!=''){
