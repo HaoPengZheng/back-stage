@@ -420,25 +420,33 @@ export const asyncRouterMap = [
         ]
       },
       {
-        path:'lottery',
-        name:'lottery',
-        redirect: '/machine/management',
+        path: '/lottery',
+        name: 'lottery',
+        redirect: '/lottery/list',
         meta: {
-          title: '抽奖中心',
-          icon: 'tool'
+          title: '抽奖',
+          icon: 'euro'
         },
         component: RouteView,
-        children:[
-          {
-            path: '/lottery/management',
-            name: 'lottery-management',
-            component: () => import('@/views/lottery/lotteryManagement/LotteryManagement'),
-            meta: {
-              title: '抽奖中心'
-            }
-          },
+        children: [
+        {
+          path: '/lottery/list',
+          name: 'lottery-list',
+          component: () => import('@/views/lottery/lotteryList/LotteryList'),
+          meta: {
+            title: '抽奖列表'
+          }
+        },
+        {
+          path: '/lottery/add',
+          name: 'lottery-add',
+          component: () => import('@/views/lottery/addLottery/AddLottery'),
+          meta: {
+            title: '添加抽奖'
+          }
+        }
         ]
-      }
+      },
     ]
   },
   {

@@ -130,3 +130,10 @@ export function pushFashToMachine(id, data) {
         }
     })
 }
+
+export function setIsRequestOpenDoor(id,isRequestOpenDoor){
+    return request({
+        url:`${ZUUL}/faceMachine/api/v1/machines/${id}/params/isRequestOpenDoor/${isRequestOpenDoor}`,
+        method:'POST',
+    })
+}

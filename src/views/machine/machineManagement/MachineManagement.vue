@@ -97,8 +97,12 @@
           okText="确定"
           cancelText="取消"
         >
-          <a-button type="danger" style="margin-left:8px">删除时间段</a-button>
+        <a-button type="danger" style="margin-left:8px">删除时间段</a-button>
         </a-popconfirm>
+
+        <a-button type="primary" @click="changeIsRequestOpenDoor(record.id,true)" style="margin-left:8px;">回调开</a-button>
+        <a-button type="primary" @click="changeIsRequestOpenDoor(record.id,false)" style="margin-left:8px;">回调关</a-button>
+        
         <!-- <a-button type="danger" style="margin-left:8px" @click="handleSearchFace">查看设备人脸</a-button> -->
       </span>
       <p slot="expandedRowRender" slot-scope="text" style="margin: 0">
@@ -195,7 +199,8 @@ import {
   getMachineOnline,
   addTimeQuantum,
   deleteTimeQuantum,
-  getFaceById
+  setIsRequestOpenDoor,
+  getFaceById,
 } from "@/api/machine";
 import TimeRange from "./components/TimeRange";
 import { inoutFaceList, machinesLogList } from "@/api/machine";
@@ -367,6 +372,11 @@ export default {
       let id = "440582199704036138";
       console.log(id);
       getFaceById(id).then(res => {});
+    },
+    changeIsRequestOpenDoor(id,isRequestOpenDoor){
+      setIsRequestOpenDoor(id,isRequestOpenDoor).then(res=>{
+        this.$message.success('请求成功');
+      })
     }
   }
 };
