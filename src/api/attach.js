@@ -18,3 +18,14 @@ export function addAttach(data){
     data,
   })
 }
+/*
+* { module: 'all',page: 1, limit: 10, type: 'jpg.mp4' }
+* type .隔开
+* */
+export function getAttach(params){
+  return request({
+    url: `${GOOD_BASE_URL}/api/attach`,
+    method: 'get',
+    params,
+  })
+}

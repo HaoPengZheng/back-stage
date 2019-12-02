@@ -27,6 +27,8 @@ import EditableCell from './EditableCell'
 import Result from './Result'
 import Coupon from './Coupon'
 // import ChartCard from './Charts/ChartCard'
+import Steps from './Steps'
+import PictureGallery from './PictureGallery'
 export {
   ExceptionPage,
   GlobalHeader,
@@ -54,5 +56,7 @@ export {
   AvatarList,
   StandardFormRow, EditableCell,
   Result,
-  Coupon
+  Coupon,
+  Steps,
+  PictureGallery
 }
