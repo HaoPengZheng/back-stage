@@ -100,7 +100,7 @@
                     current: 1,
                     total: 0
                 },
-                showUpload: true
+                showUpload: (this.module != 'all')
             }
         },
         watch: {

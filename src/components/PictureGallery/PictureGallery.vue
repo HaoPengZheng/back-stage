@@ -93,14 +93,18 @@
             handleClickUpload(data) {
                 this.showPageUpload = true
                 let moduleList = Object.values(data.classList)
-                moduleList.shift()
+                // moduleList.shift()
+                moduleList.forEach((item, idx) => {
+                    if(item.attach_module == 'all') {
+                        moduleList.splice(idx, 1)
+                    }
+                })
                 this.moduleList = moduleList
                 this.activeModule = data.activeClass
             },
             handleConfirm(attache_array) {
                 this.modelVisible = false
                 this.$emit("ok", attache_array)
-                console.log(attache_array)
             },
             handleCancel() {
                 this.modelVisible = false
