@@ -97,6 +97,7 @@
 <script>
 import { getGoods } from "@/api/good";
 import DownShelvesTimeTag from "./DownShelvesTimeTag";
+import { mapActions } from "vuex";
 // import { Icon } from 'ant-design-vue';
 // const MyIcon = Icon.createFromIconfontCN({
 //   scriptUrl: "//at.alicdn.com/t/font_1315685_y7cb0fbbu5.js" // 在 iconfont.cn 上生成

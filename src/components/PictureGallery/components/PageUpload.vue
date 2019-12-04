@@ -48,6 +48,7 @@
 
 <script>
     import {deleteAttach} from "@/api/attach"
+    import { GOOD_BASE_URL } from '@/constant'
     export default {
         name: "PageUpload",
         props: {
@@ -79,7 +80,7 @@
                 previewVisible: false,
                 previewImage: '',
                 selectedModule: this.activeModule,
-                uploadUrl: "http://192.168.101.115:8089/api/attach",
+                uploadUrl: `${GOOD_BASE_URL}/api/attach`,
                 uploadHeader: {
                     company: this.$ls.get("company").id
                 }
