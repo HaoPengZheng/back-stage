@@ -156,7 +156,7 @@ export default {
       loading: false,
       typeId: "",
       parentId: "",
-      uploadUrl: "http://192.168.101.115:8089/api/attach",
+      uploadUrl: "http://39.108.77.108/good/api/attach",
       imageUrl: "",
       typeName: "",
       shop_id: "",

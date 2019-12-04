@@ -27,49 +27,43 @@ export default {
       this.$store.commit("Add_Lottery_Go_Last");
     },
     publish() {
+      let lotteryInfo = this.lottery;
+      console.log(lotteryInfo);
       axios
-        .get("http://localhost:8089/lottery/5dd65e2649f3137cab9c19da")
+        .get(
+          "http://test.00800.com.cn/data/upload/lottery/template/template.html"
+        )
         .then(res => {
-          let lotteryInfo = this.lottery;
-          console.log(lotteryInfo);
-          axios
-            .get(
-              "http://test.00800.com.cn/data/upload/lottery/template/template.html"
-            )
+          let $ = cheerio.load(res.data);
+          this.generateWheel($, lotteryInfo);
+
+          var blob = new Blob([$.html()]);
+          var file = new File([blob], `${lotteryInfo.lotteryName}.html`, {
+            type: "html",
+            lastModified: Date.now()
+          });
+          console.log(file);
+          var data = new FormData();
+          data.append("module", "lottery");
+
+          data.append("file", file);
+          let publishLink;
+          addAttach(data)
             .then(res => {
-              let $ = cheerio.load(res.data);
-              this.generateWheel($, lotteryInfo);
+              publishLink = res.data.data.file_url;
+              let data = {
+                publishLink: publishLink
+              };
 
-              var blob = new Blob([$.html()]);
-              var file = new File([blob], `${lotteryInfo.lotteryName}.html`, {
-                type: "html",
-                lastModified: Date.now()
-              });
-              console.log(file);
-              var data = new FormData();
-              data.append("module", "lottery");
-
-              data.append("file", file);
-              let publishLink;
-              addAttach(data)
-                .then(res => {
-                  publishLink = res.data.data.file_url;
-                  let data = {
-                    publishLink: publishLink
-                  };
-
-                  return publishLottery(this.lottery.id, data);
-                })
-                .then(res => {
-                  console.log(
-                    `http://www.00800.com.cn/cnhs/wqproject/index.php?app=public&mod=Lottery&act=index&path=${publishLink}`
-                  );
-                  this.bindQRCode(
-                    `http://www.00800.com.cn/cnhs/wqproject/index.php?app=public&mod=Lottery&act=index&path=${publishLink}`
-                  );
-                });
-              // this.downloadHtml($.html());
-              console.log($.html());
+              return publishLottery(this.lottery.id, data);
+            })
+            .then(res => {
+              console.log(
+                `http://www.00800.com.cn/cnhs/wqproject/index.php?app=public&mod=Lottery&act=index&path=${publishLink}`
+              );
+              this.bindQRCode(
+                `http://www.00800.com.cn/cnhs/wqproject/index.php?app=public&mod=Lottery&act=index&path=${publishLink}`
+              );
             });
         });
     },
@@ -435,6 +429,7 @@ export default {
       $("title").html(title);
     },
     generateLotteryItem($, lotteryItems) {
+      console.log(lotteryItems);
       let tempLotteryItems = Object.values(lotteryItems);
       if (tempLotteryItems instanceof Array) {
         tempLotteryItems.forEach((lotteryItem, index) => {
@@ -450,7 +445,9 @@ export default {
       );
     },
     generateBackground($, lotteryInfo) {
-     
+      $("body").prepend(
+        `<img src="${lotteryInfo.backgroundImagePath}" id="bg-img" style="width: 100%" />`
+      );
     },
     downloadHtml(str) {
       // 字符内容转变成blob地址

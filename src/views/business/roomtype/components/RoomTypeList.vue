@@ -42,7 +42,7 @@
         <span slot="action" slot-scope="text, record">
           <!-- <a href="javascript:;">编辑</a>
           <a-divider type="vertical" /> -->
-        
+
           <a-popconfirm title="确认删除房型吗?" @confirm="confirmDelete(record.type_id)"  okText="Yes" cancelText="No">
             <a href="javascript:;">删除</a>
           </a-popconfirm>
@@ -81,7 +81,15 @@ const columns = [
     }
   },
   {
-    title: "预定选房",
+    title: "房型代码",
+    dataIndex: "code",
+    key: "code",
+    scopedSlots: {
+      customRender: "code"
+    }
+  },
+  {
+    title: "微信选房",
     key: "chooseRoom",
     scopedSlots: { customRender: "chooseRoom" }
   },
@@ -115,10 +123,10 @@ export default {
         this.$message.success(res.data.message)
         this.initData();
       })
-      
+
     },
     onCellChange(record, dataIndex, value){
-      
+
       let updateData = {
         type_id:record.type_id,
         type_name:value,

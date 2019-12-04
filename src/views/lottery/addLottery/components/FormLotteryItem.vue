@@ -23,9 +23,7 @@
               />
             </a-form-item>
              <a-form-item label="小图标：" :label-col="{ span: 6 }" :wrapper-col="{ span: 16 }">
-              <a-input
-                v-decorator="['smallIconPath', { rules: [{ required: true, message: '请选择小图标！' }] }]"
-              />
+                 <picture-select :multiple="false" module="lottery" v-model="smallIconPath"></picture-select>
             </a-form-item>
              <a-form-item label="跳转链接：" :label-col="{ span: 6 }" :wrapper-col="{ span: 16 }">
               <a-input
@@ -33,9 +31,7 @@
               />
             </a-form-item>
              <a-form-item label="中奖提示：" :label-col="{ span: 6 }" :wrapper-col="{ span: 16 }">
-              <a-input
-                v-decorator="['awardImagePath', { rules: [{ required: true, message: '请选择中奖提示图片！' }] }]"
-              />
+                <picture-select :multiple="false" module="lottery" v-model="awardImagePath"></picture-select>
             </a-form-item>
           </a-form>
         </div>
@@ -58,12 +54,12 @@
             buttonStyle="solid"
             @change="hanldeLotteryType"
           >
-            <a-radio-button value="0">积分</a-radio-button>
-            <a-radio-button value="1">优惠券</a-radio-button>
+            <a-radio-button value="1">积分</a-radio-button>
+            <a-radio-button value="0">优惠券</a-radio-button>
           </a-radio-group>
         </a-form-item>
         <a-form-item
-          v-if="priceType == 0"
+          v-if="priceType == 1"
           label="积分："
           :label-col="{ span: 6 }"
           :wrapper-col="{ span: 16 }"
@@ -74,7 +70,7 @@
           />
         </a-form-item>
         <a-form-item
-          v-if="priceType == 1"
+          v-if="priceType == 0"
           label="优惠券Id："
           :label-col="{ span: 6 }"
           :wrapper-col="{ span: 16 }"
@@ -97,11 +93,16 @@
             :step="0.01"
           />
         </a-form-item>
-        <a-form-item label="库存：" :label-col="{ span: 6 }" :wrapper-col="{ span: 16 }">
-          <a-input-number
-            v-decorator="['repertory', { rules: [{ required: true, message: '请输入库存数量！' }] }]"
-            :min="0"
-          />
+        <a-form-item label="图标：" :label-col="{ span: 6 }" :wrapper-col="{ span: 16 }">
+         <picture-select :multiple="false" module="lottery" v-model="lotteryItemSmallIconPath"></picture-select>
+        </a-form-item>
+        <a-form-item label="中奖提示：" :label-col="{ span: 6 }" :wrapper-col="{ span: 16 }">
+          <picture-select :multiple="false" module="lottery" v-model="lotteryItemSmallIconPath"></picture-select>
+        </a-form-item>
+        <a-form-item label="跳转链接：" :label-col="{ span: 6 }" :wrapper-col="{ span: 16 }">
+           <a-input
+                v-decorator="['jumpLink', { rules: [{ required: true, message: '请输入未中奖名！' }] }]"
+              />
         </a-form-item>
       </a-form>
 
@@ -120,8 +121,12 @@ import {
   addLosingPrice
 } from "@/api/lottery";
 import { mixinAddLotteryState } from "../mixin";
+import {PictureSelect} from '@/components'
 export default {
   name: "FormLotteryItem",
+  components:{
+    PictureSelect
+  },
   props: {
     check: Boolean
   },
@@ -130,28 +135,11 @@ export default {
     return {
       spinning: false,
       addLotteryItemVisible: false,
-      addLotteryItemForm: this.$form.createForm(this, {
-        name: "lotteryItem-form"
-      }),
       priceType: 0,
-      formItemLayout: {
-        labelCol: {
-          xs: { span: 24 },
-          sm: { span: 24 },
-          md: { span: 8 },
-          lg: { span: 7 },
-          xl: { span: 6 },
-          xxl: { span: 5 }
-        },
-        wrapperCol: {
-          xs: { span: 24 },
-          sm: { span: 24 },
-          md: { span: 16 },
-          lg: { span: 15 },
-          xl: { span: 14 },
-          xxl: { span: 13 }
-        }
-      },
+      smallIconPath:[],
+      awardImagePath:[],
+      lotteryItemSmallIconPath:[],
+       lotteryItemAwardImagePath:[],
       form: this.$form.createForm(this, {
         name: "form_lottery_item"
       }),
@@ -226,12 +214,12 @@ export default {
           console.log(values);
           let data = {
             lotteryItemName: values.lotteryItemName,
-            smallIconPath: values.smallIconPath,
-            jumpLink: "values.jumpLink",
+            smallIconPath: this.lotteryItemSmallIconPath.length>0? this.lotteryItemSmallIconPath[0]: "",
+            jumpLink: values.jumpLink,
             prizeType: values.prizeType,
             couponId: values.couponId,
             point: values.point,
-            awardImagePath: "values.awardImagePath",
+            awardImagePath:  this.lotteryItemAwardImagePath.length>0? this.lotteryItemAwardImagePath[0]: "",
             probability: values.probability,
             repertory: values.repertory
           };
@@ -250,9 +238,9 @@ export default {
           console.log(values);
           let data = {
             prizeName:values.prizeName,
-            smallIconPath:values.smallIconPath,
+            smallIconPath:this.smallIconPath.length>0? this.smallIconPath[0]: "",
             jumpLink:values.jumpLink,
-            awardImagePath:values.awardImagePath
+            awardImagePath: this.awardImagePath.length>0? this.awardImagePath[0]: "",
           };
           addLosingPrice(this.lottery.id, data).then(res => {
             this.$message.success(res.data.msg);

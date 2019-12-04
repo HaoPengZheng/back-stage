@@ -15,7 +15,7 @@
         ]"
         placeholder="请选择店"
         @change="handleSelectChange"
-        
+
       >
         <a-select-option :value="institution.id" v-for="(institution,index) in institutions" :key="index">
           {{institution.name}}
@@ -35,6 +35,16 @@
         ]"
       />
     </a-form-item>
+      <a-form-item
+        label="房型代码"
+        :label-col="{ span: 5 }"
+        :wrapper-col="{ span: 12 }">
+      <a-input  v-decorator="[
+          'type_code',
+          {getValueFromEvent:upCase,rules: [{ required: true, message: '请输入房型代码!'},{pattern:'[A-Z0-9]'}] },
+        ]">
+      </a-input>
+      </a-form-item>
     <a-form-item
       :wrapper-col="{ span: 12, offset: 5 }"
     >
@@ -54,6 +64,7 @@ import { addRoomTypes,getRoomTypes } from "@/api/room";
 export default {
   data () {
     return {
+        node:'123',
       formLayout: 'horizontal',
       form: this.$form.createForm(this),
       institutions:["选择店"]
@@ -61,7 +72,6 @@ export default {
   },
   created(){
       this.initInstitutions()
-
   },
   methods: {
     initInstitutions(){
@@ -76,10 +86,11 @@ export default {
           console.log('Received values of form: ', values);
           let data={
               type_name:values.type_name,
-              "is_choose_room": 0
+              "is_choose_room": 0,
+              code:values.type_code
           }
           let shop_id = values.shop_id
-          
+
           addRoomTypes(data,shop_id).then(res=>{
               this.$message.success('添加成功')
           })
@@ -87,8 +98,12 @@ export default {
       });
     },
     handleSelectChange (value) {
-     
+
     },
+    upCase(value){
+        console.log(value);
+        return value.target.value.toUpperCase()
+      },
   },
 };
 </script>

@@ -37,10 +37,11 @@ export default {
       this.value = fileList.map(file => {
         return file.path;
       });
+      this.$emit('input',this.value)
     },
     showPictureGallery() {
       this.isShowPictureGallery = true;
-      this.$emit('value',this.value)
+    
     }
   }
 };

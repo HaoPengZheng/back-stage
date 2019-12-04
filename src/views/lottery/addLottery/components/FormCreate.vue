@@ -29,6 +29,12 @@
                 <picture-select :limit="1" module="lottery" v-model="backgroundImageFile"></picture-select>
               </div>
             </a-form-item>
+            <a-form-item label="用户" v-bind="formItemLayout">
+              <a-radio-group v-decorator="['userType', config.timesTypeConfig]">
+                <a-radio value="0">所有用户</a-radio>
+                <a-radio value="1">后台设置</a-radio>
+              </a-radio-group>
+            </a-form-item>
             <a-form-item label="参与类型" v-bind="formItemLayout">
               <a-radio-group v-decorator="['timesType', config.timesTypeConfig]">
                 <a-radio value="0">N天一次</a-radio>
@@ -54,16 +60,7 @@
               <a-textarea placeholder="活动详情" :rows="4" v-decorator="['rule']" />
             </a-form-item>
 
-            <a-form-item
-              :wrapper-col="{
-                                        xs:  { span: 24, offset: 0 },
-                                        sm:  { span: 24, offset: 0 },
-                                        md:  { span: 10, offset: 8 },
-                                        lg:  { span: 10, offset: 7 },
-                                        xl:  { span: 10, offset: 6 },
-                                        xxl: { span: 10, offset: 5 },
-                                    }"
-            >
+            <a-form-item v-bind="formItemLayout">
               <div class="actions">
                 <a-button type="primary" @click="handleSubmit">下一步</a-button>
               </div>
@@ -76,13 +73,12 @@
 </template>
 
 <script>
-import { createLottery,updateLotteryById } from "@/api/lottery";
-import {PictureGallery,PictureSelect} from '@/components'
+import { createLottery, updateLotteryById } from "@/api/lottery";
+import { PictureSelect } from "@/components";
 import { mixinAddLotteryState } from "../mixin";
 export default {
   mixins: [mixinAddLotteryState],
-  components:{
-    PictureGallery,
+  components: {
     PictureSelect
   },
   name: "FormCreate",
@@ -95,28 +91,11 @@ export default {
       timesType: "1",
       times: "1",
       needReload: false,
-      intervalHours: "1"
+      intervalHours: "1",
+      userType: "0"
     };
     return {
-      backgroundImageFile:[],
-      formItemLayout: {
-        labelCol: {
-          xs: { span: 24 },
-          sm: { span: 24 },
-          md: { span: 8 },
-          lg: { span: 7 },
-          xl: { span: 6 },
-          xxl: { span: 5 }
-        },
-        wrapperCol: {
-          xs: { span: 24 },
-          sm: { span: 24 },
-          md: { span: 16 },
-          lg: { span: 15 },
-          xl: { span: 14 },
-          xxl: { span: 13 }
-        }
-      },
+      backgroundImageFile: [],
       form: this.$form.createForm(this, {
         name: "form_create",
         onValuesChange: (props, values) => {
@@ -131,6 +110,10 @@ export default {
         },
         timeRangeConfig: {
           rules: [{ type: "array", required: true, message: "请选择时间!" }]
+        },
+        userTypeConfig: {
+          rules: [{ required: true, message: "请选择用户类型!" }],
+          initialValue: defaultData.userType
         },
         timesTypeConfig: {
           rules: [{ required: true, message: "请选择参与类型!" }],
@@ -151,10 +134,10 @@ export default {
         }
       },
       formData: defaultData,
-      
+
       previewImage: "",
       spinning: false,
-      isShowPictureGallery:false,
+      isShowPictureGallery: false
     };
   },
   methods: {
@@ -171,9 +154,10 @@ export default {
           values.endTime = values.time[1]
             .format("YYYY/MM/DD HH:mm:ss")
             .valueOf();
-          values.backgroundImagePath = this.backgroundImageFile.length>0
-            ? this.backgroundImageFile[0]
-            : "http://test.00800.com.cn/data/upload/lottery/game-bg2.jpg";
+          values.backgroundImagePath =
+            this.backgroundImageFile.length > 0
+              ? this.backgroundImageFile[0]
+              : "http://test.00800.com.cn/data/upload/lottery/game-bg2.jpg";
           values.needReload = +values.needReload;
           let form_data = "";
           for (let key in values) {
@@ -182,50 +166,50 @@ export default {
           }
           form_data = form_data.slice(0, -1);
           this.spinning = true;
-          if(this.lottery){
-            alert('更新')
-            updateLotteryById(this.lottery.id,form_data).then(res => {
-              if (res.data) {
-                this.$store.commit("Update_Lottery", res.data.data);
-                this.$store.commit("Add_Lottery_Go_Next");
-                this.$message.success(res.data.msg);
-              } else {
-                this.$message.success("添加成功");
-              }
-            })
-            .catch(e => {
-              if (e.response && e.response.data) {
-                this.$message.error(e.response.data.msg);
-              } else {
-                this.$message.error("添加失败");
-              }
-            })
-            .finally(() => {
-              this.spinning = false;
-            });
-          }else{
+          if (this.lottery) {
+            alert("更新");
+            updateLotteryById(this.lottery.id, form_data)
+              .then(res => {
+                if (res.data) {
+                  this.$store.commit("Update_Lottery", res.data.data);
+                  this.$store.commit("Add_Lottery_Go_Next");
+                  this.$message.success(res.data.msg);
+                } else {
+                  this.$message.success("添加成功");
+                }
+              })
+              .catch(e => {
+                if (e.response && e.response.data) {
+                  this.$message.error(e.response.data.msg);
+                } else {
+                  this.$message.error("添加失败");
+                }
+              })
+              .finally(() => {
+                this.spinning = false;
+              });
+          } else {
             createLottery(form_data)
-            .then(res => {
-              if (res.data) {
-                this.$store.commit("Update_Lottery", res.data.data);
-                this.$store.commit("Add_Lottery_Go_Next");
-                this.$message.success(res.data.msg);
-              } else {
-                this.$message.success("添加成功");
-              }
-            })
-            .catch(e => {
-              if (e.response && e.response.data) {
-                this.$message.error(e.response.data.msg);
-              } else {
-                this.$message.error("添加失败");
-              }
-            })
-            .finally(() => {
-              this.spinning = false;
-            });
+              .then(res => {
+                if (res.data) {
+                  this.$store.commit("Update_Lottery", res.data.data);
+                  this.$store.commit("Add_Lottery_Go_Next");
+                  this.$message.success(res.data.msg);
+                } else {
+                  this.$message.success("添加成功");
+                }
+              })
+              .catch(e => {
+                if (e.response && e.response.data) {
+                  this.$message.error(e.response.data.msg);
+                } else {
+                  this.$message.error("添加失败");
+                }
+              })
+              .finally(() => {
+                this.spinning = false;
+              });
           }
-         
         }
       });
     }
