@@ -13,7 +13,7 @@
                         v-show="!showPageUpload"
                         :show-time="pageListShowTime"
                         :module="module"
-                        :multiple="multiple"
+                        :limit="limit"
                         @ok="handleConfirm"
                         @cancel="handleCancel"
                         @click:upload="handleClickUpload">
@@ -54,9 +54,8 @@
                 type: String,
                 default: 'all'
             },
-            multiple: {
-                type: Boolean,
-                default: true
+            limit: {
+                type: Number
             }
         },
         data() {
@@ -100,7 +99,7 @@
                     }
                 })
                 this.moduleList = moduleList
-                this.activeModule = data.activeClass
+                this.activeModule = (data.activeClass == 'all' ? moduleList[0].attach_module : data.activeClass)
             },
             handleConfirm(attache_array) {
                 this.modelVisible = false

@@ -37,7 +37,7 @@ export default {
 | title    | String  |  模态框标题  | 图库     |
 | width    | Number  |  模态框宽度  | 900     |
 | visible  | Boolean | 是否显示     | false   |
-| multiple | Boolean | 是否允许多选     | true    |
+| limit    | Number  | 限制选择数量  | 不限    |
 | module   | String  | 指定默认模块( 目前可选 ["all", "employee", "feed", "lottery", "goods"] ) | all |
 
 #### 事件

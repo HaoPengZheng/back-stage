@@ -2,7 +2,7 @@
   <div>
     <picture-gallery
       :visible="isShowPictureGallery"
-      :multiple="multiple"
+      :limit="limit"
       :module="module"
       @cancel="isShowPictureGallery=false"
       @ok="handlePicSelect"
@@ -24,7 +24,7 @@ export default {
   },
   props: {
     module: String,
-    multiple:Boolean
+    limit: Number
   },
   data() {
     return {

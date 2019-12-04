@@ -3,6 +3,7 @@
         <a-spin :spinning="loading">
             <div class="page-main">
                 <div class="class-list">
+                    <a-empty v-if="!classList.length" />
                     <div class="class-item"
                          :class="{active: (item.attach_module == activeClass)}"
                          v-for="(item, idx) in classList"
@@ -25,7 +26,8 @@
                             <a-button type="primary" v-if="showUpload" @click="handleClickUpload">上传图片</a-button>
                         </div>
                     </div>
-                    <div class="img-item-list">
+                    <div class="img-item-list" :class="{empty: !imgList.length}">
+                        <a-empty v-if="!imgList.length" />
                         <div class="img-item"
                              v-for="(item, idx) in imgList"
                              :key="idx"
@@ -55,7 +57,11 @@
             <div class="page-footer">
                 <a-button @click="handleCancel">取消</a-button>
                 <a-button type="primary" @click="handleConfirm">
-                    {{selectImgList.length ? `已选 ${selectImgList.length} 个` : '确定'}}
+                    {{
+                        selectImgListLimit == undefined
+                        ? `已选 ${selectImgList.length} 个`
+                        : `已选 ${selectImgList.length} / ${selectImgListLimit} 个`
+                    }}
                 </a-button>
             </div>
         </a-spin>
@@ -73,40 +79,41 @@
                 type: String,
                 default: 'all'
             },
-            multiple: {
-                type: Boolean,
-                default: true
-            },
             showTime: {
                 type: String,
                 default: ''
+            },
+            limit: {
+                type: Number
             }
         },
         data() {
             return {
                 loading: false,
                 typeList: [
-                    {id: 1, name: '图片', type: 'jpg.jpeg.png.webp'},
-                    {id: 2, name: '视频', type: 'mp4'}
+                    {id: 1, name: '图片', type: 'jpg.jpeg.png.webp.bmp'},
+                    {id: 2, name: '视频', type: 'mp4.flv'}
                 ],
                 activeType: 1,
                 classList: [],
                 imgList: [],
                 activeClass: this.module,
                 selectImgList: [],
+                selectImgListLimit: (this.limit == undefined ? this.limit : (+this.limit <= 0 ? 0 : +this.limit)),
                 selectImgIdList: [],
                 page: {
                     pageSize: 18,
                     current: 1,
                     total: 0
                 },
-                showUpload: (this.module != 'all')
+                // showUpload: (this.module != 'all')
+                showUpload: true
             }
         },
         watch: {
-            activeClass(activeClass) {
-                this.showUpload = (activeClass != 'all')
-            },
+            // activeClass(activeClass) {
+            //     this.showUpload = (activeClass != 'all')
+            // },
             showTime() {
                 this.getAttach()
             }
@@ -179,16 +186,27 @@
                     this.selectImgList.splice(hasItemIdx, 1)
                     this.selectImgIdList.splice(hasItemIdx, 1)
                 } else {
-                    if(this.multiple) {
+                    if(this.selectImgListLimit == undefined) {
                         this.selectImgList.push(item)
                         this.selectImgIdList.push(item.id)
                     } else {
-                        this.selectImgList = []
-                        this.selectImgIdList = []
-
                         this.selectImgList.push(item)
                         this.selectImgIdList.push(item.id)
+                        if(+this.selectImgList.length > +this.selectImgListLimit) {
+                            this.selectImgList.shift()
+                            this.selectImgIdList.shift()
+                        }
                     }
+                    // if(this.multiple) {
+                    //     this.selectImgList.push(item)
+                    //     this.selectImgIdList.push(item.id)
+                    // } else {
+                    //     this.selectImgList = []
+                    //     this.selectImgIdList = []
+                    //
+                    //     this.selectImgList.push(item)
+                    //     this.selectImgIdList.push(item.id)
+                    // }
                 }
             },
             handleSelectedClass(item) {
@@ -305,11 +323,11 @@
                     align-items: center;
                 }
             }
-            .img-item-list {
+            .img-item-list:not(.empty) {
                 flex: 1;
                 display: grid;
                 grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
-                grid-template-rows: auto auto auto;
+                grid-template-rows: 1fr 1fr 1fr;
                 grid-row-gap: 0px;
                 grid-column-gap: 5px;
                 font-size: 0px;
@@ -437,6 +455,9 @@
                     }
                 }
             }
+            .img-item-list.empty {
+                flex: 1;
+            }
             .page {
                 display: flex;
                 justify-content: center;
@@ -458,5 +479,8 @@
                 margin-left: 25px;
             }
         }
+    }
+    .ant-empty {
+        margin-top: 20px;
     }
 </style>

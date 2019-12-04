@@ -26,7 +26,7 @@
             </a-form-item>
             <a-form-item label="背景图片" v-bind="formItemLayout">
               <div>
-                <picture-select :multiple="false" module="lottery" v-model="backgroundImageFile"></picture-select>
+                <picture-select :limit="1" module="lottery" v-model="backgroundImageFile"></picture-select>
               </div>
             </a-form-item>
             <a-form-item label="参与类型" v-bind="formItemLayout">
