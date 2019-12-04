@@ -471,7 +471,7 @@ export default {
       activeGoodType: "",
       form: {},
       wechatShareForm: {},
-      uploadUrl: "http://192.168.101.115:8089/api/attach",
+      uploadUrl: "http://39.108.77.108/good/api/attach",
 
       tagInputVisible: false,
       tagInputValue: "",

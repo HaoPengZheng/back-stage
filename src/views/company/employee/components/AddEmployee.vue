@@ -215,7 +215,7 @@ import { deleteAttach, addAttach } from "@/api/attach";
 export default {
   data() {
     return {
-      uploadUrl: "http://192.168.101.115:8089/api/attach",
+      uploadUrl: "http://39.108.77.108/good/api/attach",
       form: this.$form.createForm(this, { name: "addEmployee" }),
       loadding: false,
       recv: "",
@@ -723,6 +723,9 @@ export default {
               this.loadding = false;
               this.$emit('refresh')
             });
+          }).catch(err=>{
+            console.log(err.response)
+            this.$message.error(err.response.data.message)
           });
         }
       });
