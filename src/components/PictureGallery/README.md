@@ -7,7 +7,7 @@
 ```
 
 #### 例子
-```js
+```
 <template>
     <picture-gallery
         :visible="isShow"
@@ -43,5 +43,5 @@ export default {
 #### 事件
 |  名      | 回调参数               | 描述              |
 |  ----    | ----                  | ----             |
-| cancel   | function()            | 显示或隐藏后的回调 |
+| cancel   | function()            | 隐藏后的回调 |
 | ok       | function(pictureList) | 确定选择之后的回调 |
