@@ -29,6 +29,7 @@ import Coupon from './Coupon'
 // import ChartCard from './Charts/ChartCard'
 import Steps from './Steps'
 import PictureGallery from './PictureGallery'
+import PictureSelect from './PictureSelect'
 export {
   ExceptionPage,
   GlobalHeader,
@@ -58,5 +59,6 @@ export {
   Result,
   Coupon,
   Steps,
-  PictureGallery
+  PictureGallery,
+  PictureSelect
 }

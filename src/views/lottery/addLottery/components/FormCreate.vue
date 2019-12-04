@@ -26,26 +26,7 @@
             </a-form-item>
             <a-form-item label="背景图片" v-bind="formItemLayout">
               <div>
-                <a-upload
-                  :action="uploadUrl"
-                  :data="uploadAddData"
-                  :headers="uploadHeader"
-                  listType="picture-card"
-                  :fileList="fileList"
-                  @preview="handlePreview"
-                  @change="handleChange"
-                  v-decorator="[
-                                              'backgroundImagePath'
-                                            ]"
-                >
-                  <div v-if="fileList.length < 1">
-                    <a-icon type="plus" />
-                    <div class="ant-upload-text">上传图片</div>
-                  </div>
-                </a-upload>
-                <a-modal :visible="previewVisible" :footer="null" @cancel="handleCancel">
-                  <img alt="example" style="width: 100%" :src="previewImage" />
-                </a-modal>
+                <picture-select :multiple="false" module="lottery" v-model="backgroundImageFile"></picture-select>
               </div>
             </a-form-item>
             <a-form-item label="参与类型" v-bind="formItemLayout">
@@ -83,7 +64,9 @@
                                         xxl: { span: 10, offset: 5 },
                                     }"
             >
-              <a-button type="primary" html-type="submit">提交</a-button>
+              <div class="actions">
+                <a-button type="primary" @click="handleSubmit">下一步</a-button>
+              </div>
             </a-form-item>
           </div>
         </div>
@@ -93,8 +76,15 @@
 </template>
 
 <script>
-import { createLottery } from "@/api/lottery";
+import { createLottery,updateLotteryById } from "@/api/lottery";
+import {PictureGallery,PictureSelect} from '@/components'
+import { mixinAddLotteryState } from "../mixin";
 export default {
+  mixins: [mixinAddLotteryState],
+  components:{
+    PictureGallery,
+    PictureSelect
+  },
   name: "FormCreate",
   props: {
     check: Boolean
@@ -108,6 +98,7 @@ export default {
       intervalHours: "1"
     };
     return {
+      backgroundImageFile:[],
       formItemLayout: {
         labelCol: {
           xs: { span: 24 },
@@ -160,48 +151,15 @@ export default {
         }
       },
       formData: defaultData,
-      previewVisible: false,
+      
       previewImage: "",
-      fileList: [],
-      uploadUrl: "http://192.168.101.115:8089/api/attach",
-      uploadHeader: {
-        company: this.$ls.get("company").id
-      },
-      spinning: false
+      spinning: false,
+      isShowPictureGallery:false,
     };
-  },
-  watch: {
-    check(check) {
-      if (check) {
-        this.form.validateFields((err, values) => {
-          console.log(err);
-          if (!err) {
-            this.$emit("checkSuccess");
-          } else {
-            this.$emit("checkFailed");
-          }
-        });
-      }
-    }
   },
   methods: {
     watchFields(key, val) {
       this.formData[key] = val;
-    },
-    uploadAddData() {
-      return {
-        module: "lottery"
-      };
-    },
-    handleCancel() {
-      this.previewVisible = false;
-    },
-    handlePreview(file) {
-      this.previewImage = file.url || file.thumbUrl;
-      this.previewVisible = true;
-    },
-    handleChange({ fileList }) {
-      this.fileList = fileList;
     },
     handleSubmit(e) {
       e.preventDefault();
@@ -213,9 +171,9 @@ export default {
           values.endTime = values.time[1]
             .format("YYYY/MM/DD HH:mm:ss")
             .valueOf();
-          values.backgroundImagePath = values.backgroundImagePath
-            ? values.backgroundImagePath.file.response.data.file_url
-            : "";
+          values.backgroundImagePath = this.backgroundImageFile.length>0
+            ? this.backgroundImageFile[0]
+            : "http://test.00800.com.cn/data/upload/lottery/game-bg2.jpg";
           values.needReload = +values.needReload;
           let form_data = "";
           for (let key in values) {
@@ -224,9 +182,12 @@ export default {
           }
           form_data = form_data.slice(0, -1);
           this.spinning = true;
-          createLottery(form_data)
-            .then(res => {
+          if(this.lottery){
+            alert('更新')
+            updateLotteryById(this.lottery.id,form_data).then(res => {
               if (res.data) {
+                this.$store.commit("Update_Lottery", res.data.data);
+                this.$store.commit("Add_Lottery_Go_Next");
                 this.$message.success(res.data.msg);
               } else {
                 this.$message.success("添加成功");
@@ -242,6 +203,29 @@ export default {
             .finally(() => {
               this.spinning = false;
             });
+          }else{
+            createLottery(form_data)
+            .then(res => {
+              if (res.data) {
+                this.$store.commit("Update_Lottery", res.data.data);
+                this.$store.commit("Add_Lottery_Go_Next");
+                this.$message.success(res.data.msg);
+              } else {
+                this.$message.success("添加成功");
+              }
+            })
+            .catch(e => {
+              if (e.response && e.response.data) {
+                this.$message.error(e.response.data.msg);
+              } else {
+                this.$message.error("添加失败");
+              }
+            })
+            .finally(() => {
+              this.spinning = false;
+            });
+          }
+         
         }
       });
     }
@@ -268,6 +252,14 @@ export default {
   /deep/ .ant-upload-text {
     margin-top: 8px;
     color: rgb(102, 102, 102);
+  }
+}
+.actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /deep/ .ant-btn + .ant-btn {
+    margin-left: 50px;
   }
 }
 </style>

@@ -444,6 +444,14 @@ export const asyncRouterMap = [
           meta: {
             title: '添加抽奖'
           }
+        },
+        {
+          path: '/lottery/management',
+          name: 'lottery-management',
+          component: () => import('@/views/lottery/lotteryManagement/LotteryManagement'),
+          meta: {
+            title: '抽奖管理'
+          }
         }
         ]
       },

@@ -1,4 +1,5 @@
 <template>
+  <a-spin :spinning="loadding" tip="组件加载中。。">
   <a-row>
     <a-col :span="6">
        <div style="max-height:70vh;overflow:auto;border-right:2px solid #e8e8e8;padding-right:5px;">
@@ -35,6 +36,7 @@
       </div>
     </a-col>
   </a-row>
+  </a-spin>
 </template>
 
 <script>
@@ -68,7 +70,8 @@ export default {
       selectId: "",
       selectValue: "",
       dataList: [],
-      activeUserId:''
+      activeUserId:'',
+      loadding:false
     };
   },
   components: {
@@ -89,9 +92,13 @@ export default {
       this.initInstitution();
     },
     initInstitution() {
+      this.loadding = true
       getInstitutionsAuthorization().then(res => {
         this.institutionData = res.data.data;
         this.treeData = this.generateData(res.data.data);
+        this.$nextTick(()=>{
+           this.loadding = false
+        })
         this.generateList(this.treeData);
       });
     },
