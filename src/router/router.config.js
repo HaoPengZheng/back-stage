@@ -471,21 +471,21 @@ export const asyncShopRouterMap = [
     name: 'shop-home',
     component: ShopLayout,
     meta: { title: '首页' },
-    redirect: '/shop/dashboard',
+    redirect: '/shop/room',
     children: [
       {
-        path: '/shop/dashboard',
+        path: '/shop/room',
         name: 'shop-dashboard',
-        redirect: '/shop/dashboard/statistics',
+        redirect: '/shop/room/roomManagement',
         component: RouteView,
         permission: ['dashboard'],
-        meta: { title: '仪表盘', icon: 'form' },
+        meta: { title: '房价管理', icon: 'form' },
         children: [
           {
-            path: '/shop/dashboard/statistics',
-            name: 'shop-statistics',
-            component: () => import('@/views/dashboard/statistics/DataStatistics'),
-            meta: { title: '数据统计', },
+            path: '/shop/room/roomManagement',
+            name: 'shop-room-roomManagement',
+            component: () => import('@/views/shop/room/roomManagement/RoomManagement'),
+            meta: { title: '房间管理', },
           },
         ]
       },

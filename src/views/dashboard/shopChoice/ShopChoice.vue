@@ -16,13 +16,16 @@
             <a-button type="danger" ghost slot="extra" @click="selectShop(shop)">进店</a-button>
             <p
               style="text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;"
+                overflow: hidden;
+                white-space: nowrap;"
             >主体信息：{{shop.main_info}}</p>
             <p>
               状态：
               <a-tag color="#87d068" v-if="shop.status == 'success'">运营中</a-tag>
               <a-tag color="#ccc" v-else>未营业</a-tag>
+            </p>
+            <p>
+              类型：<a-tag color="#87d068">客房</a-tag>
             </p>
             <p>有效期至：{{shop.indate}}</p>
             <div class="shop-choose-action">
@@ -141,7 +144,7 @@ export default {
         this.$store.dispatch('setShop',shop)
        
       }).then(res=>{
-         this.$router.push("/shop/dashboard");
+         this.$router.push("/shop/room");
       });
     },
     showDeleteCompanyModal() {
