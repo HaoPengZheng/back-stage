@@ -10,61 +10,55 @@
 import { mapActions } from "vuex";
 import cheerio from "cheerio";
 import axios from "axios";
-import QRCode from 'qrcodejs2';
+import QRCode from "qrcodejs2";
 import { deleteAttach, addAttach } from "@/api/attach";
 export default {
   created() {
-      this.getGoodList().then(res=>{
-          
-      })
+    this.getGoodList().then(res => {});
   },
   methods: {
-    ...mapActions([
-        'getGoodList', // 将 `this.increment()` 映射为 `this.$store.dispatch('increment')`
-    ]),
     publish() {
-      axios
-        .get("http://localhost:8089/lottery/5dd65e2649f3137cab9c19da")
-        .then(res => {
-          let lotteryInfo = res.data.data;
-          console.log(lotteryInfo);
-          axios
-            .get(
-              "http://test.00800.com.cn/data/upload/lottery/template/template.html"
-            )
-            .then(res => {
-                let $ = cheerio.load(res.data);
-                this.generateWheel($, lotteryInfo);
-              
-                 var blob = new Blob([$.html()]);
-                 var file = new File([blob], `${lotteryInfo.lotteryName}.html`, {type: 'html', lastModified: Date.now()});
+      let lotteryInfo = res.data.data;
+      if (this.lotteryInfo.lotteryType == "0") {
+        axios
+          .get(
+            "http://test.00800.com.cn/data/upload/lottery/template/template.html"
+          )
+          .then(res => {
+            let $ = cheerio.load(res.data);
+            this.generateWheel($, lotteryInfo);
 
-                var data = new FormData()
-                data.append("module", "lottery");
-
-                data.append("file", file);
-                
-                addAttach(data).then(res=>{
-                    console.log(res)
-                })
-                   this.downloadHtml($.html());
-                console.log($.html());
-                
+            var blob = new Blob([$.html()]);
+            var file = new File([blob], `${lotteryInfo.lotteryName}.html`, {
+              type: "html",
+              lastModified: Date.now()
             });
-        });
+
+            var data = new FormData();
+            data.append("module", "lottery");
+
+            data.append("file", file);
+            return addAttach(data);
+          })
+          .then(res => {
+            console.log(res);
+            this.downloadHtml($.html());
+            console.log($.html());
+          });
+      }
     },
-    bindQRCode: function (url) {
-        new QRCode(this.$refs.qrCodeDiv, {
-          text: url,
-          width: 200,
-          height: 200,
-          colorDark: "#333333", //二维码颜色
-          colorLight: "#ffffff", //二维码背景色
-          correctLevel: QRCode.CorrectLevel.L//容错率，L/M/H
-        })
-      },
-    generateQrCode(url){
-        this.bindQRCode(url)
+    bindQRCode: function(url) {
+      new QRCode(this.$refs.qrCodeDiv, {
+        text: url,
+        width: 200,
+        height: 200,
+        colorDark: "#333333", //二维码颜色
+        colorLight: "#ffffff", //二维码背景色
+        correctLevel: QRCode.CorrectLevel.L //容错率，L/M/H
+      });
+    },
+    generateQrCode(url) {
+      this.bindQRCode(url);
     },
     //生成大转盘页面
     generateWheel($, lotteryInfo) {

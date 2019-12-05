@@ -13,8 +13,8 @@
       <span slot="publish" slot-scope="text">
         <a-tag :color="text ? 'green' : 'red'">{{text ? '已发布' : '未发布'}}</a-tag>
       </span>
-      <span slot="action" slot-scope="text">
-        <a href="javascript:;">查看</a>
+      <span slot="action" slot-scope="text,record">
+        <a @click="editLottery(record)">查看</a>
         <a-divider type="vertical" />
         <a href="javascript:;">发布</a>
         <a-divider type="vertical" />
@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import { getLottery, deleteLotteryById } from "@/api/lottery";
+import { getLottery, deleteLotteryById,getLotteryById } from "@/api/lottery";
 const columns = [
   // {
   //     title: '编号',
@@ -117,6 +117,13 @@ export default {
     this.getLottery();
   },
   methods: {
+    editLottery(record){
+      getLotteryById(record.id).then(res=>{
+          this.$store.commit("Update_Lottery",res.data.data)
+          this.$router.push({ name: "lottery-add" });
+      })
+    
+    },
     getLottery(page, pageSize) {
       let params = {
         page: page != undefined ? page - 1 : this.pagination.current - 1,

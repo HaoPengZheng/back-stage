@@ -100,6 +100,20 @@ export default {
         name: "form_create",
         onValuesChange: (props, values) => {
           this.watchFields(Object.keys(values)[0], Object.values(values)[0]);
+        },
+        mapPropsToFields: ()=>{
+          if(!this.lottery){
+            return 
+          }
+          this.backgroundImageFile = []
+          return {
+            lotteryName:this.$form.createFormField({
+              value:this.lottery.lotteryName
+            }),
+            lotteryType:this.$form.createFormField({
+              value:this.lottery.lotteryType
+            })
+          }
         }
       }),
       config: {
