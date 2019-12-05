@@ -104,24 +104,29 @@
             },
             async handleRemove(file) {
                 let result = false
-                let attach_id = file.response.data.attach_id
-                await deleteAttach(attach_id).then(res => {
-                    if(res.data) {
-                        if(res.data.status == 'true') {
-                            this.$message.success(res.data.message)
-                            result = true
+                if(file.response) {
+                    let attach_id = file.response.data.attach_id
+                    await deleteAttach(attach_id).then(res => {
+                        if (res.data) {
+                            if (res.data.status == 'true') {
+                                this.$message.success(res.data.message)
+                                result = true
+                            } else {
+                                this.$message.error(res.data.message)
+                                result = false
+                            }
                         } else {
-                            this.$message.error(res.data.message)
+                            this.$message.error("删除失败")
                             result = false
                         }
-                    } else {
+                    }).catch(() => {
                         this.$message.error("删除失败")
                         result = false
-                    }
-                }).catch(() => {
-                    this.$message.error("删除失败")
-                    result = false
-                })
+                    })
+                } else {
+                    result = true
+                    this.$message.success("删除成功")
+                }
                 return result
             },
             handleConfirm() {
@@ -150,5 +155,13 @@
                 margin-left: 25px;
             }
         }
+    }
+    .ant-upload-select-picture-card i {
+        font-size: 32px;
+        color: #999;
+    }
+    .ant-upload-select-picture-card .ant-upload-text {
+        margin-top: 8px;
+        color: #666;
     }
 </style>
