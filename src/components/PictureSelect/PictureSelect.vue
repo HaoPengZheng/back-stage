@@ -12,7 +12,7 @@
         <img :src="item" width="80" height="80">
       </a-list-item>
     </a-list>
-    <a-button type="primary" @click="showPictureGallery">选择图片(已选{{value.length}}张)</a-button>
+    <a-button type="primary" @click="showPictureGallery" :disabled="disabled">选择图片(已选{{value.length}}张)</a-button>
   </div>
 </template>
 
@@ -24,20 +24,25 @@ export default {
   },
   props: {
     module: String,
-    limit: Number
+    limit: Number,
+    disabled:Boolean,
+    value: Array
   },
   data() {
     return {
       isShowPictureGallery: false,
-      value: []
+      valueTemp:[]
     };
+  },
+  created(){
+    this.valueTemp = this.value
   },
   methods: {
     handlePicSelect(fileList) {
-      this.value = fileList.map(file => {
+      this.valueTemp = fileList.map(file => {
         return file.path;
       });
-      this.$emit('input',this.value)
+      this.$emit('input',this.valueTemp)
     },
     showPictureGallery() {
       this.isShowPictureGallery = true;

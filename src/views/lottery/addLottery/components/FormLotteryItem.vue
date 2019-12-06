@@ -5,9 +5,26 @@
         <div class="title">奖品设置</div>
         <a-divider :style="{'margin': '15px 0'}" />
         <div class="value">
-          <a-button type="primary" @click="handleShowAddLotteryForm">添加奖项</a-button>
-          <a-button type="danger" style="margin-left:8px;" @click="handleCleanLotteryItem">清空奖项</a-button>
-          <a-table :columns="columns" :dataSource="lotteryItems" rowKey="lotteryItemName"></a-table>
+          <a-button
+            type="primary"
+            @click="handleShowAddLotteryForm"
+            :disabled="getAddLotteryFormDisable"
+          >添加奖项</a-button>
+          <a-button
+            type="danger"
+            style="margin-left:8px;"
+            @click="handleCleanLotteryItem"
+            :disabled="getAddLotteryFormDisable"
+          >清空奖项</a-button>
+          <div style="width:800px;">
+          <a-table
+            :columns="columns"
+            
+            :scroll="{ x: 800 }"
+            :dataSource="lotteryItems"
+            rowKey="lotteryItemName"
+          ></a-table>
+          </div>
         </div>
       </div>
 
@@ -16,28 +33,35 @@
         <a-divider :style="{'margin': '15px 0'}" />
 
         <div class="value">
-          <a-form :form="losingPriceForm">
+          <a-form :form="losingPrizeForm">
             <a-form-item label="奖项名称：" :label-col="{ span: 6 }" :wrapper-col="{ span: 16 }">
               <a-input
                 v-decorator="['prizeName', { rules: [{ required: true, message: '请输入未中奖名！' }] }]"
+                :disabled="getAddLotteryFormDisable"
               />
             </a-form-item>
-             <a-form-item label="小图标：" :label-col="{ span: 6 }" :wrapper-col="{ span: 16 }">
-                 <picture-select :multiple="false" module="lottery" v-model="smallIconPath"></picture-select>
+            <a-form-item label="小图标：" :label-col="{ span: 6 }" :wrapper-col="{ span: 16 }">
+              <picture-select :multiple="false" module="lottery" v-model="smallIconPath" :disabled="getAddLotteryFormDisable"></picture-select>
             </a-form-item>
-             <a-form-item label="跳转链接：" :label-col="{ span: 6 }" :wrapper-col="{ span: 16 }">
+            <a-form-item label="跳转链接：" :label-col="{ span: 6 }" :wrapper-col="{ span: 16 }">
               <a-input
                 v-decorator="['jumpLink', { rules: [{ required: true, message: '请选择跳转链接！' }] }]"
+                :disabled="getAddLotteryFormDisable"
               />
             </a-form-item>
-             <a-form-item label="中奖提示：" :label-col="{ span: 6 }" :wrapper-col="{ span: 16 }">
-                <picture-select :multiple="false" module="lottery" v-model="awardImagePath"></picture-select>
+            <a-form-item label="中奖提示：" :label-col="{ span: 6 }" :wrapper-col="{ span: 16 }">
+              <picture-select :multiple="false" module="lottery" v-model="awardImagePath" :disabled="getAddLotteryFormDisable"></picture-select>
             </a-form-item>
           </a-form>
         </div>
       </div>
       <div class="actions">
-        <a-button type="primary" :disabled="getAddLotteryCouldGoStep<1" @click="goLast" style="margin-right:8px;">上一步</a-button>
+        <a-button
+          type="primary"
+          :disabled="getAddLotteryCouldGoStep<1"
+          @click="goLast"
+          style="margin-right:8px;"
+        >上一步</a-button>
         <a-button type="primary" @click="handleAddLosingPrcieSubmit">下一步</a-button>
       </div>
     </div>
@@ -79,7 +103,7 @@
             v-decorator="['couponId', { rules: [{ required: true, message: '请输入优惠券ID！' }] }]"
           />
         </a-form-item>
-         <a-form-item label="库存：" :label-col="{ span: 6 }" :wrapper-col="{ span: 16 }">
+        <a-form-item label="库存：" :label-col="{ span: 6 }" :wrapper-col="{ span: 16 }">
           <a-input-number
             v-decorator="['repertory', { rules: [{ required: true, message: '请输入库存数量！' }] }]"
             :min="0"
@@ -94,15 +118,15 @@
           />
         </a-form-item>
         <a-form-item label="图标：" :label-col="{ span: 6 }" :wrapper-col="{ span: 16 }">
-         <picture-select :multiple="false" module="lottery" v-model="lotteryItemSmallIconPath"></picture-select>
-        </a-form-item>
-        <a-form-item label="中奖提示：" :label-col="{ span: 6 }" :wrapper-col="{ span: 16 }">
           <picture-select :multiple="false" module="lottery" v-model="lotteryItemSmallIconPath"></picture-select>
         </a-form-item>
+        <a-form-item label="中奖提示：" :label-col="{ span: 6 }" :wrapper-col="{ span: 16 }">
+          <picture-select :multiple="false" module="lottery" v-model="lotteryItemAwardImagePath"></picture-select>
+        </a-form-item>
         <a-form-item label="跳转链接：" :label-col="{ span: 6 }" :wrapper-col="{ span: 16 }">
-           <a-input
-                v-decorator="['jumpLink', { rules: [{ required: true, message: '请输入未中奖名！' }] }]"
-              />
+          <a-input
+            v-decorator="['jumpLink', { rules: [{ required: true, message: '请输入未中奖名！' }] }]"
+          />
         </a-form-item>
       </a-form>
 
@@ -118,13 +142,13 @@
 import {
   addLotteryItems,
   deleteLotteryItems,
-  addLosingPrice
+  addLosingPrize
 } from "@/api/lottery";
 import { mixinAddLotteryState } from "../mixin";
-import {PictureSelect} from '@/components'
+import { PictureSelect } from "@/components";
 export default {
   name: "FormLotteryItem",
-  components:{
+  components: {
     PictureSelect
   },
   props: {
@@ -136,16 +160,14 @@ export default {
       spinning: false,
       addLotteryItemVisible: false,
       priceType: 0,
-      smallIconPath:[],
-      awardImagePath:[],
-      lotteryItemSmallIconPath:[],
-       lotteryItemAwardImagePath:[],
+      smallIconPath: [],
+      awardImagePath: [],
+      lotteryItemSmallIconPath: [],
+      lotteryItemAwardImagePath: [],
       form: this.$form.createForm(this, {
         name: "form_lottery_item"
       }),
-      losingPriceForm: this.$form.createForm(this, {
-        name: "form_losing_price"
-      }),
+      losingPrizeForm: null,
       config: {
         nameConfig: { rules: [{ required: true, message: "请输入活动名称!" }] }
       },
@@ -153,15 +175,18 @@ export default {
       columns: [
         {
           title: "奖项名",
-          dataIndex: "lotteryItemName"
+          dataIndex: "lotteryItemName",
+          width: 150
         },
         {
           title: "图标",
-          dataIndex: "smallIconPath"
+          dataIndex: "smallIconPath",
+          width: 150
         },
         {
           title: "跳转链接",
-          dataIndex: "jumpLink"
+          dataIndex: "jumpLink",
+          width: 150
         },
         {
           title: "中奖照片",
@@ -190,6 +215,11 @@ export default {
       ]
     };
   },
+  watch: {
+    lottery() {
+      this.initLosingPrizeForm();
+    }
+  },
   computed: {
     lotteryItems() {
       if (this.lottery && this.lottery.lotteryItems) {
@@ -199,6 +229,29 @@ export default {
     }
   },
   methods: {
+    initLosingPrizeForm() {
+      this.losingPrizeForm = this.$form.createForm(this, {
+        name: "form_losing_price",
+        mapPropsToFields: () => {
+          if (!this.lottery) {
+            return;
+          }
+          if(!this.lottery.losingPrize){
+            return;
+          }
+          this.smallIconPath = [this.lottery.losingPrize.smallIconPath]
+          this.awardImagePath = [this.lottery.losingPrize.awardImagePath]
+          return {
+            prizeName: this.$form.createFormField({
+              value: this.lottery.losingPrize.prizeName
+            }),
+            jumpLink: this.$form.createFormField({
+              value: this.lottery.losingPrize.jumpLink
+            })
+          };
+        }
+      });
+    },
     handleShowAddLotteryForm() {
       this.addLotteryItemVisible = true;
     },
@@ -214,12 +267,18 @@ export default {
           console.log(values);
           let data = {
             lotteryItemName: values.lotteryItemName,
-            smallIconPath: this.lotteryItemSmallIconPath.length>0? this.lotteryItemSmallIconPath[0]: "",
+            smallIconPath:
+              this.lotteryItemSmallIconPath.length > 0
+                ? this.lotteryItemSmallIconPath[0]
+                : "",
             jumpLink: values.jumpLink,
             prizeType: values.prizeType,
             couponId: values.couponId,
             point: values.point,
-            awardImagePath:  this.lotteryItemAwardImagePath.length>0? this.lotteryItemAwardImagePath[0]: "",
+            awardImagePath:
+              this.lotteryItemAwardImagePath.length > 0
+                ? this.lotteryItemAwardImagePath[0]
+                : "",
             probability: values.probability,
             repertory: values.repertory
           };
@@ -233,16 +292,23 @@ export default {
       });
     },
     handleAddLosingPrcieSubmit() {
-      this.losingPriceForm.validateFields((err, values) => {
+      alert(1)
+      if(this.lottery&&this.lottery.publish){
+         this.$store.commit("Add_Lottery_Go_Next");
+         return;
+      }
+      alert(2)
+      this.losingPrizeForm.validateFields((err, values) => {
         if (!err) {
-          console.log(values);
           let data = {
-            prizeName:values.prizeName,
-            smallIconPath:this.smallIconPath.length>0? this.smallIconPath[0]: "",
-            jumpLink:values.jumpLink,
-            awardImagePath: this.awardImagePath.length>0? this.awardImagePath[0]: "",
+            prizeName: values.prizeName,
+            smallIconPath:
+              this.smallIconPath.length > 0 ? this.smallIconPath[0] : "",
+            jumpLink: values.jumpLink,
+            awardImagePath:
+              this.awardImagePath.length > 0 ? this.awardImagePath[0] : ""
           };
-          addLosingPrice(this.lottery.id, data).then(res => {
+          addLosingPrize(this.lottery.id, data).then(res => {
             this.$message.success(res.data.msg);
             this.$store.commit("Update_Lottery", res.data.data);
             this.$store.commit("Add_Lottery_Go_Next");
@@ -261,8 +327,7 @@ export default {
         this.$message.success("清除成功！");
       });
     }
-  },
-
+  }
 };
 </script>
 

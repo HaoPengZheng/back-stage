@@ -16,6 +16,8 @@
       <span slot="action" slot-scope="text,record">
         <a @click="editLottery(record)">查看</a>
         <a-divider type="vertical" />
+        <a @click="copyLottery(record)">复制</a>
+        <a-divider type="vertical" />
         <a href="javascript:;">发布</a>
         <a-divider type="vertical" />
         <a-popconfirm
@@ -41,7 +43,7 @@
 </template>
 
 <script>
-import { getLottery, deleteLotteryById,getLotteryById } from "@/api/lottery";
+import { getLottery, deleteLotteryById,getLotteryById ,copyLotteryById} from "@/api/lottery";
 const columns = [
   // {
   //     title: '编号',
@@ -124,6 +126,16 @@ export default {
       })
     
     },
+    copyLottery(record){
+      copyLotteryById(record.id).then(res=>{
+         if (res.data) {
+            this.$message.success(res.data.msg);
+          } else {
+            this.$message.success("复制成功");
+          }
+          this.getLottery();
+      })
+    },
     getLottery(page, pageSize) {
       let params = {
         page: page != undefined ? page - 1 : this.pagination.current - 1,
@@ -162,6 +174,7 @@ export default {
         });
     },
     handleClickCreate() {
+      this.$store.commit('Update_Lottery',null)
       this.$router.push({ name: "lottery-add" });
     },
     handelDeleteLottery(id) {

@@ -3,6 +3,7 @@
 const addLotteryState = {
     state: {
         activeStep: 0,//当前步骤
+        lotteryId:'',
         lottery: null,//抽奖信息
         formItemLayout: {
             labelCol: {
@@ -34,6 +35,12 @@ const addLotteryState = {
                 return 1;
             }
             return 0;
+        },
+        getAddLotteryFormDisable(state){
+            if(state.lottery){
+                return state.lottery.publish
+            }
+            return false
         }
     },
     mutations: {
@@ -42,6 +49,9 @@ const addLotteryState = {
             state.lottery = null
         },
         Update_Lottery(state, lottery) {
+            if(lottery){
+                state.lotteryId = lottery.id
+            }
             state.lottery = lottery
         },
         Add_Lottery_Go_Last(state) {

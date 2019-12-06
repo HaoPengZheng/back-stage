@@ -14,7 +14,7 @@ import QRCode from "qrcodejs2";
 import { deleteAttach, addAttach } from "@/api/attach";
 export default {
   created() {
-    this.getGoodList().then(res => {});
+    
   },
   methods: {
     publish() {
@@ -41,9 +41,12 @@ export default {
             return addAttach(data);
           })
           .then(res => {
-            console.log(res);
-            this.downloadHtml($.html());
-            console.log($.html());
+            // console.log(res);
+            // this.downloadHtml($.html());
+            // console.log($.html());
+             this.bindQRCode(
+                `http://www.00800.com.cn/cnhs/wqproject/index.php?app=public&mod=Lottery&act=index&path=${publishLink}`
+              );
           });
       }
     },

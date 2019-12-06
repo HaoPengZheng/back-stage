@@ -1,8 +1,7 @@
 <template>
   <div>
-    <a-button type="primary" @click="publish" style="margin-right:8px">发布</a-button>
-    <a-button type="primary" @click="generateQrCode">生成二维码</a-button>
-    <div id="qrCode" ref="qrCodeDiv" style="margin-top:8px"></div>
+    <a-button type="primary" @click="publish" style="margin-right:8px" :disabled="getAddLotteryFormDisable">发布</a-button>
+    <div id="qrCode" ref="qrCodeDiv" style="margin:8px:0"></div>
     <a-button
       type="primary"
       :disabled="getAddLotteryCouldGoStep<1"
@@ -22,6 +21,15 @@ import { mixinAddLotteryState } from "../mixin";
 export default {
   mixins: [mixinAddLotteryState],
   created() {},
+  watch:{
+      lottery(){
+          if(this.lottery.publish){
+               this.bindQRCode(
+                `http://www.00800.com.cn/cnhs/wqproject/index.php?app=public&mod=Lottery&act=index&path=${this.lottery.publishLink}`
+              );
+          }
+      }
+  },
   methods: {
     goLast() {
       this.$store.commit("Add_Lottery_Go_Last");
@@ -68,6 +76,7 @@ export default {
         });
     },
     bindQRCode: function(url) {
+        document.getElementById('qrCode').innerHTML = ''
       new QRCode(this.$refs.qrCodeDiv, {
         text: url,
         width: 200,
@@ -160,6 +169,52 @@ export default {
             $('#myModal').modal('hide')
         }
 
+showAwardView = function(awardImagePath,jumpLink) {
+                var str = '';
+                str += '<div class="bg-mask"></div>';
+                str += '<div class="pop-cj">';
+                str += '<div class="close" alt="关闭"></div>';
+                str += '<img class ="link" style="width:100%;margin:0 auto" src="';
+                str +=  awardImagePath;
+                str += '" alt="结果">';
+                str += '</div>';
+                //禁用滚动条
+                disableScrool(true);
+                $('body').append(str);
+
+                $('.pop-cj .link').bind('click', function() {
+                    closePop()
+                    if(jumpLink!=''&&jumpLink!=undefined&&jumpLink!=null){
+                         location.href = jumpLink
+                    }
+                });
+                
+
+                //10秒后关闭
+                //setTimeout(closePop, 10000);
+
+                //绑定关闭抽奖结果按钮
+                $('.pop-cj .close').bind('click', '.close', closePop);
+            }
+
+            disableScrool = function(flag) {
+                if (flag) {
+                    $('html').addClass('noscroll').on('touchmove', function(event) {
+                        event.preventDefault();
+                    });
+                } else {
+                    $('html').removeClass('noscroll').unbind('touchmove');
+                }
+            }
+            //关闭弹窗
+            closePop = function() {
+                $('.bg-mask').remove();
+                $('.pop-cj').remove();
+                disableScrool(false);
+                isRun = false;
+            }
+
+
          var api = {
         lottery:function (){
             let data ={
@@ -217,7 +272,7 @@ export default {
             };
 
             //旋转转盘 item:奖品位置; txt：提示语;
-            var rotateFn = function (item, txt) {
+            var rotateFn = function (item, txt ,prize) {
                 var angles = item * (360 / turnplate.restaraunts.length) - (360 / (turnplate.restaraunts.length * 2));
                 if (angles < 270) {
                     angles = 270 - angles;
@@ -234,7 +289,7 @@ export default {
                         //中奖提示
                         $('.pointer').bind('click', handlerPointerClick)
                         var prizeName = txt;
-                        alert(\`恭喜获得奖品\$\{prizeName\}，奖品已存入您的个人中心！\`)
+                        showAwardView(prize.awardImagePath,prize.jumpLink)
                         turnplate.bRotate = !turnplate.bRotate;
                     }
                 });
@@ -263,15 +318,16 @@ export default {
                         let prize = res.data
                         var item = prize.lotteryItemName
                         var index = turnplate.restaraunts.indexOf(item)
+                        
                         if(index==-1){
                             index = turnplate.restaraunts.length-1
                         }
                         //奖品数量等于10,指针落在对应奖品区域的中心角度[252, 216, 180, 144, 108, 72, 36, 360, 324, 288]
-                        rotateFn(index+1, turnplate.restaraunts[index]);
-                    }).catch(error=>{
-                        console.log(error)
-                        alert('出错了！')
-                        turnplate.bRotate = true
+                        rotateFn(index+1, turnplate.restaraunts[index],prize);
+                    }).catch(err=>{
+                        turnplate.bRotate = false
+                        alert(JSON.parse(err.responseText).msg)
+                        console.log(err)
                     })
 
             };

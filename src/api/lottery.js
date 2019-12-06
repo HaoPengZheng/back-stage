@@ -62,7 +62,7 @@ export function addLotteryItems(id,data){
 }
 
 //添加未中奖设置
-export function addLosingPrice(id,data){
+export function addLosingPrize(id,data){
     return request({
         url: `${LOTTERY_BASE_URL}/lottery/${id}/losingPrice`,
         method: 'POST',
@@ -85,5 +85,12 @@ export function publishLottery(id,data){
         url:`${LOTTERY_BASE_URL}/lottery/${id}/publish`,
         method:'PUT',
         data: qs.stringify(data),
+    })
+}
+
+export function copyLotteryById(id){
+    return request({
+        url:`${LOTTERY_BASE_URL}/lottery/${id}/copy`,
+        method:'GET'
     })
 }

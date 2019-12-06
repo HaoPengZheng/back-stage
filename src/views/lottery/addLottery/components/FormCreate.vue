@@ -8,7 +8,10 @@
 
           <div class="value">
             <a-form-item label="活动名称" v-bind="formItemLayout">
-              <a-input v-decorator="['lotteryName', config.nameConfig]" />
+              <a-input
+                v-decorator="['lotteryName', config.nameConfig]"
+                :disabled="getAddLotteryFormDisable"
+              />
             </a-form-item>
             <a-form-item label="活动类型" v-bind="formItemLayout">
               <a-radio-group v-decorator="['lotteryType', config.typeConfig]">
@@ -22,42 +25,69 @@
                 show-time
                 format="YYYY-MM-DD HH:mm:ss"
                 style="width: 100%"
+                :disabled="getAddLotteryFormDisable"
               />
             </a-form-item>
             <a-form-item label="背景图片" v-bind="formItemLayout">
               <div>
-                <picture-select :limit="1" module="lottery" v-model="backgroundImageFile"></picture-select>
+                <picture-select :limit="1" module="lottery" v-model="backgroundImageFile"  :disabled="getAddLotteryFormDisable"></picture-select>
               </div>
             </a-form-item>
             <a-form-item label="用户" v-bind="formItemLayout">
-              <a-radio-group v-decorator="['userType', config.timesTypeConfig]">
+              <a-radio-group
+                v-decorator="['userType', config.timesTypeConfig]"
+                :disabled="getAddLotteryFormDisable"
+              >
                 <a-radio value="0">所有用户</a-radio>
                 <a-radio value="1">后台设置</a-radio>
               </a-radio-group>
             </a-form-item>
             <a-form-item label="参与类型" v-bind="formItemLayout">
-              <a-radio-group v-decorator="['timesType', config.timesTypeConfig]">
+              <a-radio-group
+                v-decorator="['timesType', config.timesTypeConfig]"
+                :disabled="getAddLotteryFormDisable"
+              >
                 <a-radio value="0">N天一次</a-radio>
                 <a-radio value="1">一人N次</a-radio>
               </a-radio-group>
             </a-form-item>
             <a-form-item label="参与次数" v-bind="formItemLayout" v-if="formData.timesType">
               <div v-if="formData.timesType + '' == '0'">
-                <a-input-number v-decorator="['times', config.timesConfig]" :min="1" />天一次
+                <a-input-number
+                  v-decorator="['times', config.timesConfig]"
+                  :min="1"
+                  :disabled="getAddLotteryFormDisable"
+                />天一次
               </div>
               <div v-if="formData.timesType + '' == '1'">
                 一人
-                <a-input-number v-decorator="['times', config.timesConfig]" :min="1" />次
+                <a-input-number
+                  v-decorator="['times', config.timesConfig]"
+                  :min="1"
+                  :disabled="getAddLotteryFormDisable"
+                />次
               </div>
             </a-form-item>
             <a-form-item label="是否重置库存" v-bind="formItemLayout">
-              <a-switch v-decorator="['needReload', config.reloadConfig ]" />
+              <a-switch
+                v-decorator="['needReload', config.reloadConfig ]"
+                :disabled="getAddLotteryFormDisable"
+              />
             </a-form-item>
             <a-form-item label="多久后重置" v-bind="formItemLayout" v-if="formData.needReload">
-              <a-input-number v-decorator="['intervalHours', config.hoursConfig]" :min="1" />小时
+              <a-input-number
+                v-decorator="['intervalHours', config.hoursConfig]"
+                :min="1"
+                :disabled="getAddLotteryFormDisable"
+              />小时
             </a-form-item>
             <a-form-item label="活动详情" v-bind="formItemLayout">
-              <a-textarea placeholder="活动详情" :rows="4" v-decorator="['rule']" />
+              <a-textarea
+                placeholder="活动详情"
+                :rows="4"
+                v-decorator="['rule']"
+                :disabled="getAddLotteryFormDisable"
+              />
             </a-form-item>
 
             <a-form-item v-bind="formItemLayout">
@@ -96,26 +126,7 @@ export default {
     };
     return {
       backgroundImageFile: [],
-      form: this.$form.createForm(this, {
-        name: "form_create",
-        onValuesChange: (props, values) => {
-          this.watchFields(Object.keys(values)[0], Object.values(values)[0]);
-        },
-        mapPropsToFields: ()=>{
-          if(!this.lottery){
-            return 
-          }
-          this.backgroundImageFile = []
-          return {
-            lotteryName:this.$form.createFormField({
-              value:this.lottery.lotteryName
-            }),
-            lotteryType:this.$form.createFormField({
-              value:this.lottery.lotteryType
-            })
-          }
-        }
-      }),
+      form: null,
       config: {
         nameConfig: { rules: [{ required: true, message: "请输入活动名称!" }] },
         typeConfig: {
@@ -154,11 +165,68 @@ export default {
       isShowPictureGallery: false
     };
   },
+  created() {
+    this.initForm();
+  },
+  watch: {
+    lottery() {
+      this.initForm();
+    }
+  },
   methods: {
+    initForm() {
+      this.form = this.$form.createForm(this, {
+        name: "form_create",
+        onValuesChange: (props, values) => {
+          this.watchFields(Object.keys(values)[0], Object.values(values)[0]);
+        },
+        mapPropsToFields: () => {
+          if (!this.lottery) {
+            return;
+          }
+          this.backgroundImageFile = [this.lottery.backgroundImagePath];
+          let time = [
+            this.$moment(this.lottery.startTime),
+            this.$moment(this.lottery.endTime)
+          ];
+
+          return {
+            lotteryName: this.$form.createFormField({
+              value: this.lottery.lotteryName
+            }),
+            lotteryType: this.$form.createFormField({
+              value: this.lottery.lotteryType
+            }),
+            time: this.$form.createFormField({
+              value: time
+            }),
+            userType: this.$form.createFormField({
+              value: this.lottery.userType
+            }),
+            times: this.$form.createFormField({
+              value: this.lottery.times
+            }),
+            needReload: this.$form.createFormField({
+              value: this.lottery.needReload
+            }),
+            intervalHours: this.$form.createFormField({
+              value: this.lottery.intervalHours
+            }),
+            rule:this.$form.createFormField({
+              value: this.lottery.rule
+            }),
+          };
+        }
+      });
+    },
     watchFields(key, val) {
       this.formData[key] = val;
     },
     handleSubmit(e) {
+      if(this.lottery&&this.lottery.publish){
+         this.$store.commit("Add_Lottery_Go_Next");
+         return;
+      }
       e.preventDefault();
       this.form.validateFields((err, values) => {
         if (!err) {
