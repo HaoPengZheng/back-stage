@@ -27,6 +27,28 @@ import { LoginLayout, BasicLayout, RouteView } from '@/layouts'
             },
           ]
         },
+        {
+          path: '/shop/room/good',
+          name: 'shop-room-good',
+          redirect: '/shop/room/good',
+          component: RouteView,
+          permission: ['dashboard'],
+          meta: { title: '商品', icon: 'shop' },
+          children: [
+            {
+              path: '/shop/room/good/add',
+              name: 'shop-room-good-add',
+              component: () => import('@/views/shop/room/good/addGood/AddGood'),
+              meta: { title: '添加商品', },
+            },
+            {
+              path: '/shop/room/good/management',
+              name: 'good-management',
+              component: () => import('@/views/shop/room/good/goodManagement/GoodManagement'),
+              meta: { title: '商品管理' }
+            },
+          ]
+        },
       ]
     }
   ]

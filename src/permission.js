@@ -47,7 +47,7 @@ router.beforeEach((to, from, next) => {
       // 进店生成路由
       if(!store.getters.isGenerateShopRoutes){
         // let shopType =  Vue.ls.get('shop').getShopType()
-        let shopType = "spring"
+        let shopType = "room"
         store.dispatch('GenerateShopRoutes',shopType).then(() => {
           console.log(store)
           console.log(store.getters.shopRouters)
