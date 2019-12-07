@@ -141,10 +141,9 @@ export default {
     selectShop(shop) {
       this.$ls.set("shop", shop);
       this.$store.dispatch("ResetRouter").then(res => {
-        this.$store.dispatch('setShop',shop)
-       
+        this.$store.dispatch('setShop',shop) 
       }).then(res=>{
-         this.$router.push("/shop/room");
+         this.$router.push("/shop");
       });
     },
     showDeleteCompanyModal() {

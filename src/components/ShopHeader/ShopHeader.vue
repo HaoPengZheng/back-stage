@@ -9,7 +9,7 @@
       color="#87d068"
       style="margin-left:8px;"
       @click="jumpToCompanyChoose"
-    >切换
+    >回到公司
     </a-tag>
      <a-tag
       style="margin-left:8px;"

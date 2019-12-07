@@ -1,5 +1,5 @@
 //权限
-import { asyncRouterMap, constantRouterMap,asyncShopRouterMap } from '@/router/router.config.js'
+import { asyncRouterMap, constantRouterMap,asyncShopRoomRouterMap,asyncShopSpringRouterMap } from '@/router/router.config.js'
 import {resetRouter} from '@/router'
 /**
  * 过滤账户是否拥有某一个权限，并将菜单从加载列表移除
@@ -111,10 +111,16 @@ const permission = {
         resolve()
       })
     },
-    GenerateShopRoutes({commit}){
+    GenerateShopRoutes({commit},shopType='spring'){
       return new Promise(resolve => {
         let permissionList = ['*']
-        const accessedRouters = filterAsyncRouter(asyncShopRouterMap, permissionList);
+        let shopTypeMap = {
+          'room':asyncShopRoomRouterMap,
+          'spring':asyncShopSpringRouterMap
+        }
+        let shopRouterMap = shopTypeMap[shopType]
+
+        const accessedRouters = filterAsyncRouter(shopRouterMap, permissionList);
         commit('SET_SHOP_ROUTERS', accessedRouters)
         commit('SET_IS_GENERATE_SHOP_ROUTES',true)
         resolve()

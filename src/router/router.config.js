@@ -1,7 +1,9 @@
 // eslint-disable-next-line
 import { LoginLayout, BasicLayout, RouteView } from '@/layouts'
 import { ShopLayout } from '../layouts'
-
+import { asyncShopRoomRouterMap} from './router.room'
+import { asyncShopSpringRouterMap } from './router.spring'
+import { constantRouterMap } from './router.base';
 /**
  * 公司动态路由
  */
@@ -16,11 +18,17 @@ export const asyncRouterMap = [
       {
         path: '/dashboard',
         name: 'dashboard',
-        redirect: '/dashboard/statistics',
+        redirect: '/dashboard/shop',
         component: RouteView,
         permission: ['dashboard'],
         meta: { title: '仪表盘', icon: 'form' },
         children: [
+          {
+            path: '/dashboard/shop',
+            name: 'shop-choice',
+            component: () => import('@/views/dashboard/shopChoice/ShopChoice'),
+            meta: { title: '进店' }
+          },
           {
             path: '/dashboard/statistics',
             name: 'statistics',
@@ -41,12 +49,6 @@ export const asyncRouterMap = [
             name: 'admin-log',
             component: () => import('@/views/dashboard/AdminLog'),
             meta: { title: '系统日志' },
-          },
-          {
-            path: '/dashboard/shop',
-            name: 'shop-choice',
-            component: () => import('@/views/dashboard/shopChoice/ShopChoice'),
-            meta: { title: '进店' }
           }
         ]
       },
@@ -465,102 +467,12 @@ export const asyncRouterMap = [
 /**
  * 店动态路由
  */
-export const asyncShopRouterMap = [
-  {
-    path: '/shop',
-    name: 'shop-home',
-    component: ShopLayout,
-    meta: { title: '首页' },
-    redirect: '/shop/room',
-    children: [
-      {
-        path: '/shop/room',
-        name: 'shop-dashboard',
-        redirect: '/shop/room/roomManagement',
-        component: RouteView,
-        permission: ['dashboard'],
-        meta: { title: '房价管理', icon: 'form' },
-        children: [
-          {
-            path: '/shop/room/roomManagement',
-            name: 'shop-room-roomManagement',
-            component: () => import('@/views/shop/room/roomManagement/RoomManagement'),
-            meta: { title: '房间管理', },
-          },
-        ]
-      },
-    ]
-  }
-]
 
+export {asyncShopSpringRouterMap ,asyncShopRoomRouterMap};
 
 /**
  * 基础路由
  * @type { *[] }
  */
-export const constantRouterMap = [
-  {
-    path: '/',
-    component: LoginLayout,
-    redirect: '/login',
-    children: [
-      {
-        path: 'login',
-        name: 'login',
-        component: () => import('@/views/user/Login'),
-        meta: { title: '登录' }
-      },
-      {
-        path: '/company-choose',
-        name: 'company-choose',
-        component: () => import('@/views/user/CompanyChoose'),
-        meta: { title: '切换公司' }
-      }
-    ]
-  },
-  {
-    path: '/apply',
-    component: LoginLayout,
-    redirect: '/apply/company',
-    children: [
-      {
-        path: '/apply/company',
-        name: 'apply-company',
-        component: () => import(/* webpackChunkName: "fail" */ '@/views/public/ApplyCompany'),
-        meta: { title: '申请公司', }
-      }
-    ]
-  },
-  // Exception
-  {
-    path: '/exception',
-    name: 'exception',
-    component: RouteView,
-    redirect: '/exception/403',
-    meta: {
-      title: '异常页',
-      icon: 'warning',
-      permission: ['exception']
-    },
-    children: [
-      {
-        path: '403',
-        name: 'Exception403',
-        component: () => import(/* webpackChunkName: "fail" */ '@/views/exception/403'),
-        meta: { title: '403', }
-      },
-      {
-        path: '404',
-        name: 'Exception404',
-        component: () => import(/* webpackChunkName: "fail" */ '@/views/exception/404'),
-        meta: { title: '404', }
-      },
-      {
-        path: '500',
-        name: 'Exception500',
-        component: () => import(/* webpackChunkName: "fail" */ '@/views/exception/500'),
-        meta: { title: '500', }
-      }
-    ]
-  }
-]
+export {constantRouterMap};
+

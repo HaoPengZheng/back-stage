@@ -64,8 +64,11 @@
                   />
                 </a-form-item>
                 <a-form-item :label-col="{ span: 3 }" :wrapper-col="{ span: 16 }" label="职位">
+                
                   <a-cascader
                     :options="roleOptions"
+                    :showSearch="{filter}"
+                      @change="onRoleOptionChange"
                     placeholder="没有职位的部门将选择不了"
                     v-decorator="['role', { rules: [{ required: true, message: '职位是必须要填的!'}]}]"
                   />
@@ -92,7 +95,7 @@
                 </a-form-item>
                 <a-form-item :label-col="{ span: 3 }" :wrapper-col="{ span: 16 }" label="婚姻状况">
                   <a-radio-group v-decorator="['maritalStatus', { rules: [{ required: false}]}]">
-                    <a-radio :value="0">未知</a-radio>
+                    <a-radio :value="0">离异</a-radio>
                     <a-radio :value="1">已婚</a-radio>
                     <a-radio :value="2">未婚</a-radio>
                   </a-radio-group>
@@ -117,9 +120,8 @@
                   :label-col="{ span: 3 }"
                   :wrapper-col="{ span: 16 }"
                   label="到职日期"
-                  :required="true"
                 >
-                  <a-date-picker v-decorator="['EOD', { rules: [{ required:true}]}]"></a-date-picker>
+                  <a-date-picker v-decorator="['EOD', { rules: []}]"></a-date-picker>
                 </a-form-item>
                 <a-form-item
                   :label-col="{ span: 3 }"
@@ -256,7 +258,46 @@ export default {
       expandedKeys: [],
       autoExpandParent: true,
       checkedKeys: [],
-      selectedKeys: []
+      selectedKeys: [],
+        options: [
+          {
+            value: 'zhejiang',
+            label: 'Zhejiang',
+            children: [
+              {
+                value: 'hangzhou',
+                label: 'Hangzhou',
+                children: [
+                  {
+                    value: 'xihu',
+                    label: 'West Lake',
+                  },
+                  {
+                    value: 'xiasha',
+                    label: 'Xia Sha',
+                    disabled: true,
+                  },
+                ],
+              },
+            ],
+          },
+          {
+            value: 'jiangsu',
+            label: 'Jiangsu',
+            children: [
+              {
+                value: 'nanjing',
+                label: 'Nanjing',
+                children: [
+                  {
+                    value: 'zhonghuamen',
+                    label: 'Zhong Hua men',
+                  },
+                ],
+              },
+            ],
+          },
+        ],
     };
   },
   watch: {
@@ -310,6 +351,23 @@ export default {
     }
   },
   methods: {
+    onChange(value, selectedOptions) {
+        console.log(value, selectedOptions);
+      },
+ 
+    onRoleOptionChange(value, selectedOptions){
+      //  this.form.setFieldsValue({
+      //    role:value
+      //  })
+        console.log(value, selectedOptions);
+        console.log(this.form.getFieldValue('role'))
+
+    },
+     filter(inputValue, path) {
+        return path.some(
+          option => option.label.toLowerCase().indexOf(inputValue.toLowerCase()) > -1,
+        );
+      },
     initData() {
       let params = {
         company: this.$ls.get("company").id
@@ -651,6 +709,9 @@ export default {
 
           let role = values.role[values.role.length - 1].split("-")[1];
           console.log(values.TermDate)
+          if(!values.EOD){
+            values.EOD = this.$moment(`${new Date().getFullYear()}-${new Date().getMonth()}-${new Date().getDate()}`)
+          }
           if(!values.TermDate){
             values.TermDate = this.$moment(`${new Date().getFullYear()+100}-${new Date().getMonth()}-${new Date().getDate()}`)
           }
@@ -669,9 +730,9 @@ export default {
             education: values.education,
             contact: values.phoneNumber,
             enter_office_date:
-              values.EOD && values.EOD.format("L").replace(/\//g, "-"),
+              values.EOD && values.EOD.format('YYYY-MM-DD'),
             arrival_date:
-              values.TermDate && values.TermDate.format("L").replace(/\//g, "-"),
+              values.TermDate && values.TermDate.format('YYYY-MM-DD'),
             identify_card_url:this.employeePictrue
           };
 
@@ -721,7 +782,7 @@ export default {
             };
             appAddPerson(mechineData).then(res => {
               this.loadding = false;
-              this.$emit('refresh')
+              // this.$emit('refresh')
             });
           }).catch(err=>{
             console.log(err.response)

@@ -1,10 +1,10 @@
 <template>
   <div class="content-warp">
-    <a-tabs defaultActiveKey="1">
-      <a-tab-pane tab="员工列表" key="1">
+    <a-tabs defaultActiveKey="list" @change="handleTabChange">
+      <a-tab-pane tab="员工列表" key="list">
         <employee-list ref="employeeList"></employee-list>
       </a-tab-pane>
-      <a-tab-pane tab="添加员工" key="2" forceRender>
+      <a-tab-pane tab="添加员工" key="add" forceRender>
         <add-employee @refresh="refresh"></add-employee >
       </a-tab-pane>
     </a-tabs>
@@ -32,6 +32,11 @@ export default {
   methods: {
     refresh(){
       this.$refs.employeeList.refresh()
+    },
+    handleTabChange(activeKey){
+      if(activeKey == "list"){
+        this.refresh()
+      }
     }
   }
 };
