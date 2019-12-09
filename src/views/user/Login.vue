@@ -205,25 +205,29 @@ export default {
                 let permissions = res.data.data;
                 this.$store.commit("SET_TOKEN", token);
                 this.$ls.set("Access-Token", token, expires_in * 1000);
+                this.$ls.set("Access-Token-Expires",expires_in * 1000)
                 this.$ls.set("PERMISSIONS", permissions, expires_in * 1000);
                 this.$router.push({ name: "company-choose" });
                 //重置token
                 setTimeout(() => {
                   updateToken().then(response => {
-                    console.log(response);
-                    this.$store.commit("SET_TOKEN", response.data.token);
+                    let responseData = response.data
+                    let expires_in =responseData.expires_in * 1000
+                    this.$store.commit("SET_TOKEN", `${responseData.token_type} ${responseData.access_token}`);
+                    this.$ls.set("Access-Token-Expires",expires_in)
+                    this.$ls.set("Access-Token-Expires-Time",new Date().getTime + expires_in)
                     this.$ls.set(
                       "Access-Token",
-                      response.data.token,
-                      response.data.expires_in * 1000
+                      responseData.access_token,
+                      expires_in
                     );
                     this.$ls.set(
                       "PERMISSIONS",
-                      response.data.data,
-                      response.data.expires_in * 1000
+                      responseData.data,
+                      expires_in
                     );
                   });
-                }, (expires_in - 5 * 60) * 1000);
+                },  expires_in*1000);
 
                 
               }

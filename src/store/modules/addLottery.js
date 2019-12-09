@@ -45,7 +45,7 @@ const addLotteryState = {
     },
     mutations: {
         Reset_Add_Lottery: state => {
-            state.step = 0
+            state.activeStep = 0
             state.lottery = null
         },
         Update_Lottery(state, lottery) {

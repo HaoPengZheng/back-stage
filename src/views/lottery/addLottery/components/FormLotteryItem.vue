@@ -16,14 +16,22 @@
             @click="handleCleanLotteryItem"
             :disabled="getAddLotteryFormDisable"
           >清空奖项</a-button>
-          <div style="width:800px;">
+          <div >
           <a-table
             :columns="columns"
             
-            :scroll="{ x: 800 }"
+            :scroll="{ x: 1000 }"
             :dataSource="lotteryItems"
             rowKey="lotteryItemName"
-          ></a-table>
+          >
+            <span slot="renderSmallIconPath" slot-scope="text">
+              <img :src="text" width="40" height="40">
+           
+            </span>
+             <span slot="renderAwardImagePath" slot-scope="text">
+              <img :src="text" width="80" height="80">
+            </span>
+          </a-table>
           </div>
         </div>
       </div>
@@ -181,7 +189,9 @@ export default {
         {
           title: "图标",
           dataIndex: "smallIconPath",
-          width: 150
+          width: 150,
+          slots: { title: 'smallIconPath' },
+          scopedSlots: { customRender: 'renderSmallIconPath' },
         },
         {
           title: "跳转链接",
@@ -190,7 +200,9 @@ export default {
         },
         {
           title: "中奖照片",
-          dataIndex: "awardImagePath"
+          dataIndex: "awardImagePath",
+           slots: { title: 'awardImagePath' },
+          scopedSlots: { customRender: 'renderAwardImagePath' },
         },
         {
           title: "奖品类型",

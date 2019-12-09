@@ -15,6 +15,30 @@ service.interceptors.request.use(config => {
   store.commit('SET_IS_PAGE_LOADDING', true)
   let token = Vue.ls.get('Access-Token')
   if (token) {
+    //重置token
+    let tokenExpire = Vue.ls.get('Access-Token-Expires-Time')
+    //小于5分钟内有请求
+    if (tokenExpire && new Date().getTime()-tokenExpire < 5 * 60 * 1000) {
+      updateToken().then(response => {
+        let responseData = response.data
+        let expires_in = responseData.expires_in * 1000
+        this.$store.commit("SET_TOKEN", responseData.access_token);
+        this.$ls.set("Access-Token-Expires", expires_in)
+        this.$ls.set("Access-Token-Expires-Time", new Date().getTime() + expires_in)
+        this.$ls.set(
+          "Access-Token",
+          responseData.access_token,
+          expires_in
+        );
+        this.$ls.set(
+          "PERMISSIONS",
+          responseData.data,
+          expires_in
+        );
+      });
+    }
+
+
     const TIME_OFFSET = 0.1
     if (+new Date().getTime() - +store.getters.getLoginTime >= +store.getters.getExpiresIn * 1000) {
       store.dispatch('logout')

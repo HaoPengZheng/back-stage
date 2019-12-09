@@ -51,13 +51,13 @@ export default {
 }
 .form-list {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   padding: 20px;
   .left {
-    flex: 4;
+    flex: 3;
     display: flex;
     align-items: flex-start;
-    justify-content: flex-end;
+    justify-content: center;
     img {
       width: 300px;
       height: auto;
