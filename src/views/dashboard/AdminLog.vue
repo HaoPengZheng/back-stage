@@ -29,7 +29,6 @@
                 </a-form-item>
                 <a-form-item :label-col="{ span: 3 }" :wrapper-col="{ span: 16 }" label="性别">
                   <a-radio-group v-model="Sex">
-                    <a-radio :value="0">未知</a-radio>
                     <a-radio :value="1">男</a-radio>
                     <a-radio :value="2">女</a-radio>
                   </a-radio-group>
@@ -54,7 +53,7 @@
                 </a-form-item>
                 <a-form-item :label-col="{ span: 3 }" :wrapper-col="{ span: 16 }" label="婚姻状况">
                   <a-radio-group v-model="Sex">
-                    <a-radio :value="0">未知</a-radio>
+                    <a-radio :value="0">离异</a-radio>
                     <a-radio :value="1">已婚</a-radio>
                     <a-radio :value="2">未婚</a-radio>
                   </a-radio-group>
