@@ -99,7 +99,7 @@
                         <a-radio-group
                           v-decorator="['maritalStatus', { rules: [{ required: false}]}]"
                         >
-                          <a-radio :value="0">未知</a-radio>
+                          <a-radio :value="0">离异</a-radio>
                           <a-radio :value="1">已婚</a-radio>
                           <a-radio :value="2">未婚</a-radio>
                         </a-radio-group>

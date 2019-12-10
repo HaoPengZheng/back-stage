@@ -34,7 +34,6 @@
                   <a-radio-group
                     v-decorator="['Sex', { rules: [{ required: true, message: '性别是必须要填的!'}]}]"
                   >
-                    <a-radio :value="2">未知</a-radio>
                     <a-radio :value="1">男</a-radio>
                     <a-radio :value="0">女</a-radio>
                   </a-radio-group>
@@ -82,7 +81,7 @@
                 <a-form-item :label-col="{ span: 3 }" :wrapper-col="{ span: 16 }" label="密码">
                   <a-input
                     placeholder="员工登录的密码"
-                    v-decorator="['password', { rules: [{ required: true, message: '密码是必须要填的!'}]}]"
+                    v-decorator="['password', { initialValue:'123456',rules: [{ required: true, message: '密码是必须要填的!'}]}]"
                   />
                 </a-form-item>
                 <a-form-item :label-col="{ span: 3 }" :wrapper-col="{ span: 16 }" label="户口性质">
@@ -259,45 +258,7 @@ export default {
       autoExpandParent: true,
       checkedKeys: [],
       selectedKeys: [],
-        options: [
-          {
-            value: 'zhejiang',
-            label: 'Zhejiang',
-            children: [
-              {
-                value: 'hangzhou',
-                label: 'Hangzhou',
-                children: [
-                  {
-                    value: 'xihu',
-                    label: 'West Lake',
-                  },
-                  {
-                    value: 'xiasha',
-                    label: 'Xia Sha',
-                    disabled: true,
-                  },
-                ],
-              },
-            ],
-          },
-          {
-            value: 'jiangsu',
-            label: 'Jiangsu',
-            children: [
-              {
-                value: 'nanjing',
-                label: 'Nanjing',
-                children: [
-                  {
-                    value: 'zhonghuamen',
-                    label: 'Zhong Hua men',
-                  },
-                ],
-              },
-            ],
-          },
-        ],
+     
     };
   },
   watch: {
