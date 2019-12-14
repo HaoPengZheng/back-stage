@@ -1,67 +1,47 @@
 <template>
   <div class="user-info-warp">
-    <a-row>
-      <a-col
-        :xs="24"
-        :sm="12"
-        :md="5"
-      ><span class="info-item">客户名:{{info.name}}</span></a-col>
-      <a-col
-        :xs="24"
-        :sm="12"
-        :md="5"
-      ><span class="info-item">会员级别:{{info.vipLevel}}</span></a-col>
-      <a-col
-        :xs="24"
-        :sm="12"
-        :md="5"
-      ><span class="info-item">积分:{{info.points}}</span></a-col>
-      <a-col
-        :xs="24"
-        :sm="12"
-        :md="5"
-      ><span class="info-item">手机号:{{info.phone}}</span></a-col>
-
-      <a-col
-        :xs="24"
-        :sm="12"
-        :md="4"
-      ><span class="info-item">旧卡号:{{info.oldCardNumber}}</span></a-col>
-      <a-col
-        :xs="24"
-        :sm="12"
-        :md="5"
-      ><span class="info-item">生日:{{info.birthday}}</span></a-col>
-      <a-col
-        :xs="24"
-        :sm="12"
-        :md="5"
-      ><span class="info-item">信息:{{info.tagInfo}}</span></a-col>
-      <a-col
-        :xs="24"
-        :sm="12"
-        :md="5"
-      ><span class="info-item">邮箱:{{info.email}}</span></a-col>
-      <a-col
-        :xs="24"
-        :sm="12"
-        :md="9"
-      ><span class="info-item">地址:{{info.address}}</span></a-col>
-    </a-row>
+    <a-popover placement="bottomLeft">
+      <template slot="content">
+        
+        <p><a-icon type="euro" />{{info.points}}</p>
+        <p><a-icon type="crown" />{{info.vipLevel}}</p>
+        <p><a-icon type="phone" />{{info.phone}}</p>
+        <p><a-icon type="environment" />{{info.address}}</p>
+      </template>
+      <template slot="title">
+        <span>用户个人资料</span>
+      </template>
+      <a-button type="link">{{info.name}}({{info.phone}},{{info.vipLevel}})</a-button>
+    </a-popover>
   </div>
 </template>
 
 <script>
 export default {
   props: {
-    info: Object
+    // info: Object
+  },
+  data(){
+    return{
+       info: {
+        name: "刘光光",
+        vipLevel: "白银会员",
+        points: "2000分",
+        phone: "15919289952",
+        oldCardNumber: "8602585",
+        birthday: "2019/01/06",
+        tagInfo: "喜欢吃辣，蔡少盐",
+        email: "",
+        address: "广东省珠海市斗门区斗门镇珠海XXXX"
+      }
+    }
   }
 };
 </script>
 
 <style lang="less" scoped>
-.user-info-warp{
-  .info-item{
+.user-info-warp {
+  .info-item {
     font-size: 16px;
     width: 100%;
     border-bottom: 1px solid #ddd;

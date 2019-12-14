@@ -9,11 +9,16 @@
       @search="onSearch"
     />
     <a-button type="primary">确认</a-button>
+    <user-info></user-info>
   </div>
 </template>
 
 <script>
+import UserInfo from "./UserInfo";
 export default {
+  components:{
+    UserInfo
+  },
   methods: {
     onSearch() {}
   }
@@ -23,7 +28,7 @@ export default {
 <style lang="less" scoped>
 .user-search-warp {
   display: flex;
-  justify-content: center;
+  justify-content: left;
   align-items: center;
   padding: 20px 0;
   width: 100%;

@@ -4,7 +4,7 @@
       {{orderItem.goodName}}
     </div>
     <div>
-      数量:<a-input-number :min="1" :max="100000" :defaultValue="orderItem.number" @change="onChange" />
+      数量:<a-input-number :min="1" :max="100000" :defaultValue="orderItem.number" size="small" @change="onChange" />
     </div>
     <div>
       使用日期:{{orderItem.useTime}}
