@@ -11,7 +11,7 @@ export function getStaff() {
 
 /**
  * 创建职位
- * @param {*} data 
+ * @params {*} data 
  */
 export function createStaff(data){
     return request({
@@ -67,5 +67,32 @@ export function deleteEmployee(userId){
     return request({
         url:`${USER_BASE_URL}/api/staffs/${userId}`,
         method:'delete'
+    })
+}
+
+
+//更新员工角色
+export function patchEmployeeRole(userId,params){
+    return request({ 
+        url:`${USER_BASE_URL}/api/staff-roles/${userId}`,
+        method:'patch',
+        params
+    })
+}
+
+//删除员工角色 
+export function deleteEmployeeRole(params){
+    return request({
+        url:`${USER_BASE_URL}/api/staff-roles/${userId}`,
+        method:'delete',
+        params
+    })
+}
+
+export function getEmployeeList(params){
+    return request({
+        url:`${USER_BASE_URL}/api/staffs?include=authorization,staffInformation`,
+        method:'get',
+        params
     })
 }

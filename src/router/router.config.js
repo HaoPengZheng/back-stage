@@ -100,6 +100,12 @@ export const asyncRouterMap = [
             meta: { title: '员工管理' }
           },
           {
+            path: '/company/employee/list',
+            name: 'staff-list',
+            component: () => import('@/views/company/employeeList/EmployeeList'),
+            meta: { title: '员工列表' }
+          },
+          {
             path: '/company/organizational/management',
             name: 'organizational-management',
             component: () => import('@/views/company/organizational/OrgManagement'),

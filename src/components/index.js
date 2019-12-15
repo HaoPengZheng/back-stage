@@ -30,6 +30,7 @@ import Coupon from './Coupon'
 import Steps from './Steps'
 import PictureGallery from './PictureGallery'
 import PictureSelect from './PictureSelect'
+import RoleSelect from './RoleSelect'
 export {
   ExceptionPage,
   GlobalHeader,
@@ -60,5 +61,6 @@ export {
   Coupon,
   Steps,
   PictureGallery,
-  PictureSelect
+  PictureSelect,
+  RoleSelect
 }

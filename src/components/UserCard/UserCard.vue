@@ -1,7 +1,7 @@
 <template>
   <a-popover title="Title" trigger="hover">
     <template slot="content">
-      <a-skeleton :loading="loading" avatar :paragraph="{rows: 3}" style="width:240px">
+      <a-skeleton :loading="loading" avatar :paragraph="{rows: 3}" style="width:240px;" >
         <a-popover trigger="hover">
           <template slot="content">
             <a-skeleton :loading="loading" avatar :paragraph="{rows: 3}" style="width:360px">

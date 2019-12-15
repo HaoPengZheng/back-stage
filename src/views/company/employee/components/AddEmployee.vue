@@ -1,162 +1,155 @@
 <template>
   <!-- <a-spin :spinning="loadding"> -->
-    <div>
-      <object type="application/cert-reader" id="CertCtl" width="0" height="0">找不到控件</object>
-      <div class="idCardReader-control">
-        <a-button type="primary" style="margin-right:8px" @click="connect">连接设备</a-button>
-        <!-- <a-button type="primary" style="margin-right:8px" @click="getVersion()">版本</a-button>
-        <a-button type="primary" style="margin-right:8px" @click="getStatus()">状态</a-button>-->
-        <a-button
-          type="primary"
-          style="margin-right:8px;background:#f50;border-color:#f50"
-          @click="readCert"
-        >读卡</a-button>
-        <!-- <a-button type="primary" style="margin-right:8px" @click="readACardId()">读A卡</a-button>
-        <a-button type="primary" style="margin-right:8px" @click="readBCardId()">读B卡</a-button>-->
-        <a-button type="danger" style="margin-right:8px" @click="disconnect()">断开连接</a-button>读卡信息:
-        <a-tag color="#f50" v-if="resultFlag">{{errorMsg}}</a-tag>
-        <a-tag color="#87d068" v-else>{{errorMsg}}</a-tag>
-        <span>此页面功能需要控件才能正常使用,请使用360浏览器</span>
-      </div>
-      <a-form layout="vertical" :form="form" @submit="handleMechineSubmit">
-        <div>
-          <div class="card-warp">
-            <a-divider orientation="left">主要信息</a-divider>
-            <a-row type="flex" justify="start">
-              <a-col :span="14">
-                <a-form-item :label-col="{ span: 3 }" :wrapper-col="{ span: 16 }" :label="`姓名`">
-                  <a-input
-                    placeholder="请填写用户真实姓名"
-                    v-decorator="['Name', { rules: [{ required: true, message: '真实姓名是必须要填的!' }] }]"
-                  />
-                </a-form-item>
-                <a-form-item :label-col="{ span: 3 }" :wrapper-col="{ span: 16 }" label="性别">
-                  <a-radio-group
-                    v-decorator="['Sex', { rules: [{ required: true, message: '性别是必须要填的!'}]}]"
-                  >
-                    <a-radio :value="1">男</a-radio>
-                    <a-radio :value="0">女</a-radio>
-                  </a-radio-group>
-                </a-form-item>
-                <a-form-item :label-col="{ span: 3 }" :wrapper-col="{ span: 16 }" :label="`身份证号码`">
-                  <a-input
-                    placeholder="请填写身份证号码"
-                    v-decorator="['CardNo', { rules: [{ required: true, message: '身份证号码是必须要填的!'}]}]"
-                  />
-                </a-form-item>
-                <a-form-item :label-col="{ span: 3 }" :wrapper-col="{ span: 16 }" :label="`民族`">
-                  <a-input
-                    placeholder="请填写用户民族"
-                    v-decorator="['Nation', { rules: [{ required: true, message: '民族是必须要填的!'}]}]"
-                  />
-                </a-form-item>
-                <a-form-item :label-col="{ span: 3 }" :wrapper-col="{ span: 16 }" :label="`出生`">
-                  <!-- <a-input placeholder="请填写用户真实姓名" v-model="Birth" /> -->
-                  <a-date-picker
-                    v-decorator="['Birth', { rules: [{ required: true, message: '出生日期是必须要填的!'}]}]"
-                  ></a-date-picker>
-                </a-form-item>
-                <a-form-item :label-col="{ span: 3 }" :wrapper-col="{ span: 16 }" :label="`地址`">
-                  <a-input
-                    placeholder="请填写用户地址"
-                    v-decorator="['Address', { rules: [{ required: true, message: '地址是必须要填的!'}]}]"
-                  />
-                </a-form-item>
-                <a-form-item :label-col="{ span: 3 }" :wrapper-col="{ span: 16 }" label="职位">
-                
-                  <a-cascader
-                    :options="roleOptions"
-                    :showSearch="{filter}"
-                      @change="onRoleOptionChange"
-                    placeholder="没有职位的部门将选择不了"
-                    v-decorator="['role', { rules: [{ required: true, message: '职位是必须要填的!'}]}]"
-                  />
-                </a-form-item>
-                <a-form-item :label-col="{ span: 3 }" :wrapper-col="{ span: 16 }" label="账号">
-                  <a-input
-                    placeholder="员工登录的账号"
-                    v-decorator="['account', { rules: [{ required: true, message: '账号是必须要填的(将作为员工查数据使用)!'}]}]"
-                  />
-                </a-form-item>
-                <a-form-item :label-col="{ span: 3 }" :wrapper-col="{ span: 16 }" label="密码">
-                  <a-input
-                    placeholder="员工登录的密码"
-                    v-decorator="['password', { initialValue:'123456',rules: [{ required: true, message: '密码是必须要填的!'}]}]"
-                  />
-                </a-form-item>
-                <a-form-item :label-col="{ span: 3 }" :wrapper-col="{ span: 16 }" label="户口性质">
-                  <a-radio-group
-                    v-decorator="['accountProperties', { rules: [{ required: false}]}]"
-                  >
-                    <a-radio :value="0">城镇户口</a-radio>
-                    <a-radio :value="1">农村户口</a-radio>
-                  </a-radio-group>
-                </a-form-item>
-                <a-form-item :label-col="{ span: 3 }" :wrapper-col="{ span: 16 }" label="婚姻状况">
-                  <a-radio-group v-decorator="['maritalStatus', { rules: [{ required: false}]}]">
-                    <a-radio :value="0">离异</a-radio>
-                    <a-radio :value="1">已婚</a-radio>
-                    <a-radio :value="2">未婚</a-radio>
-                  </a-radio-group>
-                </a-form-item>
-                <a-form-item :label-col="{ span: 3 }" :wrapper-col="{ span: 16 }" label="学历">
-                  <a-radio-group v-decorator="['education', { rules: [{ required: false}]}]">
-                    <a-radio :value="0">小学</a-radio>
-                    <a-radio :value="1">初中</a-radio>
-                    <a-radio :value="2">中专</a-radio>
-                    <a-radio :value="3">高中</a-radio>
-                    <a-radio :value="4">大专</a-radio>
-                    <a-radio :value="5">本科</a-radio>
-                    <a-radio :value="6">硕士</a-radio>
-                    <a-radio :value="7">博士</a-radio>
-                  </a-radio-group>
-                </a-form-item>
-                <a-form-item :label-col="{ span: 3 }" :wrapper-col="{ span: 16 }" :label="`联系方式`">
-                  <a-input v-decorator="['phoneNumber', { rules: [{ required: false}]}]" />
-                </a-form-item>
+  <div>
+    <object type="application/cert-reader" id="CertCtl" width="0" height="0">找不到控件</object>
+    <div class="idCardReader-control">
+      <a-button type="primary" style="margin-right:8px" @click="connect">连接设备</a-button>
+      <!-- <a-button type="primary" style="margin-right:8px" @click="getVersion()">版本</a-button>
+      <a-button type="primary" style="margin-right:8px" @click="getStatus()">状态</a-button>-->
+      <a-button
+        type="primary"
+        style="margin-right:8px;background:#f50;border-color:#f50"
+        @click="readCert"
+      >读卡</a-button>
+      <!-- <a-button type="primary" style="margin-right:8px" @click="readACardId()">读A卡</a-button>
+      <a-button type="primary" style="margin-right:8px" @click="readBCardId()">读B卡</a-button>-->
+      <a-button type="danger" style="margin-right:8px" @click="disconnect()">断开连接</a-button>读卡信息:
+      <a-tag color="#f50" v-if="resultFlag">{{errorMsg}}</a-tag>
+      <a-tag color="#87d068" v-else>{{errorMsg}}</a-tag>
+      <span>此页面功能需要控件才能正常使用,请使用360浏览器</span>
+    </div>
+    <a-form layout="vertical" :form="form" @submit="handleMechineSubmit">
+      <div>
+        <div class="card-warp">
+          <a-divider orientation="left">主要信息</a-divider>
+          <a-row type="flex" justify="start">
+            <a-col :span="14">
+              <a-form-item :label-col="{ span: 3 }" :wrapper-col="{ span: 16 }" :label="`姓名`">
+                <a-input
+                  placeholder="请填写用户真实姓名"
+                  v-decorator="['Name', { rules: [{ required: true, message: '真实姓名是必须要填的!' }] }]"
+                />
+              </a-form-item>
+              <a-form-item :label-col="{ span: 3 }" :wrapper-col="{ span: 16 }" label="性别">
+                <a-radio-group
+                  v-decorator="['Sex', { rules: [{ required: true, message: '性别是必须要填的!'}]}]"
+                >
+                  <a-radio :value="1">男</a-radio>
+                  <a-radio :value="0">女</a-radio>
+                </a-radio-group>
+              </a-form-item>
+              <a-form-item :label-col="{ span: 3 }" :wrapper-col="{ span: 16 }" :label="`身份证号码`">
+                <a-input
+                  placeholder="请填写身份证号码"
+                  v-decorator="['CardNo', { rules: [{ required: true, message: '身份证号码是必须要填的!'}]}]"
+                />
+              </a-form-item>
+              <a-form-item :label-col="{ span: 3 }" :wrapper-col="{ span: 16 }" :label="`民族`">
+                <a-input
+                  placeholder="请填写用户民族"
+                  v-decorator="['Nation', { rules: [{ required: true, message: '民族是必须要填的!'}]}]"
+                />
+              </a-form-item>
+              <a-form-item :label-col="{ span: 3 }" :wrapper-col="{ span: 16 }" :label="`出生`">
+                <!-- <a-input placeholder="请填写用户真实姓名" v-model="Birth" /> -->
+                <a-date-picker
+                  v-decorator="['Birth', { rules: [{ required: true, message: '出生日期是必须要填的!'}]}]"
+                ></a-date-picker>
+              </a-form-item>
+              <a-form-item :label-col="{ span: 3 }" :wrapper-col="{ span: 16 }" :label="`地址`">
+                <a-input
+                  placeholder="请填写用户地址"
+                  v-decorator="['Address', { rules: [{ required: true, message: '地址是必须要填的!'}]}]"
+                />
+              </a-form-item>
+              <a-form-item :label-col="{ span: 3 }" :wrapper-col="{ span: 16 }" label="职位">
+                <a-cascader
+                  :options="roleOptions"
+                  :showSearch="{filter}"
+                  @change="onRoleOptionChange"
+                  placeholder="没有职位的部门将选择不了"
+                  v-decorator="['role', { rules: [{ required: true, message: '职位是必须要填的!'}]}]"
+                />
+              </a-form-item>
+              <a-form-item :label-col="{ span: 3 }" :wrapper-col="{ span: 16 }" label="账号">
+                <a-input
+                  placeholder="员工登录的账号"
+                  v-decorator="['account', { rules: [{ required: true, message: '账号是必须要填的(将作为员工查数据使用)!'}]}]"
+                />
+              </a-form-item>
+              <a-form-item :label-col="{ span: 3 }" :wrapper-col="{ span: 16 }" label="密码">
+                <a-input
+                  placeholder="员工登录的密码"
+                  v-decorator="['password', { initialValue:'123456',rules: [{ required: true, message: '密码是必须要填的!'}]}]"
+                />
+              </a-form-item>
+              <a-form-item :label-col="{ span: 3 }" :wrapper-col="{ span: 16 }" label="户口性质">
+                <a-radio-group v-decorator="['accountProperties', { rules: [{ required: false}]}]">
+                  <a-radio :value="0">城镇户口</a-radio>
+                  <a-radio :value="1">农村户口</a-radio>
+                </a-radio-group>
+              </a-form-item>
+              <a-form-item :label-col="{ span: 3 }" :wrapper-col="{ span: 16 }" label="婚姻状况">
+                <a-radio-group v-decorator="['maritalStatus', { rules: [{ required: false}]}]">
+                  <a-radio :value="0">离异</a-radio>
+                  <a-radio :value="1">已婚</a-radio>
+                  <a-radio :value="2">未婚</a-radio>
+                </a-radio-group>
+              </a-form-item>
+              <a-form-item :label-col="{ span: 3 }" :wrapper-col="{ span: 16 }" label="学历">
+                <a-radio-group v-decorator="['education', { rules: [{ required: false}]}]">
+                  <a-radio :value="0">小学</a-radio>
+                  <a-radio :value="1">初中</a-radio>
+                  <a-radio :value="2">中专</a-radio>
+                  <a-radio :value="3">高中</a-radio>
+                  <a-radio :value="4">大专</a-radio>
+                  <a-radio :value="5">本科</a-radio>
+                  <a-radio :value="6">硕士</a-radio>
+                  <a-radio :value="7">博士</a-radio>
+                </a-radio-group>
+              </a-form-item>
+              <a-form-item :label-col="{ span: 3 }" :wrapper-col="{ span: 16 }" :label="`联系方式`">
+                <a-input v-decorator="['phoneNumber', { rules: [{ required: false}]}]" />
+              </a-form-item>
 
-                <a-form-item
-                  :label-col="{ span: 3 }"
-                  :wrapper-col="{ span: 16 }"
-                  label="到职日期"
-                >
-                  <a-date-picker v-decorator="['EOD', { rules: []}]"></a-date-picker>
-                </a-form-item>
-                <a-form-item
-                  :label-col="{ span: 3 }"
-                  :wrapper-col="{ span: 16 }"
-                  label="离职日期"
-                  :required="false"
-                >
-                  <a-date-picker v-decorator="['TermDate', { rules: [{ required:false}]}]"></a-date-picker>
-                </a-form-item>
-              </a-col>
-              <a-col :span="10">
-                <div class="column-center">
-                  <a-avatar :src="Base64JpgDisplay" shape="square" :size="160" icon="user" />
-                  <div class="margin-top-10">
-                    <a-upload
-                      name="file"
-                      :multiple="false"
-                      :beforeUpload="beforeUpload"
-                      @change="handleChange"
-                      :data="uploadAddData"
-                      :headers="uploadHeader"
-                      :action="uploadUrl"
-                      :remove="handleImageRemove"
-                    >
-                      <a-button>
-                        <a-icon type="upload" />重新上传
-                      </a-button>
-                    </a-upload>
-                  </div>
-                  <a-form-item
-                    :label-col="{ span: 3 }"
-                    :wrapper-col="{ span: 16 }"
-                    label="下放机器："
-                    style="width:100%"
+              <a-form-item :label-col="{ span: 3 }" :wrapper-col="{ span: 16 }" label="到职日期">
+                <a-date-picker v-decorator="['EOD', { rules: []}]"></a-date-picker>
+              </a-form-item>
+              <a-form-item
+                :label-col="{ span: 3 }"
+                :wrapper-col="{ span: 16 }"
+                label="离职日期"
+                :required="false"
+              >
+                <a-date-picker v-decorator="['TermDate', { rules: [{ required:false}]}]"></a-date-picker>
+              </a-form-item>
+            </a-col>
+            <a-col :span="10">
+              <div class="column-center">
+                <a-avatar :src="Base64JpgDisplay" shape="square" :size="160" icon="user" />
+                <div class="margin-top-10">
+                  <a-upload
+                    name="file"
+                    :multiple="false"
+                    :beforeUpload="beforeUpload"
+                    @change="handleChange"
+                    :data="uploadAddData"
+                    :headers="uploadHeader"
+                    :action="uploadUrl"
+                    :remove="handleImageRemove"
                   >
-                    <!-- <div :value="machine.id" :key="machine.id" v-for="machine in machineData">
+                    <a-button>
+                      <a-icon type="upload" />重新上传
+                    </a-button>
+                  </a-upload>
+                </div>
+                <a-form-item
+                  :label-col="{ span: 3 }"
+                  :wrapper-col="{ span: 16 }"
+                  label="下放机器："
+                  style="width:100%"
+                >
+                  <!-- <div :value="machine.id" :key="machine.id" v-for="machine in machineData">
                       <span>{{machine.name}}:</span>
 
                       <a-checkbox
@@ -171,35 +164,35 @@
                         :key="machine.id"
                         v-for="machine in machineData"
                       >{{machine.name}}{{machine}}</a-checkbox>
-                    </a-checkbox-group>-->
-                    <a-tree
-                      checkable
-                      @expand="onExpand"
-                      :expandedKeys="expandedKeys"
-                      :autoExpandParent="autoExpandParent"
-                      v-model="checkedKeys"
-                      @select="onSelect"
-                      :selectedKeys="selectedKeys"
-                      :treeData="treeData"
-                    />
-                  </a-form-item>
-                </div>
-              </a-col>
+                  </a-checkbox-group>-->
+                  <a-tree
+                    checkable
+                    @expand="onExpand"
+                    :expandedKeys="expandedKeys"
+                    :autoExpandParent="autoExpandParent"
+                    v-model="checkedKeys"
+                    @select="onSelect"
+                    :selectedKeys="selectedKeys"
+                    :treeData="treeData"
+                  />
+                </a-form-item>
+              </div>
+            </a-col>
+          </a-row>
+          <div class="account-settings-info-view">
+            <a-row type="flex" justify="start">
+              <a-col :md="12"></a-col>
             </a-row>
-            <div class="account-settings-info-view">
-              <a-row type="flex" justify="start">
-                <a-col :md="12"></a-col>
-              </a-row>
-            </div>
-          </div>
-          <div class="card-warp">
-            <a-form-item>
-              <a-button type="primary" html-type="submit" @click="handleMechineSubmit">新增员工</a-button>
-            </a-form-item>
           </div>
         </div>
-      </a-form>
-    </div>
+        <div class="card-warp">
+          <a-form-item>
+            <a-button type="primary" html-type="submit" @click="handleMechineSubmit">新增员工</a-button>
+          </a-form-item>
+        </div>
+      </div>
+    </a-form>
+  </div>
   <!-- </a-spin> -->
 </template>
 
@@ -257,13 +250,12 @@ export default {
       expandedKeys: [],
       autoExpandParent: true,
       checkedKeys: [],
-      selectedKeys: [],
-     
+      selectedKeys: []
     };
   },
   watch: {
     $route: function(newVal) {
-      this.initData()
+      this.initData();
     },
     checkedKeys(val) {
       console.log("onCheck", val);
@@ -313,22 +305,22 @@ export default {
   },
   methods: {
     onChange(value, selectedOptions) {
-        console.log(value, selectedOptions);
-      },
- 
-    onRoleOptionChange(value, selectedOptions){
+      console.log(value, selectedOptions);
+    },
+
+    onRoleOptionChange(value, selectedOptions) {
       //  this.form.setFieldsValue({
       //    role:value
       //  })
-        console.log(value, selectedOptions);
-        console.log(this.form.getFieldValue('role'))
-
+      console.log(value, selectedOptions);
+      console.log(this.form.getFieldValue("role"));
     },
-     filter(inputValue, path) {
-        return path.some(
-          option => option.label.toLowerCase().indexOf(inputValue.toLowerCase()) > -1,
-        );
-      },
+    filter(inputValue, path) {
+      return path.some(
+        option =>
+          option.label.toLowerCase().indexOf(inputValue.toLowerCase()) > -1
+      );
+    },
     initData() {
       let params = {
         company: this.$ls.get("company").id
@@ -361,12 +353,17 @@ export default {
         return [];
       }
       return data.map(institution => {
-        let isDisable = false
-        if(institution.positions.data.length==0&&institution.children.data.length==0){isDisable = true}
+        let isDisable = false;
+        if (
+          institution.positions.data.length == 0 &&
+          institution.children.data.length == 0
+        ) {
+          isDisable = true;
+        }
         return {
           value: "institution-" + institution.id,
           label: institution.name,
-          disabled:isDisable,
+          disabled: isDisable,
           slots: {
             icon: "institution"
           },
@@ -593,13 +590,12 @@ export default {
         "file",
         this.dataURLtoFile(this.Base64JpgDisplay, pCardNo + ".jpg")
       );
-      this.loadding = true
+      this.loadding = true;
       addAttach(data)
         .then(res => {
-          this.loadding=false
+          this.loadding = false;
           this.$message.success("上传成功");
           this.employeePictrue = res.data.data.file_url;
-
         })
         .catch(err => {
           this.$message.error("上传失败,请联系管理员");
@@ -669,12 +665,17 @@ export default {
           // this.loadding = true;
 
           let role = values.role[values.role.length - 1].split("-")[1];
-          console.log(values.TermDate)
-          if(!values.EOD){
-            values.EOD = this.$moment(`${new Date().getFullYear()}-${new Date().getMonth()}-${new Date().getDate()}`)
+          console.log(values.TermDate);
+          if (!values.EOD) {
+            values.EOD = this.$moment(
+              `${new Date().getFullYear()}-${new Date().getMonth()}-${new Date().getDate()}`
+            );
           }
-          if(!values.TermDate){
-            values.TermDate = this.$moment(`${new Date().getFullYear()+100}-${new Date().getMonth()}-${new Date().getDate()}`)
+          if (!values.TermDate) {
+            values.TermDate = this.$moment(
+              `${new Date().getFullYear() +
+                100}-${new Date().getMonth()}-${new Date().getDate()}`
+            );
           }
           let employee = {
             realname: values.Name,
@@ -690,65 +691,71 @@ export default {
             marital_status: values.maritalStatus,
             education: values.education,
             contact: values.phoneNumber,
-            enter_office_date:
-              values.EOD && values.EOD.format('YYYY-MM-DD'),
+            enter_office_date: values.EOD && values.EOD.format("YYYY-MM-DD"),
             arrival_date:
-              values.TermDate && values.TermDate.format('YYYY-MM-DD'),
-            identify_card_url:this.employeePictrue
+              values.TermDate && values.TermDate.format("YYYY-MM-DD"),
+            identify_card_url: this.employeePictrue
           };
 
-          createEmployee(employee).then(res => {
-            this.$message.success("添加成功！");
-            this.form.resetFields()
-            let machine = [];
-            let machineMap = new Map();
-            this.checkedKeys.forEach(obj => {
-              let keyValue = obj.split("-");
-              if (keyValue[0] == "machine") {
-                // machineMap.set(keyValue[1], []);
-              } else {
-                if (machineMap.get(keyValue[0])) {
-                  machineMap.get(keyValue[0]).push(keyValue[1]);
+          createEmployee(employee)
+            .then(res => {
+              this.$message.success("添加成功！");
+              this.form.resetFields();
+              let machine = [];
+              let machineMap = new Map();
+              this.checkedKeys.forEach(obj => {
+                let keyValue = obj.split("-");
+                if (keyValue[0] == "machine") {
+                  // machineMap.set(keyValue[1], []);
                 } else {
-                  machineMap.set(keyValue[0], []);
-                  machineMap.get(keyValue[0]).push(keyValue[1]);
-                }
-              }
-            });
-            for (let key of machineMap.entries()) {
-              this.machineData.forEach(machineEle => {
-                let obj = {};
-                if (machineEle.id == key[0]) {
-  
-                  obj.mac = machineEle.mac;
-                  obj.effectbTime = Math.floor(values.EOD.valueOf() / 1000);
-                  obj.effectTime = Math.floor(values.TermDate.valueOf() / 1000);
-                  obj.timeLimit = this.getTimeLimitById(machineMap.get(key[0]));
-                  machine.push(obj);
+                  if (machineMap.get(keyValue[0])) {
+                    machineMap.get(keyValue[0]).push(keyValue[1]);
+                  } else {
+                    machineMap.set(keyValue[0], []);
+                    machineMap.get(keyValue[0]).push(keyValue[1]);
+                  }
                 }
               });
-            }
-
-            let mechineData = {
-              machine,
-              dept: [],
-              face: {
-                img: this.Base64JpgDisplay.substr(this.Base64JpgDisplay.indexOf(',')+1),
-                faceName:  values.Name,
-                wgCardNo: "",
-                flag: 0,
-                platformId: values.CardNo,
-                company: this.$ls.get("company").id
+              for (let key of machineMap.entries()) {
+                this.machineData.forEach(machineEle => {
+                  let obj = {};
+                  if (machineEle.id == key[0]) {
+                    obj.mac = machineEle.mac;
+                    obj.effectbTime = Math.floor(values.EOD.valueOf() / 1000);
+                    obj.effectTime = Math.floor(
+                      values.TermDate.valueOf() / 1000
+                    );
+                    obj.timeLimit = this.getTimeLimitById(
+                      machineMap.get(key[0])
+                    );
+                    machine.push(obj);
+                  }
+                });
               }
-            };
-            appAddPerson(mechineData).then(res => {
-              this.loadding = false;
-              // this.$emit('refresh')
+
+              let mechineData = {
+                machine,
+                dept: [],
+                face: {
+                  img: this.Base64JpgDisplay.substr(
+                    this.Base64JpgDisplay.indexOf(",") + 1
+                  ),
+                  faceName: values.Name,
+                  wgCardNo: "",
+                  flag: 0,
+                  platformId: values.CardNo,
+                  company: this.$ls.get("company").id
+                }
+              };
+              appAddPerson(mechineData).then(res => {
+                this.loadding = false;
+                // this.$emit('refresh')
+              });
+            })
+            .catch(err => {
+              console.log(err.response);
+              this.$message.error(err.response.data.message);
             });
-          }).catch(err=>{
-            console.log(err.response)
-            this.$message.error(err.response.data.message)
-          });
         }
       });
     },

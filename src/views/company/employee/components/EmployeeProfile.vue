@@ -11,7 +11,9 @@
         <a-tab-pane tab="出入记录" key="3">
           <inout-list-page :faceId="baseInfo.CardNo"></inout-list-page>
         </a-tab-pane>
-        <a-tab-pane tab key="4">Content of Tab Pane 3</a-tab-pane>
+        <a-tab-pane tab="多角色设置" key="4">
+          <role-setting></role-setting>
+        </a-tab-pane>
       </a-tabs>
     <!-- </a-spin> -->
   </div>
@@ -19,11 +21,13 @@
 
 <script>
 import BaseSetting from "./BaseSetting";
+import RoleSetting from "./RoleSetting";
 import FaceInfo from "./FaceInfo";
 import InoutListPage from "@/views/machine/inoutPage/InoutListPage";
 import { getEmployee } from "@/api/staff";
 export default {
   components: {
+    RoleSetting,
     BaseSetting,
     FaceInfo,
     InoutListPage

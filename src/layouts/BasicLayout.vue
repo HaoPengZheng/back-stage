@@ -1,46 +1,53 @@
 <template>
   <a-layout class="layout" id="layout">
     <a-spin :spinning="isPageLoadding" tip="数据加载中,请稍后..." :delay="200">
-    <a-layout id="components-layout-demo-custom-trigger" style="min-height:100vh">
-      <a-drawer
-        v-if="isMobile()"
-        :wrapClassName="`drawer-sider`"
-        placement="left"
-        :closable="true"
-        @close="onClose"
-        width="240"
-        :visible="!collapsed"
-      >
-        <a-layout-sider :trigger="null" collapsible width="240" v-model="collapsed">
+      <a-layout id="components-layout-demo-custom-trigger" style="min-height:100vh">
+        <a-drawer
+          v-if="isMobile()"
+          :wrapClassName="`drawer-sider`"
+          placement="left"
+          :closable="true"
+          @close="onClose"
+          width="240"
+          :visible="!collapsed"
+        >
+          <a-layout-sider
+            :trigger="null"
+            collapsible
+            width="240"
+            v-model="collapsed"
+            style="min-height: 100vh"
+          >
+            <global-logo />
+
+            <global-menu />
+          </a-layout-sider>
+        </a-drawer>
+        <a-layout-sider
+          v-if="!isMobile()"
+          :trigger="null"
+          collapsible
+          width="240"
+          v-model="collapsed"
+          :style="{ overflow: 'auto', height: '100vh', position: 'fixed', left: 0 }"
+        >
+          >
           <global-logo />
 
           <global-menu />
         </a-layout-sider>
-      </a-drawer>
-      <a-layout-sider
-        v-if="!isMobile()"
-        :trigger="null"
-        collapsible
-        width="240"
-        v-model="collapsed"
-      >
-        <global-logo />
+        <a-layout :style="styleObject">
+          <global-header :collapsed="collapsed" @toggle="toggle"></global-header>
+          <multi-tab></multi-tab>
+          <div class="layout-content" id="layout-content">
+            <router-view></router-view>
+          </div>
 
-        <global-menu />
-      </a-layout-sider>
-      <a-layout>
-        <global-header :collapsed="collapsed" @toggle="toggle"></global-header>
-        <multi-tab></multi-tab>
-        <div class="layout-content" id="layout-content">
-          <router-view></router-view>
-         
-        </div>
-        
-        <a-layout-footer>
-          <global-footer />
-        </a-layout-footer>
+          <a-layout-footer>
+            <global-footer />
+          </a-layout-footer>
+        </a-layout>
       </a-layout>
-    </a-layout>
     </a-spin>
   </a-layout>
 </template>
@@ -66,18 +73,29 @@ export default {
   data() {
     return {
       collapsed: false,
-      target:()=>{return document.getElementById('layout')}
+      target: () => {
+        return document.getElementById("layout");
+      }
     };
   },
   computed: {
     ...mapState({
       sidebar: state => state.app.sidebar,
-      isPageLoadding:state => state.app.isPageLoadding
-    })
+      isPageLoadding: state => state.app.isPageLoadding
+    }),
+    styleObject() {
+      if (this.collapsed) {
+        return {
+          marginLeft: "80px"
+        };
+      } else {
+        return {
+          marginLeft: "240px"
+        };
+      }
+    }
   },
-  created() {
-    
-  },
+  created() {},
   methods: {
     ...mapActions(["setSidebar"]),
     toggle() {

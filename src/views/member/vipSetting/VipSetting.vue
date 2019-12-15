@@ -67,8 +67,8 @@
           textAlign: 'right',
         }"
       >
-        <a-button :style="{marginRight: '8px'}" @click="addMemberDrawerVisible = false">Cancel</a-button>
-        <a-button @click="handleAddMember" type="primary">Submit</a-button>
+        <a-button :style="{marginRight: '8px'}" @click="addMemberDrawerVisible = false">取消</a-button>
+        <a-button @click="handleAddMember" type="primary">提交</a-button>
       </div>
     </a-drawer>
   </div>
