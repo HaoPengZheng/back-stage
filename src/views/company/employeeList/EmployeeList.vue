@@ -1,5 +1,6 @@
 <template>
   <div class="content-warp">
+    <a-input-search placeholder="根据姓名搜索" style="width: 200px" @search="onSearch" />
     <a-table
       :columns="columns"
       :rowKey="record => record.id"
@@ -11,6 +12,7 @@
       <template slot="operation" slot-scope="text, record">
         <a href="javascript:;">Delete</a>
       </template>
+      <template slot="identify_card" slot-scope="text,record">{{text.substring()}}</template>
     </a-table>
   </div>
 </template>
@@ -24,22 +26,20 @@ const columns = [
   },
   {
     title: "姓名",
-    dataIndex: "realName",
-    sorter: true
+    dataIndex: "realName"
   },
   {
     title: "性别",
-    dataIndex: "sex",
-    sorter: true
+    dataIndex: "sex"
   },
   {
     title: "生日",
-    dataIndex: "birth",
-    sorter: true
+    dataIndex: "birth"
   },
   {
     title: "身份证",
-    dataIndex: "identify_card"
+    dataIndex: "identify_card",
+    scopedSlots: { customRender: "identify_card" }
   },
   {
     title: "operation",
@@ -91,12 +91,8 @@ export default {
       getEmployeeList(param).then(res => {
         this.originalEmployeeData = res.data.data;
         console.log(res.data);
-        console.log(res.data.meta.pagination.current_page)
-        this.$set(
-          this.pagination,
-          "current",
-          param.page
-        );
+        console.log(res.data.meta.pagination.current_page);
+        this.$set(this.pagination, "current", param.page);
       });
     },
     handleTableChange(pagination, filters, sorter, { currentDataSource }) {

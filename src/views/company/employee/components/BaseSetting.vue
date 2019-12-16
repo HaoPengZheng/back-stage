@@ -237,7 +237,6 @@ export default {
     confirmDeleteEmployee() {
       deleteEmployee(this.id).then(res => {
         this.$message.success("删除成功");
-        this.$emit("refresh");
       });
     },
     setavatar(url) {

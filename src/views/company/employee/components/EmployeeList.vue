@@ -3,7 +3,10 @@
   <a-row>
     <a-col :span="6">
        <div style="max-height:70vh;overflow:auto;border-right:2px solid #e8e8e8;padding-right:5px;">
-          <a-input-search style="margin-bottom: 8px" v-model="searchValue" placeholder="Search" @change="onChange" />
+          <div class="search-control">
+          <a-input-search style="margin-bottom: 8px" v-model="searchValue" placeholder="搜索" @change="onChange" />
+           <a-button icon="reload" style="margin-left:8px;width:40px" @click="handleReload"/>
+          </div>
           <a-tree
             @expand="onExpand"
             @select="onSelect"
@@ -32,7 +35,7 @@
     </a-col>
     <a-col :span="18">
       <div class="employee-profile-warp">
-        <employee-profile :id="activeUserId" @refresh="refresh"></employee-profile>
+        <employee-profile :id="activeUserId" ></employee-profile>
       </div>
     </a-col>
   </a-row>
@@ -230,6 +233,9 @@ export default {
     refresh() {
       this.activeUserId = ''
       this.init();
+    },
+    handleReload(){
+      this.refresh()
     }
   }
 };
@@ -238,6 +244,8 @@ export default {
 .employee-profile-warp{
   margin-left: 15px;
   padding-left: 15px;
-
+}
+.search-control{
+  display: flex;
 }
 </style>

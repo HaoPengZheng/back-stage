@@ -3,7 +3,7 @@
     <!-- <a-spin :delay="500" :spinning="isLoadding"> -->
       <a-tabs type="card">
         <a-tab-pane tab="基本设置" key="1">
-          <base-setting :baseInfo="baseInfo" :id="id" @refresh="refresh"></base-setting>
+          <base-setting :baseInfo="baseInfo" :id="id" ></base-setting>
         </a-tab-pane>
         <a-tab-pane tab="人脸信息" key="2">
           <face-info :platformId="baseInfo.CardNo"></face-info>
@@ -12,7 +12,8 @@
           <inout-list-page :faceId="baseInfo.CardNo"></inout-list-page>
         </a-tab-pane>
         <a-tab-pane tab="多角色设置" key="4">
-          <role-setting></role-setting>
+          {{id}}
+          <role-setting :userId="id"></role-setting>
         </a-tab-pane>
       </a-tabs>
     <!-- </a-spin> -->
@@ -81,9 +82,7 @@ export default {
           res.data.staffInformation.identify_card_url;
       });
     },
-    refresh(){
-      this.$emit('refresh')
-    }
+
   },
   watch: {
     // $route(val) {},

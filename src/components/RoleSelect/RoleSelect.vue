@@ -1,10 +1,11 @@
 <template>
-  <div>
+  <div >
     <a-cascader
       :options="roleOptions"
       :showSearch="{filter}"
       @change="onRoleOptionChange"
       placeholder="没有职位的部门将选择不了"
+      style="width:300px"
     />
   </div>
 </template>
@@ -33,11 +34,7 @@ export default {
       });
     },
     onRoleOptionChange(value, selectedOptions) {
-      //  this.form.setFieldsValue({
-      //    role:value
-      //  })
-      console.log(value, selectedOptions);
-      console.log(this.form.getFieldValue("role"));
+      this.$emit('change',value,selectedOptions)
     },
     generateOption(data) {
       if (!data instanceof Array || data.length == 0) {

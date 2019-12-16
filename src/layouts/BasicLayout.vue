@@ -88,9 +88,9 @@ export default {
         return {
           marginLeft: "80px"
         };
-      } else {
+      } else {  
         return {
-          marginLeft: "240px"
+          marginLeft: "240px"   
         };
       }
     }

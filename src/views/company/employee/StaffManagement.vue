@@ -5,7 +5,7 @@
         <employee-list ref="employeeList"></employee-list>
       </a-tab-pane>
       <a-tab-pane tab="添加员工" key="add" forceRender>
-        <add-employee @refresh="refresh"></add-employee >
+        <add-employee></add-employee >
       </a-tab-pane>
     </a-tabs>
   </div>
@@ -30,13 +30,8 @@ export default {
     
   },
   methods: {
-    refresh(){
-      this.$refs.employeeList.refresh()
-    },
     handleTabChange(activeKey){
-      if(activeKey == "list"){
-        this.refresh()
-      }
+     
     }
   }
 };
