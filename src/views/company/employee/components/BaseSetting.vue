@@ -3,7 +3,7 @@
     <a-empty v-if="id==''" />
     <div v-else>
       <a-row :gutter="16">
-        <a-col :md="24" :lg="16">
+        <a-col :md="24" :lg="24">
           <div style="margin-left:10px">
             <a-form layout="vertical" :form="form" @submit="handleSubmit">
               <div>

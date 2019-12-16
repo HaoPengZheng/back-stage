@@ -48,7 +48,7 @@ export function createEmployee(data){
 // 获取员工信息
 export function getEmployee(userId){
     return request({
-        url:`${USER_BASE_URL}/api/staffs/${userId}?include=authorization,staffInformation`,
+        url:`${USER_BASE_URL}/api/staffs/${userId}?include=authorization,staffInformation,roles`,
         method:'GET'
     })
 }
@@ -81,7 +81,7 @@ export function patchEmployeeRole(userId,params){
 }
 
 //删除员工角色 
-export function deleteEmployeeRole(params){
+export function deleteEmployeeRole(userId,params){
     return request({
         url:`${USER_BASE_URL}/api/staff-roles/${userId}`,
         method:'delete',
@@ -91,7 +91,7 @@ export function deleteEmployeeRole(params){
 
 export function getEmployeeList(params){
     return request({
-        url:`${USER_BASE_URL}/api/staffs?include=authorization,staffInformation`,
+        url:`${USER_BASE_URL}/api/staffs?include=authorization,user,staffInformation`,
         method:'get',
         params
     })

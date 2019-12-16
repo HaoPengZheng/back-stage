@@ -15,6 +15,7 @@
 import { mixinDevice } from "@/utils/mixin.js";
 import AddEmployee from "./components/AddEmployee";
 import EmployeeList from "./components/EmployeeList";
+
 export default {
   components: {
     AddEmployee,

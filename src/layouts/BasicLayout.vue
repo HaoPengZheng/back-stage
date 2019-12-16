@@ -85,12 +85,17 @@ export default {
     }),
     styleObject() {
       if (this.collapsed) {
+        if(this.device == 'mobile'){
+          return {
+            marginLeft : '0px'
+          }
+        }
         return {
           marginLeft: "80px"
         };
-      } else {  
+      } else {
         return {
-          marginLeft: "240px"   
+          marginLeft: "240px"
         };
       }
     }

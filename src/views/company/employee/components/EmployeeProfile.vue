@@ -12,8 +12,7 @@
           <inout-list-page :faceId="baseInfo.CardNo"></inout-list-page>
         </a-tab-pane>
         <a-tab-pane tab="多角色设置" key="4">
-          {{id}}
-          <role-setting :userId="id"></role-setting>
+          <role-setting :userId="id" :baseInfo="baseInfo" :roles="roles" @reloadInfo="reloadInfo"></role-setting>
         </a-tab-pane>
       </a-tabs>
     <!-- </a-spin> -->
@@ -34,7 +33,7 @@ export default {
     InoutListPage
   },
   props: {
-    id: String
+    id: String||Number
   },
   data() {
     return {
@@ -55,7 +54,8 @@ export default {
         TermDate: "",
         employeePictrue: ""
       },
-      isLoadding: false
+      isLoadding: false,
+      roles:[]
     };
   },
   created() {},
@@ -80,9 +80,12 @@ export default {
         this.baseInfo.TermDate = res.data.staffInformation.arrival_date;
         this.baseInfo.employeePictrueres =
           res.data.staffInformation.identify_card_url;
+        this.roles = res.data.roles.data
       });
     },
-
+    reloadInfo(){
+      this.handleGetEmployeeInfo()
+    }
   },
   watch: {
     // $route(val) {},
