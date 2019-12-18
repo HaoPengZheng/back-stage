@@ -13,16 +13,18 @@
             v-decorator="[
             'storeNo',
             {
+              initialValue:{value:shopId},
               rules: [{ required: true, message: '部门是必选的！' }],
             }]"
+            disabled
             style="width: 200px"
             @change="handleInstituteChange"
           >
             <a-select-option
-              v-for="i in institution"
+              v-for="i in institutions"
               :key="`store—no-${i.id}`"
-              :value="i.value.toString()"
-            >{{i.label}}</a-select-option>
+              :value="i.id"
+            >{{i.name}}</a-select-option>
           </a-select>
         </a-form-item>
 
@@ -678,7 +680,7 @@ export default {
       this.initForm();
       this.initTagData()
         .then(() => {
-          this.initInstitution();
+          // this.initInstitution();
         })
         .then(() => {
           this.initGoodType();
@@ -900,9 +902,7 @@ export default {
       } else if (file.hasOwnProperty("attach_id")) {
         attachId = file.attach_id;
       }
-      deleteAttach(attachId).then(res => {
-        ;
-      });
+      deleteAttach(attachId).then(res => {});
     },
     handleChange(info) {
       this.fileList = [...info.fileList];
@@ -1030,9 +1030,7 @@ export default {
 
         if (!id) {
           //还没有这个标签
-          addTag({ tag_name: inputValue }).then(res => {
-            ;
-          });
+          addTag({ tag_name: inputValue }).then(res => {});
         }
         this.$store.commit("SET_FORM", {
           tags: [...tags, { id, name: inputValue }]
@@ -1215,7 +1213,7 @@ export default {
 }
 
 .ant-upload-select-picture-card {
-  display: flex!important;
+  display: flex !important;
   justify-content: center;
   align-items: center;
 }

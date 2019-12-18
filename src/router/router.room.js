@@ -28,22 +28,6 @@ import { LoginLayout, BasicLayout, RouteView } from '@/layouts'
           ]
         },
         {
-          path: '/shop/reception',
-          name: 'shop-dashboard',
-          redirect: '/shop/room/roomManagement',
-          component: RouteView,
-          permission: ['dashboard'],
-          meta: { title: '前台', icon: 'from' },
-          children: [
-            {
-              path: '/shop/room/roomManagement',
-              name: 'shop-room-roomManagement',
-              component: () => import('@/views/shop/room/roomManagement/RoomManagement'),
-              meta: { title: '房间管理', },
-            },
-          ]
-        },
-        {
           path: '/shop/room/good',
           name: 'shop-room-good',
           redirect: '/shop/room/good',

@@ -41,7 +41,12 @@ const mixinAddGoodState = {
       shareTitle: state => state.addGood.shareTitle,
       shareDesc: state => state.addGood.shareDesc,
       shareImg: state => state.addGood.shareImg,
-      shopDetailRenderHtml:state=>state.addGood.shopDetailRenderHtml
+      shopDetailRenderHtml:state=>state.addGood.shopDetailRenderHtml,
+
+      //店类型
+      shopId:state=> state.app.shopId,
+
+      institutions:state=>state.shop.institutions,
     })
   },
 }
