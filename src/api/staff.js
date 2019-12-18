@@ -48,7 +48,7 @@ export function createEmployee(data){
 // 获取员工信息
 export function getEmployee(userId){
     return request({
-        url:`${USER_BASE_URL}/api/staffs/${userId}?include=authorization,staffInformation,roles`,
+        url:`${USER_BASE_URL}/api/staffs/${userId}?include=authorization,staffInformation,roles,user`,
         method:'GET'
     })
 }

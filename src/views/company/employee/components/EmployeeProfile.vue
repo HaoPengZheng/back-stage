@@ -1,20 +1,20 @@
 <template>
   <div class="page-header-index-wide">
     <!-- <a-spin :delay="500" :spinning="isLoadding"> -->
-      <a-tabs type="card">
-        <a-tab-pane tab="基本设置" key="1">
-          <base-setting :baseInfo="baseInfo" :id="id" ></base-setting>
-        </a-tab-pane>
-        <a-tab-pane tab="人脸信息" key="2">
-          <face-info :platformId="baseInfo.CardNo"></face-info>
-        </a-tab-pane>
-        <a-tab-pane tab="出入记录" key="3">
-          <inout-list-page :faceId="baseInfo.CardNo"></inout-list-page>
-        </a-tab-pane>
-        <a-tab-pane tab="多角色设置" key="4">
-          <role-setting :userId="id" :baseInfo="baseInfo" :roles="roles" @reloadInfo="reloadInfo"></role-setting>
-        </a-tab-pane>
-      </a-tabs>
+    <a-tabs type="card">
+      <a-tab-pane tab="基本设置" key="1">
+        <base-setting :baseInfo="baseInfo" :id="id"></base-setting>
+      </a-tab-pane>
+      <a-tab-pane tab="人脸信息" key="2">
+        <face-info :platformId="baseInfo.CardNo"></face-info>
+      </a-tab-pane>
+      <a-tab-pane tab="出入记录" key="3">
+        <inout-list-page :faceId="baseInfo.CardNo"></inout-list-page>
+      </a-tab-pane>
+      <a-tab-pane tab="多角色设置" key="4">
+        <role-setting :userId="id" :baseInfo="baseInfo" :roles="roles" @reloadInfo="reloadInfo"></role-setting>
+      </a-tab-pane>
+    </a-tabs>
     <!-- </a-spin> -->
   </div>
 </template>
@@ -33,7 +33,10 @@ export default {
     InoutListPage
   },
   props: {
-    id: String||Number
+    id: {
+      type: String || Number,
+      default: -1
+    }
   },
   data() {
     return {
@@ -55,10 +58,12 @@ export default {
         employeePictrue: ""
       },
       isLoadding: false,
-      roles:[]
+      roles: []
     };
   },
-  created() {},
+  created() {
+    this.handleGetEmployeeInfo()
+  },
   methods: {
     handleGetEmployeeInfo() {
       // this.isLoadding = true;
@@ -66,7 +71,7 @@ export default {
         // this.isLoadding = false;
         this.baseInfo.Name = res.data.authorization.name;
         this.baseInfo.Sex = res.data.sex;
-        this.baseInfo.account = res.data.account;
+        this.baseInfo.account = res.data.user.account;
         this.baseInfo.CardNo = res.data.authorization.identify_card;
         this.baseInfo.Nation = res.data.staffInformation.nation;
         this.baseInfo.Birth = res.data.authorization.birth;
@@ -80,18 +85,19 @@ export default {
         this.baseInfo.TermDate = res.data.staffInformation.arrival_date;
         this.baseInfo.employeePictrueres =
           res.data.staffInformation.identify_card_url;
-        this.roles = res.data.roles.data
+        this.roles = res.data.roles.data;
       });
     },
-    reloadInfo(){
-      this.handleGetEmployeeInfo()
+    reloadInfo() {
+      this.handleGetEmployeeInfo();
     }
   },
   watch: {
     // $route(val) {},
     id: {
+      deep: true,
       handler: function(val) {
-        if(val!=''){
+        if (val != "") {
           this.handleGetEmployeeInfo();
         }
       }

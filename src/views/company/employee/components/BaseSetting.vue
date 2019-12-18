@@ -75,7 +75,7 @@
                         <a-input
                           :disabled="true"
                           placeholder="员工登录的账号"
-                          v-decorator="['account', { rules: [{ required: true, message: '账号是必须要填的(将作为员工查数据使用)!'}]}]"
+                          v-decorator="['account', { rules: [{ required: false, message: '账号是必须要填的(将作为员工查数据使用)!'}]}]"
                         />
                       </a-form-item>
 
