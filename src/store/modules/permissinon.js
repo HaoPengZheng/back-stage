@@ -111,12 +111,13 @@ const permission = {
         resolve()
       })
     },
-    GenerateShopRoutes({commit},shopType='spring'){
+    GenerateShopRoutes({commit},shopType='hotel'){
       return new Promise(resolve => {
         let permissionList = ['*']
         let shopTypeMap = {
-          'room':asyncShopRoomRouterMap,
-          'spring':asyncShopSpringRouterMap
+          'hotel':asyncShopRoomRouterMap,
+          'hot_spring':asyncShopSpringRouterMap,
+          'catering':asyncShopSpringRouterMap,
         }
         let shopRouterMap = shopTypeMap[shopType]
 

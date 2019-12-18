@@ -6,8 +6,12 @@
 
         <a-button type="primary">创建店</a-button>
       </template>
-      <a-row :gutter="16">
-        <a-col :md="24" :lg="12" :xl="8" v-for="(shop,index) in currentCompanyInfo" :key="index">
+      <a-list
+        :grid="{ gutter: 16, xs: 1, sm: 2, md: 2, lg: 2, xl: 3, xxl: 3 }"
+        :pagination="pagination"
+        :dataSource="currentInstitutions"
+      >
+        <a-list-item slot="renderItem" slot-scope="shop">
           <a-card class="shop-card">
             <div slot="title">
               <a-icon type="shop" style="font-size:30px;color:blue;margin-right:8px" />
@@ -18,14 +22,15 @@
               style="text-overflow: ellipsis;
                 overflow: hidden;
                 white-space: nowrap;"
-            >主体信息：{{shop.main_info}}</p>
+            >主体信息：</p>
             <p>
               状态：
               <a-tag color="#87d068" v-if="shop.status == 'success'">运营中</a-tag>
               <a-tag color="#ccc" v-else>未营业</a-tag>
             </p>
             <p>
-              类型：<a-tag color="#87d068">客房</a-tag>
+              类型：
+              <a-tag color="#87d068">{{shop.type.title}}</a-tag>
             </p>
             <p>有效期至：{{shop.indate}}</p>
             <div class="shop-choose-action">
@@ -33,17 +38,8 @@
               <a href="#" @click="showDeleteCompanyModal">删除</a>
             </div>
           </a-card>
-        </a-col>
-      </a-row>
-      <div class="pagination">
-        <a-pagination
-          v-model="current"
-          showSizeChanger
-          @change="onPageChange"
-          @showSizeChange="onShowSizeChange"
-          :total="pageCount"
-        />
-      </div>
+        </a-list-item>
+      </a-list>
     </a-card>
     <!-- 删除模态框 -->
     <a-modal
@@ -97,6 +93,7 @@
 
 <script>
 import { getInstitutions } from "@/api/institutions";
+import { mapState } from "vuex";
 export default {
   data() {
     return {
@@ -105,57 +102,56 @@ export default {
       pageSize: 10,
       confirmDeleteCompanyLoading: false,
       deleteModalVisible: false,
-      shopListBackup: [],
-      shopList: []
+      searchValue: "",
+      pagination: {
+        onChange: page => {
+          console.log(page);
+        },
+        pageSize: 9
+      }
     };
   },
   /**
    * 1.处理组件初始化，拉取公司数据
    */
   beforeCreate() {
+    this.$store.dispatch("getInstitutionsList");
     this.form = this.$form.createForm(this);
-    getInstitutions().then(res => {
-      this.shopList = res.data.data;
-      this.shopListBackup = this.shopList.slice();
-    });
   },
   computed: {
-    pageCount() {
-      return this.shopList.length;
-    },
-    currentCompanyInfo() {
-      let start = (this.current - 1) * this.pageSize;
-      let end =
-        start + this.pageSize >= this.shopList.length
-          ? this.shopList.length
-          : start + this.pageSize;
-      return this.shopList.slice(start, end);
+    ...mapState({
+      institutions: state => state.shop.institutions
+    }),
+    currentInstitutions() {
+      let list = [];
+      if (this.institutions) {
+        list = this.institutions.filter(shop => {
+          return shop.name.includes(this.searchValue);
+        });
+      }
+      return list;
     }
   },
   methods: {
     onSearch(value) {
+      this.searchValue = value;
       this.shopList = this.shopListBackup.filter(shop => {
         return shop.name.includes(value);
       });
     },
     selectShop(shop) {
       this.$ls.set("shop", shop);
-      this.$store.dispatch("ResetRouter").then(res => {
-        this.$store.dispatch('setShop',shop) 
-      }).then(res=>{
-         this.$router.push("/shop");
-      });
+      this.$store
+        .dispatch("ResetRouter")
+        .then(res => {
+          this.$store.dispatch("setShop", shop);
+        })
+        .then(res => {
+          this.$router.push("/shop");
+        });
     },
     showDeleteCompanyModal() {
       this.deleteModalVisible = true;
-    },
-    onPageChange(page, pageSize) {
-      console.log(page);
-      console.log(pageSize);
-    },
-    onShowSizeChange(current, size) {
-      this.current = current;
-      this.pageSize = size;
     },
     handleDeleteComapny() {},
     handleCancel() {

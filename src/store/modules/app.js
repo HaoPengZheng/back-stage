@@ -10,8 +10,9 @@ const app = {
     company:null,//公司ID
     companyName:'',//公司姓名
     shop:'',//店Id
+    shopType:'hotel',
     isShowPermissionDialog:false,//无权提示框
-    isPageLoadding:false
+    isPageLoadding:false,
     // theme: '',
     // layout: '',
     // contentWidth: '',
@@ -54,6 +55,9 @@ const app = {
     },
     SET_IS_PAGE_LOADDING:(state,isPageLoadding)=>{
       state.isPageLoadding = isPageLoadding
+    },
+    SET_SHOP_TYPE:(state,type)=>{
+      state.shopType = type
     }
 
   },
@@ -74,6 +78,7 @@ const app = {
     setShop({commit},shop){
       return new Promise(resolve => {
         commit('SET_SHOP',shop.id)
+        commit('SET_SHOP_TYPE',shop.type.sign)
         resolve()
       })
     },
