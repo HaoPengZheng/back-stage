@@ -1,20 +1,24 @@
 <template>
   <a-layout-header style="background: #fff; padding: 0;border-bottom:2px solid #eee">
-    <a-icon
-      class="trigger"
-      :type="collapsed ? 'menu-unfold' : 'menu-fold'"
-      @click="toggle"
-    />
-    <a-tag
-      color="#87d068"
-      style="margin-left:8px;"
-      @click="jumpToCompanyChoose"
-    >回到公司
-    </a-tag>
-     <a-tag
-      style="margin-left:8px;"
-    >店内
-    </a-tag>
+    <a-icon class="trigger" :type="collapsed ? 'menu-unfold' : 'menu-fold'" @click="toggle" />
+    <a-tag color="#87d068" style="margin-left:8px;" @click="jumpToCompanyChoose">回到公司</a-tag>
+    <!-- <a-tag style="margin-left:8px;">店内</a-tag> -->
+    <a-select
+      showSearch
+      placeholder="选择店"
+      optionFilterProp="children"
+      style="width: 200px"
+      @change="handleChange"
+      :filterOption="filterOption"
+      size="small"
+      :defaultValue="shopId"
+    >
+      <a-select-option
+        v-for="institution in institutions"
+        :key="institution.id"
+        :value="institution.id"
+      >{{institution.name}}</a-select-option>
+    </a-select>
     <div class="user-menu">
       <user-menu></user-menu>
     </div>
@@ -23,6 +27,7 @@
 
 <script>
 import UserMenu from "@/components/UserMenu/UserMenu";
+import { mapState } from "vuex";
 export default {
   name: "GlobalHeader",
   components: {
@@ -41,12 +46,51 @@ export default {
       oldScrollTop: 0
     };
   },
+  computed: {
+    ...mapState({
+      institutions: state => state.shop.institutions,
+      shopId: state => state.app.shopId,
+    }),
+    activeShop(){
+      let activeShop= null
+      this.institutions.forEach((ele,index)=>{
+        if(ele.id == this.shopId){
+          activeShop = ele
+        }
+      })
+      return activeShop
+    }
+  },
   methods: {
     toggle() {
       this.$emit("toggle");
     },
-    jumpToCompanyChoose(){
-      this.$router.push('/dashboard/shop')
+    jumpToCompanyChoose() {
+      this.$router.push("/dashboard/shop");
+    },
+    filterOption(input, option) {
+      return (
+        option.componentOptions.children[0].text
+          .toLowerCase()
+          .indexOf(input.toLowerCase()) >= 0
+      );
+    },
+    handleChange(shopId) {
+      let activeShop= null
+      this.institutions.forEach((ele,index)=>{
+        if(ele.id == shopId){
+          activeShop = ele
+        }
+      })
+      this.$ls.set("shop", activeShop);
+      this.$store
+        .dispatch("ResetRouter")
+        .then(res => {
+          this.$store.dispatch("setShop", activeShop);
+        })
+        .then(res => {
+          this.$router.push("/shop");
+        });
     }
   },
   beforeDestroy() {

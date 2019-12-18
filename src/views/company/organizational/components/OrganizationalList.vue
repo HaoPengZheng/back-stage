@@ -63,9 +63,7 @@
         </div>
       </a-drawer>
     </div>
-    <a-table :columns="columns" :dataSource="data" bordered rowKey="id">
-     
-    </a-table>
+    <a-table :columns="columns" :dataSource="data" bordered rowKey="id"></a-table>
     <!-- <organizational-table :data="data"></organizational-table> -->
   </div>
 </template>
@@ -77,6 +75,7 @@ import {
   getInstitutionType,
   addInsitutions
 } from "@/api/institutions";
+import { mapState } from "vuex";
 export default {
   components: {
     // OrganizationalTable
@@ -107,6 +106,11 @@ export default {
       parentId: null
     };
   },
+  computed: {
+    ...mapState({
+      institutions: state => state.shop.institutions
+    })
+  },
   created() {
     this.initData();
   },
@@ -121,7 +125,7 @@ export default {
           delete item.children;
         }
       });
-      return data
+      return data;
     },
     initData() {
       getInstitutions().then(res => {
