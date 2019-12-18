@@ -128,31 +128,26 @@ export default {
       this.$store.commit("SET_SUB_MENU_ACTIVE_INDEX", index);
     },
     handleAddSubMenu(menuIndex) {
-      console.log(menuIndex);
+
     },
     sortMenu() {
       this.$store.commit("SET_IS_ON_SORT", true);
     },
     finishSortMenu() {
-      // this.$store.commit("SET_IS_ON_SORT", false);
       let menuData = [];
       this.menu.forEach((ele, index) => {
         let menuItem = {};
         menuItem = ele;
-        // console.log(menuItem.hasOwnProperty('sub_button'))
-        // console.log(this.sortMenuList[index]);
         if(menuItem.hasOwnProperty('sub_button')){
           menuItem.sub_button = this.sortMenuList[index]
         }
         menuData.push(menuItem);
       });
-      console.log(JSON.stringify(menuData))
     }
   },
   watch: {
     menu: {
       handler: function(val, oldVal) {
-        console.log(val);
         if (val.length > 0) {
           if (val[0].hasOwnProperty("sub_button")) {
             this.sortMenuList[0] = val[0].sub_button.list;

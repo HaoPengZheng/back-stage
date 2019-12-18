@@ -276,7 +276,6 @@ export default {
     handleSubmit() {
       this.form.validateFields((err, values) => {
         if (!err) {
-          console.log(values);
           let data = {
             lotteryItemName: values.lotteryItemName,
             smallIconPath:

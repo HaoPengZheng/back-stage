@@ -81,9 +81,7 @@ export default {
     data: Array
   },
   created() {
-    console.log(this.data);
-    console.log(`1`);
-    console.log(this.dataSource);
+
   },
   methods: {
     onCellChange(key, dataIndex, value) {

@@ -195,7 +195,7 @@ export default {
       let targetAttach = attachs.filter(attach => {
         return attach.type == typeName;
       });
-      console.log(targetAttach);
+
       if (
         (typeName == "mainV" || typeName == "shopV") &&
         targetAttach.length > 0
@@ -231,7 +231,7 @@ export default {
   },
   watch: {
     $route: function(newVal) {
-      console.log(newVal);
+
       let that = this;
       if (newVal.fullPath == "/good/add") {
         if (newVal.params.good) {

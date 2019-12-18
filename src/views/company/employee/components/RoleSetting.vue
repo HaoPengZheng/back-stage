@@ -46,11 +46,11 @@ export default {
   methods: {
     handleChange(value) {
       this.roleValue = value;
-      console.log(this.userId);
+
     },
     handleAddRole() {
       let roleId = "";
-      console.log(this.roleValue);
+
       if (this.roleValue.length >= 2) {
         roleId = this.roleValue[1].split("-")[1];
         let params = {

@@ -101,7 +101,6 @@ export default {
 
     },
     upCase(value){
-        console.log(value);
         return value.target.value.toUpperCase()
       },
   },

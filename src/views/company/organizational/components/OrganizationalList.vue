@@ -143,7 +143,6 @@ export default {
     },
     //处理提交按钮
     handleAddInstitution() {
-      console.log(this.parentId);
       let data = {
         type_id: this.typeId,
         name: this.instituteName,

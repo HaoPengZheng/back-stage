@@ -262,7 +262,6 @@ export default {
       );
     },
     onSelectChange(selectedRowKeys) {
-      console.log("selectedRowKeys changed: ", selectedRowKeys);
       this.selectedRowKeys = selectedRowKeys;
     }
   },

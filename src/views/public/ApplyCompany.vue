@@ -194,20 +194,16 @@ export default {
     },
     handleProvinceChange(value) {
       let prefix = value.toString().substr(0,2)
-      console.log(value)
-      console.log(prefix)
       this.cityData = this.areaData[1].filter((v,index)=>{
         return v.id.indexOf(prefix)==0;
       })
       this.cityValue = ''
-      console.log(this.cityData)
     },
     handleCityChange(value){
       let prefix = value.toString().substr(0,4)
       this.districtData = this.areaData[2].filter((v,index)=>{
         return v.id.indexOf(prefix)==0;
       })
-      console.log(this.districtData)
       this.districtValue = ''
     }
   }

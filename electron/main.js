@@ -56,7 +56,6 @@ app.on('activate', () => {
 
 // 主进程监听渲染进程传来的信息
 ipcMain.on('update', (e, arg) => {
-  console.log('update')
   checkForUpdates()
 })
 

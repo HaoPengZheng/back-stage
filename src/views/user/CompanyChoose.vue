@@ -148,8 +148,7 @@ export default {
       this.deleteModalVisible = true;
     },
     onPageChange(page, pageSize) {
-      console.log(page);
-      console.log(pageSize);
+
     },
     onShowSizeChange(current, size) {
       this.current = current;

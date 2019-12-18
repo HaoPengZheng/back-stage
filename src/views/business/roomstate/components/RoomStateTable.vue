@@ -478,7 +478,7 @@ export default {
     },
     handleMouseEnter(record, key) {
       this.hoverKey = key;
-      console.log();
+
       document
         .querySelector(`th[key='${key}']`)
         .setAttribute("class", "headActive");

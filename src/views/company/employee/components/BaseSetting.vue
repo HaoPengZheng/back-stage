@@ -284,7 +284,6 @@ export default {
         } else {
           Sex = 2;
         }
-        console.log(val.Sex);
         this.form.setFieldsValue({
           Name: val.Name,
           Sex: Sex,

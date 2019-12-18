@@ -111,7 +111,7 @@ export default {
   methods: {
     dateChange() {},
     handleChange(e) {
-      console.log(e);
+
     },
     onChange() {}
   }

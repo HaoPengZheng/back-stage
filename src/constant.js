@@ -5,5 +5,5 @@ const USER_BASE_URL = "http://39.108.77.108/user"
 // const USER_BASE_URL = "http://192.168.101.147/user/public"
 // const ZUUL = 'http://192.168.101.115:9001'
 const ZUUL = 'http://39.108.77.108:9999'
-const LOTTERY_BASE_URL = 'http://192.168.101.127:8089'
+const LOTTERY_BASE_URL = 'http://192.168.101.112:8089'
 export {GOOD_BASE_URL,MAP_QQ_KEY,USER_BASE_URL,LOTTERY_BASE_URL,ZUUL} 

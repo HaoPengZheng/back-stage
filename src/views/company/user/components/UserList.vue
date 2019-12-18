@@ -973,20 +973,19 @@ export default {
           );
         },
         onSelect: (record, selected, selectedRows) => {
-          console.log(record, selected, selectedRows);
+
         },
         onSelectAll: (selected, selectedRows, changeRows) => {
-          console.log(selected, selectedRows, changeRows);
+
         }
       }
     };
   },
   methods: {
     handleSearch(selectedKeys, confirm) {
-      //   confirm();
+
       this.searchText = selectedKeys[0];
-      console.log(selectedKeys);
-      console.log(confirm);
+
     },
 
     handleReset(clearFilters) {

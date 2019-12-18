@@ -41,21 +41,6 @@ export default {
     ...mapState({
       addRouters: state => state.permissinon.shopRouters
     })
-    // generateMenu(){
-    //   let menuList = this.addRouters[0].children.map((topmic=>{
-    //     let menuItem = {
-    //       name:topmic.meta.title,
-    //       icon:topmic.meta.icon,
-
-    //     }
-    //     console.log(topmic)
-    //     topmic.children.forEach(topmicItem=>{
-    //       console.log(topmicItem)
-    //     })
-    //     return menuItem
-    //   }))
-    //  return menuList
-    // },
   },
   methods: {
     changeMenu(e) {

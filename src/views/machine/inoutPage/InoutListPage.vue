@@ -131,10 +131,8 @@ export default {
       }
     },
     startValue(val) {
-      console.log("startValue", val);
     },
     endValue(val) {
-      console.log("endValue", val);
     },
     pagination: {
       deep: true,
@@ -160,8 +158,6 @@ export default {
         platformId: this.platformId
       };
       machinesLogList(params).then(res => {
-        console.log(res.data);
-
         if (res.data.status == 405) {
           // this.pagination.total = res.data.data.total
           this.$message.error(res.data.msg);

@@ -137,8 +137,7 @@ export default {
       alert(this.defaultExpandAllRows);
     },
     handleExpand(expanded, record) {
-      console.log(expanded);
-      console.log(record);
+
     }
   }
 };

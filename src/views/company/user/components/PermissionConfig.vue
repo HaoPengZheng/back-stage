@@ -78,7 +78,7 @@ export default {
   },
   watch: {
     checkedKeys(val) {
-      console.log("onCheck", val);
+
     }
   },
   methods: {
@@ -86,18 +86,18 @@ export default {
         this.visible = false
     },
     onExpand(expandedKeys) {
-      console.log("onExpand", expandedKeys);
+
       // if not set autoExpandParent to false, if children expanded, parent can not collapse.
       // or, you can remove all expanded children keys.
       this.expandedKeys = expandedKeys;
       this.autoExpandParent = false;
     },
     onCheck(checkedKeys) {
-      console.log("onCheck", checkedKeys);
+
       this.checkedKeys = checkedKeys;
     },
     onSelect(selectedKeys, info) {
-      console.log("onSelect", info);
+
       this.selectedKeys = selectedKeys;
     }
   }

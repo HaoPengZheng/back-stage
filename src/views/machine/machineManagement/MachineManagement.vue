@@ -318,7 +318,7 @@ export default {
           this.initData();
         })
         .catch(err => {
-          console.log(err);
+
           this.$message.warn("删除失败");
         });
     },
@@ -339,7 +339,6 @@ export default {
         }
       }
       return id;
-      console.log(id);
     },
     handleOk() {
       let data = new FormData();
@@ -370,7 +369,6 @@ export default {
     },
     handleSearchFace() {
       let id = "440582199704036138";
-      console.log(id);
       getFaceById(id).then(res => {});
     },
     changeIsRequestOpenDoor(id,isRequestOpenDoor){

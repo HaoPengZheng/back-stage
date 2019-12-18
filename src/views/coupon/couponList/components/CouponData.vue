@@ -59,7 +59,7 @@ export default {
       data,
       pagination: {
         onChange: page => {
-          console.log(page);
+
         },
         pageSize: 12
       },
@@ -72,7 +72,7 @@ export default {
   },
   methods: {
     onSearch() {
-      console.log("搜索");
+
     }
   }
 };

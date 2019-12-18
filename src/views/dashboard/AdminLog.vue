@@ -436,7 +436,7 @@ export default {
     },
 
     handleChange(info) {
-      console.log(info)
+
       if (info.file.status === "uploading") {
         this.loading = true;
         return;

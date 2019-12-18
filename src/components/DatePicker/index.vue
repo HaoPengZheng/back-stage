@@ -182,7 +182,6 @@ export default {
       }
 
       this.weekData.push(tempWeekData)
-      // console.log(this.weekData)
     }
   }
 }

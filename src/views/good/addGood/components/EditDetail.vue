@@ -59,10 +59,6 @@ export default {
       console.log(`编辑器实例${editorInstance.key}: `, editorInstance);
       let _this = this
       // alert(this.$.getters.getToken)
-      console.log(this.$ls.get('Access-Token'))
-      console.log(this.$ls.get('company'))
-      console.log('=================')
-      // console.log(_this.$store.getters.getToken())
       editorInstance.ready(function() {
         editorInstance.execCommand("serverparam", {
           token:_this.$ls.get('Access-Token'),

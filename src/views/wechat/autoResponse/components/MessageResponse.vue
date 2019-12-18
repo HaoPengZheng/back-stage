@@ -36,11 +36,9 @@ export default {
   },
   methods: {
     changeText(e) {
-      console.log(e);
       this.lastEditRange = window.getSelection();
     },
     addEmoji(emoji) {
-      console.log(emoji);
       this.innerText += emoji.native;
     },
     handleTabChange() {

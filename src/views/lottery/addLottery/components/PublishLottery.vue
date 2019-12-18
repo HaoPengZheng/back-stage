@@ -36,7 +36,7 @@ export default {
     },
     publish() {
       let lotteryInfo = this.lottery;
-      console.log(lotteryInfo);
+
       axios
         .get(
           "http://test.00800.com.cn/data/upload/lottery/template/template.html"
@@ -50,7 +50,6 @@ export default {
             type: "html",
             lastModified: Date.now()
           });
-          console.log(file);
           var data = new FormData();
           data.append("module", "lottery");
 
@@ -314,7 +313,6 @@ showAwardView = function(awardImagePath,jumpLink) {
                     turnplate.bRotate = !turnplate.bRotate;
                     //获取随机数(奖品个数范围内)
                     api.lottery().then(res => {
-                        console.log(res)
                         let prize = res.data
                         var item = prize.lotteryItemName
                         var index = turnplate.restaraunts.indexOf(item)
@@ -327,7 +325,6 @@ showAwardView = function(awardImagePath,jumpLink) {
                     }).catch(err=>{
                         turnplate.bRotate = false
                         alert(JSON.parse(err.responseText).msg)
-                        console.log(err)
                     })
 
             };
@@ -485,7 +482,7 @@ showAwardView = function(awardImagePath,jumpLink) {
       $("title").html(title);
     },
     generateLotteryItem($, lotteryItems) {
-      console.log(lotteryItems);
+
       let tempLotteryItems = Object.values(lotteryItems);
       if (tempLotteryItems instanceof Array) {
         tempLotteryItems.forEach((lotteryItem, index) => {

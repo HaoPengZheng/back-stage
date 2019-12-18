@@ -173,7 +173,6 @@ export default {
     getMaterialByList(media_id) {
       let mediaList = [];
       mediaList.push(media_id);
-      console.log(media_id);
       let id = 3;
       getMaterial(id, mediaList).then(res => {
         ;

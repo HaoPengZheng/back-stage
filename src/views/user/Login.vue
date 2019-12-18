@@ -185,23 +185,18 @@ export default {
      */
     handleSubmit(e) {
       e.preventDefault();
-      // this.$router.push({ name: "company-choose" });
       if (!this.isCaptcha) {
         this.getScrollCaptch();
       }
       this.form.validateFields((err, values) => {
         if (!err) {
-          // console.log("Received values of form: ", values);
           values.captchaKey = this.captchaKey;
           authorizations(values)
             .then(res => {
-              console.log(values);
               this.setCookieAcount(values);
               if (res.data) {
                 let token = `${res.data.token_type} ${res.data.access_token}`;
                 let expires_in = res.data.expires_in;
-                ;
-                
                 let permissions = res.data.data;
                 this.$store.commit("SET_TOKEN", token);
                 this.$ls.set("Access-Token", token, expires_in * 1000);
@@ -233,7 +228,6 @@ export default {
               }
             })
             .catch(err => {
-              console.log(err);
               this.$notification["error"]({
                 message: "登陆失败",
                 description: err.response ? err.response.data.message : ""
@@ -247,10 +241,7 @@ export default {
     },
     // 初始化cookie中保存账号密码
     initCookieAccount() {
-      console.log(Cookies.get("rememberMe"));
-      console.log(Cookies.get("username"));
       if (Cookies.get("rememberMe")) {
-        console.log(Cookies.get("username"));
         this.form.setFieldsValue({
           username: Cookies.get("username"),
           password: Cookies.get("password"),

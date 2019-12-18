@@ -163,7 +163,6 @@ export default {
           this.$emit('refreshData')
         }
       }).catch(err => {
-        console.log(err)
       })
     }
   },

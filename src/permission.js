@@ -68,7 +68,6 @@ router.beforeEach((to, from, next) => {
       if (company) {
         next('/dashboard/statistics')
       } else {
-        console.log(company)
         // next({ name: 'company-choose' })
       }
 

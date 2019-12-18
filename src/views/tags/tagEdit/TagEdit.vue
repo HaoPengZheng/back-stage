@@ -66,7 +66,6 @@ export default {
       getTags().then(res => {
         this.tagOptions = res.data;
         ;
-        console.log(this.tagOptions);
       });
     },
     //设置商品到左边,
@@ -104,7 +103,6 @@ export default {
       };
     },
     handleChange(targetKeys, direction, moveKeys) {
-      console.log(targetKeys, direction, moveKeys);
       this.targetKeys = targetKeys;
       this.transferDisabled = true;
       this.spinning = true;
@@ -144,7 +142,6 @@ export default {
       } else {
         getTagsGood({ labels: value }).then(res => {
           this.targetKeys = res.data.map(ele => ele.toString());
-          console.log(res.data);
           this.selectDisabled = false;
           this.transferDisabled = false;
           this.spinning = false;

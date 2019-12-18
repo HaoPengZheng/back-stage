@@ -235,7 +235,7 @@ export default {
           details.forEach(detail => {
             let name = `${this.goodSource[detail.goods_no].name}`;
             goodNames += name;
-            console.log(this.goodSource[detail.goods_no]);
+
           });
           return goodNames;
         }
@@ -252,13 +252,10 @@ export default {
       getOrders(defaultQuery).then(res => {
         this.dataSource = res.data.data;
         this.goodSource = res.data.meta.goods;
-        console.log(this.dataSource);
       }).catch(err=>{
-        console.log(err)
       });
     },
     handleTableChange(pagination, filters, sorter) {
-      console.log(filters);
     },
     start() {
       this.loading = true;
@@ -269,7 +266,6 @@ export default {
       }, 1000);
     },
     onSelectChange(selectedRowKeys) {
-      console.log("selectedRowKeys changed: ", selectedRowKeys);
       this.selectedRowKeys = selectedRowKeys;
     },
     setTagColorByOrderType(order_type){

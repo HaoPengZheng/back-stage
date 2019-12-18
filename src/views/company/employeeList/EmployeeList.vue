@@ -114,8 +114,6 @@ export default {
     getEmployeeListData() {
       getEmployeeList(this.param).then(res => {
         this.originalEmployeeData = res.data.data;
-        console.log(res.data);
-        console.log(res.data.meta.pagination.current_page);
         this.$set(this.pagination, "current", this.param.page);
         this.$set(this.pagination, "pageSize", this.param.per_page);
         this.$set(this.pagination, "total", res.data.meta.pagination.total);

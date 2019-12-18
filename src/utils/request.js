@@ -91,7 +91,6 @@ service.interceptors.response.use(
     try {
 
       msg = error.response.data.message
-      console.log(store.getters.getIsShowPermissionDialog)
       if (error.response.status === 401) {
         if (!store.getters.getIsShowPermissionDialog) {
           store.commit('SET_IS_SHOW_PERMISSION_DIALOG', true)

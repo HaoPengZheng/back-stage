@@ -149,7 +149,6 @@ export default {
       })
     },
     initPinYin () {
-      console.log(this.goods_data)
       this.goods_data.forEach(element => {
         // element.pinyin = convertHanziToPinYin(element.materials_name)
         // element.lyx = convertHanZiToInitial(element.materials_name)

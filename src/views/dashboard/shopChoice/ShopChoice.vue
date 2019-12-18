@@ -105,7 +105,7 @@ export default {
       searchValue: "",
       pagination: {
         onChange: page => {
-          console.log(page);
+
         },
         pageSize: 9
       }

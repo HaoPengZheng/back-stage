@@ -111,18 +111,18 @@ export default {
   },
   methods: {
     onChange(date, dateString) {
-      console.log(date, dateString);
+
     },
     handleClick(e) {
-      console.log("click", e);
+
     },
     titleClick(e) {
-      console.log("titleClick", e);
+
     }
   },
   watch: {
     openKeys(val) {
-      console.log("openKeys", val);
+
     }
   }
 };

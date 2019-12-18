@@ -41,9 +41,6 @@ export default {
             return addAttach(data);
           })
           .then(res => {
-            // console.log(res);
-            // this.downloadHtml($.html());
-            // console.log($.html());
              this.bindQRCode(
                 `http://www.00800.com.cn/cnhs/wqproject/index.php?app=public&mod=Lottery&act=index&path=${publishLink}`
               );
@@ -242,7 +239,6 @@ export default {
                     turnplate.bRotate = !turnplate.bRotate;
                     //获取随机数(奖品个数范围内)
                     api.lottery().then(res => {
-                        console.log(res)
                         let prize = res.data
                         var item = prize.lotteryItemName
                         var index = turnplate.restaraunts.indexOf(item)
@@ -252,7 +248,6 @@ export default {
                         //奖品数量等于10,指针落在对应奖品区域的中心角度[252, 216, 180, 144, 108, 72, 36, 360, 324, 288]
                         rotateFn(index+1, turnplate.restaraunts[index]);
                     }).catch(error=>{
-                        console.log(error)
                         alert('出错了！')
                         turnplate.bRotate = true
                     })

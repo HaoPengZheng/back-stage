@@ -21,7 +21,7 @@ export default {
   },
   methods: {
     callback(val) {
-      console.log(val);
+
     }
   }
 };

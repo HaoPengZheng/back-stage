@@ -273,7 +273,6 @@ export default {
           return +b.level - +a.level;
         });
       dataSource.unshift({});
-      console.log(dataSource);
       return dataSource;
     }
   },
@@ -356,9 +355,7 @@ export default {
           new Date(ele.year + "-" + ele.month + "-" + ele.day)
         ).format("YYYY-MM-DD");
       });
-      // console.log(currentDate)
       if (value.month() == item.month()) {
-        // console.log(currentDate.includes(value.format("YYYY-MM-DD")))
         if (currentDate.includes(value.format("YYYY-MM-DD"))) {
           style.background = "red";
           style.color = "#fff";
@@ -377,7 +374,6 @@ export default {
       return style;
     },
     handleDateClick(date) {
-      // console.log(this.dateList.indexOf(date.format("YYYY-MM-DD")));
       if (this.dateList.indexOf(date.format("YYYY-MM-DD")) == -1) {
         this.dateList.push(date.format("YYYY-MM-DD"));
       } else {
@@ -392,10 +388,8 @@ export default {
     },
     deleteDateTag(index) {
       this.$delete(this.dateList, index);
-      // console.log(this.dateList);
     },
     handleSubmit() {
-      console.log(this.dateList);
       let type = 1;
       let start_date = this.$moment(new Date(this.date + "-1-1")).format(
         "YYYY-MM-DD"

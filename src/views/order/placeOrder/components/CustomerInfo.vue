@@ -97,12 +97,10 @@ export default {
       this.form.validateFields((err, values) => {
         if (!err) {
           this.customerOption.push(values.name + " " + values.phone);
-          console.log("Received values of form: ", values);
         }
       });
     },
     onChange(checkedList) {
-      console.log(checkedList);
     }
   }
 };

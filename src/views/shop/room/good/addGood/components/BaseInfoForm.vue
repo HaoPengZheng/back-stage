@@ -13,7 +13,6 @@
             v-decorator="[
             'storeNo',
             {
-              initialValue:{value:shopId},
               rules: [{ required: true, message: '部门是必选的！' }],
             }]"
             disabled
@@ -157,6 +156,16 @@
             </a-row>
           </template>
         </a-form-item>
+
+
+          <a-form-item           :label-col="labelCol"
+          :wrapper-col="wrapperCol"
+          label="商品图片"
+          help="建议尺寸：360*270像素，你可以拖拽图片调整顺序，为提升买家的购物体验，图片建议小于500K，最多上传10张">
+              <div>
+                <picture-select :limit="1" module="lottery" v-model="backgroundImageFile"  ></picture-select>
+              </div>
+            </a-form-item>
 
         <a-form-item
           :label-col="labelCol"
@@ -424,7 +433,7 @@
 </template>
 
 <script>
-import { PicUpload, RadioBox } from "@/components";
+import { PicUpload, RadioBox,PictureSelect } from "@/components";
 import { mapGetters, mapState } from "vuex";
 import { mixinGobalState } from "@/utils/mixin";
 import { mixinAddGoodState } from "../mixin";
@@ -440,7 +449,8 @@ export default {
   components: {
     PicUpload,
     RadioBox,
-    videoPlayer
+    videoPlayer,
+    PictureSelect
   },
   mixins: [mixinGobalState, mixinAddGoodState],
   data() {
@@ -525,7 +535,8 @@ export default {
       //上传图片的组件
       previewVisible: false,
       previewImage: "",
-      fileList: []
+      fileList: [],
+      backgroundImageFile:[]
     };
   },
   computed: {
@@ -768,7 +779,7 @@ export default {
         mapPropsToFields: () => {
           return {
             storeNo: this.$form.createFormField({
-              value: this.storeNo
+              value: this.shopId
             }),
             typeId: this.$form.createFormField({
               value: this.typeId

@@ -160,8 +160,6 @@ export default {
           console.log("Received values of form: ", values);
           getRoomTypesByShop(values.shop_id).then(res => {
             this.data = res.data.data.map(ele => {
-              console.log(this.institutionMap)
-              console.log(ele.store_id)
               ele.shopName = this.institutionMap.get(ele.store_id);
               return ele;
             });
