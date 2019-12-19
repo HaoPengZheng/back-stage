@@ -79,6 +79,7 @@ const app = {
       return new Promise(resolve => {
         commit('SET_SHOP',shop.id)
         commit('SET_SHOP_TYPE',shop.type.sign)
+        Vue.ls.set('shop',shop)
         resolve()
       })
     },

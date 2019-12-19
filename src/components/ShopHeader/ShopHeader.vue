@@ -11,7 +11,7 @@
       @change="handleChange"
       :filterOption="filterOption"
       size="small"
-      :defaultValue="shopId"
+      :defaultValue="activeShop"
     >
       <a-select-option
         v-for="institution in institutions"
@@ -58,8 +58,16 @@ export default {
           activeShop = ele
         }
       })
+      if(activeShop == null || activeShop == undefined){
+        if(this.$ls.get('shop')){
+          activeShop = this.$ls.get('shop').id
+        }
+      }
       return activeShop
     }
+  },
+  created(){
+      this.$store.dispatch("getInstitutionsList");
   },
   methods: {
     toggle() {

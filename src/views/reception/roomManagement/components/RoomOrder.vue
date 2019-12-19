@@ -233,9 +233,6 @@ export default {
   .el-tabs {
     overflow: hidden;
   }
-
-  .el-tabs {
-  }
   .el-table {
     margin-bottom: 20px;
     tr,
