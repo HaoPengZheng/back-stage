@@ -53,11 +53,6 @@ export default {
     }),
     activeShop(){
       let activeShop= null
-      this.institutions.forEach((ele,index)=>{
-        if(ele.id == this.shopId){
-          activeShop = ele
-        }
-      })
       if(activeShop == null || activeShop == undefined){
         if(this.$ls.get('shop')){
           activeShop = this.$ls.get('shop').id

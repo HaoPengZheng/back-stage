@@ -106,6 +106,12 @@ export const asyncRouterMap = [
             meta: { title: '员工列表' }
           },
           {
+            path: '/company/employee/day',
+            name: 'day-employee',
+            component: () => import('@/views/company/dayEmployee/DayEmployee'),
+            meta: { title: '临时工管理' }
+          },
+          {
             path: '/company/organizational/management',
             name: 'organizational-management',
             component: () => import('@/views/company/organizational/OrgManagement'),

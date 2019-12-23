@@ -15,10 +15,9 @@ export default {
         },
         initUserData(){
             let params = {
-                include:'user',
-                type:'client',
-                start:0,
-                limit:20
+                include:'credit.records,authorization.contact',
+                page:1,
+                per_page:20
             }
             getUserList(params).then(res=>{
                 

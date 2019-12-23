@@ -11,7 +11,7 @@ export function addUser(data) {
 
 export function getUserList(params){
   return request({
-    url: `${USER_BASE_URL}/api/company-users`,
+    url: `${USER_BASE_URL}/api/clients`,
     method:'get',
     params
   })

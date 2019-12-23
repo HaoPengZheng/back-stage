@@ -128,7 +128,7 @@ export default {
       this.getEmployeeListData();
     },
     handleEmployeeDetail(record) {
-      this.activeId = `${record.userId}`;
+      this.activeId = `${record.id}`;
       this.employeeDetailVisible = true;
     },
     onClose() {
