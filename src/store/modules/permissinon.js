@@ -14,7 +14,6 @@ function hasPermission(permission, route) {
     let flag = false
     for (let i = 0, len = permission.length; i < len; i++) {
       flag = permission[i].includes('*')||route.meta.permission.includes(permission[i])
-      console.log(flag)
       if(flag){
         return true
       }

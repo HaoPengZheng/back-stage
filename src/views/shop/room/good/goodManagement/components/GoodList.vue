@@ -2,22 +2,24 @@
   <div>
     <a-table
       :columns="columns"
+      rowKey='name'
       :dataSource="goodList"
       :bordered="true"
       :loading="loading"
       :pagination="pagination"
       :rowSelection="rowSelection"
+     
     >
       <a slot="name" slot-scope="text" href="javascript:;">{{text}}</a>
       <!-- 操作单元格 -->
-      <div slot="operator">
+      <div slot="operator"  slot-scope="text,record">
         <!-- <a-tooltip placement="bottom" title="上架">
           <a-button type="link">
             <my-icon class="icon" type="iconshangjia"  ></my-icon>
           </a-button>
         </a-tooltip> -->
         <a-tooltip placement="bottom" title="下架">
-          <a-button type="link">
+          <a-button type="link" @click="setGoodUnShelves(record)">
             <my-icon class="icon" type="iconxiajia1" ></my-icon>
           </a-button>
         </a-tooltip>
@@ -95,7 +97,7 @@
 </template>
 
 <script>
-import { getGoods } from "@/api/good";
+import { getGoods,setGoodPutAway } from "@/api/good";
 import DownShelvesTimeTag from "./DownShelvesTimeTag";
 import { mapActions } from "vuex";
 // import { Icon } from 'ant-design-vue';
@@ -264,6 +266,13 @@ export default {
     onSelectChange(selectedRowKeys) {
 
       this.selectedRowKeys = selectedRowKeys;
+    },
+    setGoodUnShelves(record){
+      let data = new FormData();
+      data.append("is_downShelves",0)
+      setGoodPutAway(data,record.no).then(res=>{
+        console.log(res)
+      })
     }
   },
   watch: {

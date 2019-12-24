@@ -20,7 +20,7 @@ export default {
                 per_page:20
             }
             getUserList(params).then(res=>{
-                
+                console.log(res)
             })
         }
     }

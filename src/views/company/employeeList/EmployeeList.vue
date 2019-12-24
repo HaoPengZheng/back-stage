@@ -12,7 +12,7 @@
       <template slot="operation" slot-scope="text, record">
         <a-button type="link" @click="handleEmployeeDetail(record)">查看详情</a-button>
       </template>
-      <template slot="identify_card" slot-scope="text,record">{{text.substring()}}</template>
+      <template slot="identify_card" slot-scope="text">{{text.substring()}}</template>
     </a-table>
     <a-drawer
       width="40%"
@@ -96,6 +96,7 @@ export default {
         people.sex = employee.user.sex;
         people.birth = employee.authorization.birth;
         people.identify_card = employee.authorization.identify_card;
+        people.user = employee
         return people;
       });
     },
@@ -119,7 +120,7 @@ export default {
         this.$set(this.pagination, "total", res.data.meta.pagination.total);
       });
     },
-    handleTableChange(pagination, filters, sorter, { currentDataSource }) {
+    handleTableChange(pagination) {
       this.pagination = pagination;
       this.getEmployeeListData();
     },
@@ -128,7 +129,9 @@ export default {
       this.getEmployeeListData();
     },
     handleEmployeeDetail(record) {
-      this.activeId = `${record.id}`;
+      console.log(record)
+      // 
+      this.activeId = `${record.user.id}`;
       this.employeeDetailVisible = true;
     },
     onClose() {

@@ -85,3 +85,12 @@ export function getHtml(url){
     method:'get'
   })
 }
+
+// 商品上架
+export function setGoodPutAway(data,id){
+  return request({
+    url:`${GOOD_BASE_URL}/api/goods/step1/${id}`,
+    method:'POST',
+    data
+  })
+}

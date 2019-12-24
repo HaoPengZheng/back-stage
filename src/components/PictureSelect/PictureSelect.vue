@@ -7,7 +7,7 @@
       @cancel="isShowPictureGallery=false"
       @ok="handlePicSelect"
     ></picture-gallery>
-    <a-list :grid="{ gutter: 16, column: 4 }" :dataSource="value">
+    <a-list :grid="{ gutter: 16, column: 4     }" :dataSource="value">
       <a-list-item slot="renderItem" slot-scope="item">
         <img :src="item" width="80" height="80">
       </a-list-item>
@@ -43,6 +43,7 @@ export default {
         return file.path;
       });
       this.$emit('input',this.valueTemp)
+      this.$emit('change',fileList)
     },
     showPictureGallery() {
       this.isShowPictureGallery = true;

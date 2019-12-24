@@ -14,7 +14,7 @@
             ></video-player>
           </div>
           <div v-for="(img,index) in goodImgList" :key="index">
-            <img :src="img.file_url" style="height:270px;width:100%" />
+            <img :src="img.path" style="height:270px;width:100%" />
           </div>
           <div v-show="goodImgList.length==0">
             <h3>上传图片</h3>
@@ -70,7 +70,7 @@
 </template>
 
 <script>
-import { mapGetters, mapState } from "vuex";
+// import { mapGetters } from "vuex";
 import { BaseButton, DropFixedBox } from "@/components";
 import { mixinAddGoodState } from "../mixin";
 import { videoPlayer } from "vue-video-player";
@@ -88,7 +88,6 @@ export default {
       mainPlayerOptions: {
         // videojs options
         muted: true,
-        language: "cn",
         language: "zh-CN",
         playbackRates: [0.7, 1.0, 1.5, 2.0],
         sources: [
@@ -102,7 +101,6 @@ export default {
       shopPlayerOptions: {
         // videojs options
         muted: true,
-        language: "cn",
         language: "zh-CN",
         playbackRates: [0.7, 1.0, 1.5, 2.0],
         sources: [

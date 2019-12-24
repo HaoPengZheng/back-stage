@@ -157,50 +157,20 @@
           </template>
         </a-form-item>
 
-
-          <a-form-item           :label-col="labelCol"
-          :wrapper-col="wrapperCol"
-          label="商品图片"
-          help="建议尺寸：360*270像素，你可以拖拽图片调整顺序，为提升买家的购物体验，图片建议小于500K，最多上传10张">
-              <div>
-                <picture-select :limit="1" module="lottery" v-model="backgroundImageFile"  ></picture-select>
-              </div>
-            </a-form-item>
-
         <a-form-item
           :label-col="labelCol"
           :wrapper-col="wrapperCol"
           label="商品图片"
-          help="建议尺寸：360*270像素，你可以拖拽图片调整顺序，为提升买家的购物体验，图片建议小于500K，最多上传10张"
+          help="建议尺寸：360*270像素，为提升买家的购物体验，图片建议小于500K，最多上传10张"
         >
-          <!-- <PicUpload
-            v-model="imgList"
-            :max="8"
-            ref="picUpload"
-            @swap="handleGoodImgListSwap"
-            @change="handleGoodImgListChange"
-            @create="handleGoodImgListCreate"
-            @delete="handleGoodImgListDelete"
-          ></PicUpload>-->
-          <a-upload
-            listType="picture-card"
-            :fileList="fileList"
-            :data="uploadAddData"
-            :headers="uploadHeader"
-            :multiple="false"
-            :action="uploadUrl"
-            @preview="handlePreview"
-            @change="handleChange"
-            :remove="handleImageRemove"
-          >
-            <div v-if="fileList.length < 8" class="center" style="height:100%;">
-              <a-icon type="plus" />
-              <!-- <div class="ant-upload-text">上传图片</div> -->
-            </div>
-          </a-upload>
-          <a-modal :visible="previewVisible" :footer="null" @cancel="handleCancel">
-            <img alt="example" style="width: 100%" :src="previewImage" />
-          </a-modal>
+          <div>
+            <picture-select
+              :limit="10"
+              module="goods"
+              v-model="backgroundImageFile"
+              @change="handlePictrueChange"
+            ></picture-select>
+          </div>
         </a-form-item>
 
         <a-form-item :label-col="labelCol" :wrapper-col="wrapperCol" label="主图视频">
@@ -390,7 +360,7 @@
         </a-form-item>
         <a-form-item :label-col="labelCol" :wrapper-col="wrapperCol" label="使用时间选择">
           <div class="form-item">
-            <a-radio-group v-model="upShelvesStyle" v-decorator="[
+            <a-radio-group v-decorator="[
             'ignoreDateSelect']">
               <a-radio :style="radioStyle" :value="0">使用</a-radio>
               <a-radio :style="radioStyle" :value="1">不使用</a-radio>
@@ -399,7 +369,7 @@
         </a-form-item>
         <a-form-item :label-col="labelCol" :wrapper-col="wrapperCol" label="退款政策">
           <div class="form-item">
-            <a-radio-group v-model="upShelvesStyle" v-decorator="[
+            <a-radio-group v-decorator="[
             'refundPolicy']">
               <a-radio :style="radioStyle" :value="0">允许退款</a-radio>
               <a-radio :style="radioStyle" :value="1">不允许退款</a-radio>
@@ -433,7 +403,7 @@
 </template>
 
 <script>
-import { PicUpload, RadioBox,PictureSelect } from "@/components";
+import { PicUpload, RadioBox, PictureSelect } from "@/components";
 import { mapGetters, mapState } from "vuex";
 import { mixinGobalState } from "@/utils/mixin";
 import { mixinAddGoodState } from "../mixin";
@@ -536,9 +506,10 @@ export default {
       previewVisible: false,
       previewImage: "",
       fileList: [],
-      backgroundImageFile:[]
+      backgroundImageFile: []
     };
   },
+
   computed: {
     uploadHeader() {
       return {
@@ -681,7 +652,8 @@ export default {
       } else if (val == 1) {
         //onchange 中处理
       }
-    }
+    },
+  
   },
   methods: {
     init: async function() {
@@ -777,9 +749,10 @@ export default {
           this.$emit("change", changedFields);
         },
         mapPropsToFields: () => {
+          console.log(this.$ls.get('shop').id)
           return {
             storeNo: this.$form.createFormField({
-              value: this.shopId
+              value: this.$ls.get("shop").id
             }),
             typeId: this.$form.createFormField({
               value: this.typeId
@@ -857,6 +830,10 @@ export default {
 
     handleGoodImgListChange(val) {
       this.$store.commit("SET_FORM", { goodImgList: this.imgListData });
+    },
+    handlePictrueChange(val) {
+      console.log(val);
+      this.$store.commit("SET_FORM", { goodImgList: val });
     },
     handleGoodImgListCreate(index, file) {
       let data = new FormData();
@@ -1082,7 +1059,7 @@ export default {
     //添加商品or编辑商品
     handleNextStep() {
       addGood({
-        store_no: this.storeNo,
+        store_no: this.$ls.get('shop').id,
         name: this.name,
         name2: this.name2,
         type_id: this.typeId,
@@ -1130,14 +1107,17 @@ export default {
       })
         .then(res => {})
         .catch(err => {
-          this.$message.error({
-            content: "添加失败"
-          });
+          console.log(err);
+          if (err.response.data.message) {
+            this.$message.error(err.response.data.message);
+          } else {
+            this.$message.error("添加失败");
+          }
         });
     },
     handleUpload() {
       updateGood(this.goodId, {
-        store_no: this.storeNo,
+        store_no: this.$ls.get('shop').id,
         name: this.name,
         name2: this.name2,
         type_id: this.typeId,
@@ -1183,10 +1163,10 @@ export default {
         // comment:state => state.addGood.comment,
         // place:state => state.addGood.place,
       })
-        .then(res => {
+        .then(() => {
           alert("編輯成功");
         })
-        .catch(err => {
+        .catch(() => {
           this.$message.error({
             content: "添加失败"
           });
@@ -1247,7 +1227,7 @@ export default {
   }
   .video-tip {
     margin: 0;
-    margin-left: 15px;
+    margin-left: 15px;  
   }
 }
 </style>

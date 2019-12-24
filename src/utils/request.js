@@ -2,6 +2,9 @@ import axios from 'axios'
 // import router from '@/router'
 import Vue from 'vue'
 import store from '@/store'
+import {
+  updateToken
+} from "@/api/auth";
 // import sysConfig from '@/utils/sysConfig'
 
 
@@ -70,7 +73,6 @@ service.interceptors.request.use(config => {
     // let shop = Vue.ls.get('shop').id
     let shop 
     if(Vue.ls.get('shop')){
-      console.log(Vue.ls.get('shop'))
       shop = Vue.ls.get('shop').id
     }
     if (shop) {
@@ -92,10 +94,10 @@ service.interceptors.response.use(
   error => {
     //loadding
     store.commit('SET_IS_PAGE_LOADDING', false)
-    let msg = ''
+    // let msg = ''
     try {
 
-      msg = error.response.data.message
+      // msg = error.response.data.message
       if (error.response.status === 401) {
         if (!store.getters.getIsShowPermissionDialog) {
           store.commit('SET_IS_SHOW_PERMISSION_DIALOG', true)
@@ -112,7 +114,7 @@ service.interceptors.response.use(
 
       }
     } catch (e) {
-      msg = error.message
+      // msg = error.message
     }
     return Promise.reject(error)
   })

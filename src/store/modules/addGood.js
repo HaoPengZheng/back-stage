@@ -48,10 +48,10 @@ const addGoodState = {
         getImgListAttachIdList: state => {
             if (state.goodImgList.length > 0) {
                 return state.goodImgList.map(ele => {
-                    if(ele.hasOwnProperty('attach_id')){
-                        return ele.attach_id
+                    if(ele.hasOwnProperty('id')){
+                        return ele.id
                     }else if(ele.hasOwnProperty('response')){
-                        return ele.response.data.attach_id
+                        return ele.response.data.id
                     }
                 })
             }

@@ -43,7 +43,7 @@ import { LoginLayout, BasicLayout, RouteView } from '@/layouts'
             },
             {
               path: '/shop/room/good/management',
-              name: 'good-management',
+              name: 'shop-room-console.log(flag)good-management',
               component: () => import('@/views/shop/room/good/goodManagement/GoodManagement'),
               meta: { title: '商品管理' }
             },
