@@ -42,7 +42,8 @@ const addGoodState = {
         shareImg: '',
 
         //商品详情
-        shopDetailRenderHtml: '1'
+        shopDetailRenderHtml: '1',
+        rolesList:[]
     },
     getters: {
         getImgListAttachIdList: state => {
@@ -73,7 +74,6 @@ const addGoodState = {
                 return vedio
             }
             return []
-
         },
     },
     mutations: {
@@ -128,6 +128,9 @@ const addGoodState = {
                 //商品详情
                 shopDetailRenderHtml: '1'
             })
+        },
+        SET_ROLES_LIST:(state,rolesList)=>{
+            state.rolesList = rolesList
         }
 
     },

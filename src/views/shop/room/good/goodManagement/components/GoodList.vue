@@ -97,7 +97,7 @@
 </template>
 
 <script>
-import { getGoods,setGoodPutAway } from "@/api/good";
+import { getGoods,setGoodUpShelves } from "@/api/good";
 import DownShelvesTimeTag from "./DownShelvesTimeTag";
 import { mapActions } from "vuex";
 // import { Icon } from 'ant-design-vue';
@@ -270,7 +270,7 @@ export default {
     setGoodUnShelves(record){
       let data = new FormData();
       data.append("is_downShelves",0)
-      setGoodPutAway(data,record.no).then(res=>{
+      setGoodUpShelves(data,record.no).then(res=>{
         console.log(res)
       })
     }

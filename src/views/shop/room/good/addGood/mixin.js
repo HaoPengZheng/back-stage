@@ -47,6 +47,8 @@ const mixinAddGoodState = {
       shopId:state=> state.app.shopId,
 
       institutions:state=>state.shop.institutions,
+
+      rolesList:state => state.addGood.rolesList
     })
   },
 }

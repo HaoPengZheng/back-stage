@@ -57,6 +57,7 @@ export function getGoodTypeList(){
 //   "image": "string",
 //   "image_id": "string"
 // }
+
 export function addGoodType(data){
   return request({
     url:`${GOOD_BASE_URL}/api/classification`,
@@ -86,11 +87,20 @@ export function getHtml(url){
   })
 }
 
+
 // 商品上架
-export function setGoodPutAway(data,id){
+export function setGoodUpShelves(data,id){
   return request({
-    url:`${GOOD_BASE_URL}/api/goods/step1/${id}`,
+    url:`${GOOD_BASE_URL}/api/goods/${id}/upShelves`,
     method:'POST',
     data
+  })
+}
+
+//商品下架
+export function setGoodDownShelves(id){
+  return request({
+    url:`${GOOD_BASE_URL}/api/goods/${id}/downShelves`,
+    method:'POST',
   })
 }

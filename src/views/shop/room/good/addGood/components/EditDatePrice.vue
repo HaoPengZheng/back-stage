@@ -1,96 +1,10 @@
 <template>
   <div class="price-setting-warp">
-    <!-- 商品头部 -->
-    <!-- <a-card>
-      <p>{{goodName}}{{goodSubName}}</p>
-      <p>门市价：{{rackRate}}</p>
-      <p>上架时间：{{putAwayTime}} 下架时间：{{soldOutTime}}</p>
-      <p>起售时间：{{startTime}} 结束时间：{{endTime }}</p>
-    </a-card>-->
-
-    <!-- <a-card style="margin-top:20px">
-      <div class="time-select">
-        选择时间范围:
-        <a-range-picker @change="handleDateRangeChange" />
-      </div>
-      <div class="date-select-warp">
-        <div
-          v-for="item in previewDateOption"
-          :key="item.toString()"
-          :style="{ minWidth: '300px', border: '1px solid #d9d9d9', borderRadius: '4px' }"
-        >
-          <a-calendar
-            :value="item"
-            :fullscreen="false"
-            :disabledDate="disabledDate"
-            @panelChange="onPanelChange"
-            @select="onSelect"
-          ></a-calendar>
-        </div>
-      </div>
-      <a-divider />
-    <!-- 单日价格修改-->
-    <!-- <div>
-        <h3>{{dateType}}({{date}})</h3>
-        <div>
-          <a-button class="editable-add-btn" @click="handleAdd">Add</a-button>
-          <a-table
-            bordered
-            :dataSource="dataSource"
-            :pagination="false"
-            :columns="columns"
-            size="middle"
-          >
-            <template slot="name" slot-scope="text, record">
-              <editable-cell :text="text" @change="onCellChange(record.key, 'name', $event)" />
-            </template>
-
-            <template slot="operation" slot-scope="text, record">
-              <a-popconfirm
-                v-if="dataSource.length"
-                title="Sure to delete?"
-                @confirm="() => onDelete(record.key)"
-              >
-                <a href="javascript:;">Delete</a>
-              </a-popconfirm>
-            </template>
-          </a-table>
-        </div>
-      </div>
-      <a-divider />
-    <!-- 规则价格修改-->
-    <!-- <div>
-        <h3>规则价格修改</h3>
-        <div>
-          <a-table
-            bordered
-            :dataSource="dataSource"
-            :pagination="false"
-            :columns="columns2"
-            size="middle"
-          >
-            <template slot="name" slot-scope="text, record">
-              <editable-cell :text="text" @change="onCellChange(record.key, 'name', $event)" />
-            </template>
-            <template slot="editPrice" slot-scope="text, record">
-              <a-row type="flex">
-                <a-input addonBefore="价格：" style="width: 200px" />
-                <a-input addonBefore="积分：" style="width: 200px" />
-              </a-row>
-            </template>
-            <template slot="operation" slot-scope="text, record">
-              <a-popconfirm
-                v-if="dataSource.length"
-                title="Sure to delete?"
-                @confirm="() => onDelete(record.key)"
-              >
-                <a href="javascript:;">Delete</a>
-              </a-popconfirm>
-            </template>
-          </a-table>
-    </div>-->
-    <!-- </div> -->
-    <!-- </a-card> -->
+    <div>
+      <a-checkbox-group @change="onRoleChange">
+        <a-checkbox :value="role" v-for="role in roleListOptions" :key="role.id">{{role.title}}</a-checkbox>
+      </a-checkbox-group>
+    </div>
     <div :style="{ display: 'inline-block', border: '1px solid #d9d9d9', borderRadius: '4px' }">
       <a-calendar @panelChange="onPanelChange" v-model="selectData" :validRange="validRange">
         <div
@@ -102,8 +16,29 @@
           <a-tag color="#f50">2019大假期</a-tag>
           <div style="float:right">{{value.format('YYYY-MM-DD')}}</div>
           <div>
-            <a-input addonBefore="价格：" style="margin:3px 0" size="small" :disabled="isDisable(value)"></a-input>
-            <a-input addonBefore="库存：" style="margin:2px 0" size="small" :disabled="isDisable(value)"></a-input>
+            <a-input
+              addonBefore="价格："
+              style="margin:3px 0"
+              size="small"
+              :disabled="isDisable(value)"
+            ></a-input>
+            <a-input
+              addonBefore="库存："
+              style="margin:2px 0"
+              size="small"
+              :disabled="isDisable(value)"
+            ></a-input>
+            <template v-for="role in rolesList">
+              <a-input
+                :key="role.id"
+                :addonBefore="`${role.title}：`"
+                style="margin:2px 0"
+                size="small"
+                :disabled="isDisable(value)"
+                :ref="`input-${value.format('l')}-${role.id}`"
+                @blur="handlePriceChange(value,role,`input-${value.format('l')}-${role.id}`)"
+              ></a-input>
+            </template>
           </div>
         </div>
         <template slot="monthCellRender" slot-scope="value">
@@ -114,38 +49,47 @@
         </template>
       </a-calendar>
     </div>
-    <div class="volume" v-show="volumeVisible">
-      <div class="volume-item">
-        <span class="volume-label">时间段：</span>
-        <a-range-picker></a-range-picker>
-      </div>
-      <div class="volume-item">
-        <span class="volume-label">规则选择：</span>
-      </div>
-      <div class="volume-item">
-        <span class="volume-label">价格：</span>
-        <a-input style="width:200px;"></a-input>
-      </div>
-      <div class="volume-item">
-        <span class="volume-label">库存：</span>
-        <a-input style="width:200px;"></a-input>
-      </div>
-      <div class="volume-item">
-        <a-button type="primary">确认</a-button>
-      </div>
-    </div>
     <div class="btn-control">
-      <a-button type="primary" @click="volumeVisible= !volumeVisible" style="">批量设置</a-button>
+      <a-button type="primary" @click="volumeVisible= !volumeVisible" style>批量设置</a-button>
+      <a-modal
+        title="Title"
+        :visible="volumeVisible"
+        @ok="handleOk"
+        :confirmLoading="confirmLoading"
+        @cancel="handleCancel"
+      >
+        <div>
+          <div class="volume-item">
+            <span class="volume-label">时间段：</span>
+            <a-range-picker @change="onDateRangeChange"></a-range-picker>
+          </div>
+          <div class="volume-item">
+            <span class="volume-label">规则选择：</span>
+          </div>
+          <div class="volume-item">
+            <span class="volume-label">价格：</span>
+            <a-input style="width:200px;"></a-input>
+          </div>
+          <div class="volume-item">
+            <span class="volume-label">库存：</span>
+            <a-input style="width:200px;"></a-input>
+          </div>
+        </div>
+      </a-modal>
     </div>
   </div>
 </template>
 
 <script>
 import { EditableCell } from "@/components";
+import { getClientRoles } from "@/api/member";
+import { mixinAddGoodState } from "../mixin";
+import { addGoodPrice } from "@/api/addGood";
 export default {
   components: {
     EditableCell
   },
+  mixins: [mixinAddGoodState],
   data() {
     return {
       goodName: "大餐庙会2人入格套票",
@@ -227,13 +171,92 @@ export default {
       ],
       validRange: [this.$moment(), this.$moment("2020-10-1")],
       selectData: this.$moment(),
-      volumeVisible:false
+      volumeVisible: false,
+      roleListOptions: [],
+      batchDateRange:[]
     };
   },
   created() {
     this.handleDateOption(this.startTime, this.endTime);
+    this.initData();
+  },
+  computed: {
+    param() {
+      return {
+        type: "client",
+        include: "rule",
+        page: 1,
+        per_page: 100
+      };
+    }
   },
   methods: {
+    initData() {
+      this.initRoles();
+    },
+    initRoles() {
+      getClientRoles(this.param).then(res => {
+        this.roleListOptions = res.data.data;
+      });
+    },
+    handleOk(){
+      console.log(this.batchDateRange)
+      if(this.batchDateRange.length>0){
+        let startDate = this.batchDateRange[0]
+        let endDate = this.batchDateRange[1]
+        for(let i = 0 ; i < 10 ; i ++){
+          startDate =  startDate.add(1,'days');
+          console.log(startDate.format('l'))
+        }
+      }
+    },
+    onDateRangeChange(date,dateString){
+      this.batchDateRange = date
+    },
+    handlePriceChange(value, role, str) {
+      console.log(str);
+      console.log(this.$refs[str]);
+      console.log(this.$refs[str][0].stateValue);
+      let inputValue = this.$refs[str][0].stateValue;
+      let _this = this;
+      this.$confirm({
+        title: `确认修改${role.title}在日期${value.format(
+          "l"
+        )}为价格${inputValue}元吗?`,
+        content: h => (
+          <div style="color:red;">
+            {role.title}({value.format("l")}):{inputValue}
+          </div>
+        ),
+        onOk() {
+          console.log("OK");
+          _this.handleChangeGoodOneDayPrice(
+            value.format("l"),
+            role.id,
+            inputValue
+          );
+        },
+        onCancel() {
+          console.log("Cancel");
+        },
+        class: "test"
+      });
+    },
+    //处理修改一天价格的接口
+    //商品id，日期，角色id，价格，is_member.date_rule_id，
+    handleChangeGoodOneDayPrice(date, roleId, price) {
+      let data = {};
+      data[date] = {};
+      data[date][roleId] = {
+        price: price,
+        level: 5,
+        is_member: 1,
+        date_rule_id: 66
+      };
+      addGoodPrice(data, 1411).then(res => {
+        console.log(res);
+      });
+    },
     //根据开始时间和结束时间生成日历选择器
     handleDateOption(start_date, end_date) {
       let start = new Date(start_date);
@@ -347,8 +370,26 @@ export default {
       }
       return currentClass;
     },
-    isDisable(value){
+    isDisable(value) {
       return value < this.$moment();
+    },
+    onRoleChange(val) {
+      this.$store.commit("SET_ROLES_LIST", val);
+    },
+    handleAddPrice() {
+      let data = {
+        "2019-09-10": {
+          "6": {
+            price: 888,
+            level: 5,
+            is_member: 1,
+            date_rule_id: 66
+          }
+        }
+      };
+      addGoodPrice(data, 1411).then(res => {
+        console.log(res);
+      });
     }
   }
 };
@@ -396,7 +437,7 @@ export default {
     }
   }
 }
-.btn-control{
+.btn-control {
   margin-top: 20px;
   display: flex;
   justify-content: flex-end;

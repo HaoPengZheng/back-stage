@@ -131,7 +131,7 @@ export default {
     handleEmployeeDetail(record) {
       console.log(record)
       // 
-      this.activeId = `${record.user.id}`;
+      this.activeId = `${record.user.user.id}`;
       this.employeeDetailVisible = true;
     },
     onClose() {

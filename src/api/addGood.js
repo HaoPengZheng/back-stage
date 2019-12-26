@@ -1,4 +1,5 @@
 import request from '@/utils/request'
+import qs from 'qs'
 import { GOOD_BASE_URL } from '../constant'
 
 // export function deleteAttach(id) {
@@ -104,5 +105,18 @@ export function updateGoodDesc(no,data){
     url:`${GOOD_BASE_URL}/api/goods/desc/${no}`,
     method:'post',
     data
+  })
+}
+
+
+
+export function addGoodPrice(data,no){
+  return request({
+    url:`${GOOD_BASE_URL}/api/goods/${no}/price`,
+    method:'post',
+    data:JSON.stringify(data),
+    headers:{
+      'Content-Type':'application/json'
+    }
   })
 }
