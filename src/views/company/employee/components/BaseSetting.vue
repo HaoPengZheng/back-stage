@@ -280,10 +280,11 @@ export default {
         if (val.Sex == "男") {
           Sex = 1;
         } else if (val.Sex == "女") {
-          Sex = 0;
-        } else {
           Sex = 2;
+        } else {
+          Sex = 0;
         }
+        console.log(val)
         this.form.setFieldsValue({
           Name: val.Name,
           Sex: Sex,

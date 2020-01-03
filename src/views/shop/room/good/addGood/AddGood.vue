@@ -231,9 +231,10 @@ export default {
   },
   watch: {
     $route: function(newVal) {
-
+      console.log('change')
       let that = this;
-      if (newVal.fullPath == "/good/add") {
+      console.log(newVal)
+      if (newVal.fullPath == "/shop/room/good/add") {
         if (newVal.params.good) {
           this.$confirm({
             title: "确定执行此操作?",

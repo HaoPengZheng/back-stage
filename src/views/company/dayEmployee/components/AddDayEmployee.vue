@@ -637,6 +637,7 @@ export default {
     },
     handleMechineSubmit(e) {
       e.preventDefault();
+      let _this = this
       this.form.validateFields((err, values) => {
         if (!err) {
           console.log("Received values of form: ", values);
@@ -644,15 +645,17 @@ export default {
 
           let role = values.role[values.role.length - 1].split("-")[1];
           console.log(values.TermDate);
+          console.log(this.$moment)
+          console.log(_this.$moment())
           if (!values.EOD) {
-            values.EOD = this.$moment(
-              `${new Date().getFullYear()}-${new Date().getMonth()}-${new Date().getDate()}`
+            values.EOD = _this.$moment(
+              `${new Date().getFullYear()}-${new Date().getMonth()+1}-${new Date().getDate()}`
             );
           }
           if (!values.TermDate) {
-            values.TermDate = this.$moment(
+            values.TermDate = _this.$moment(
               `${new Date().getFullYear() +
-                100}-${new Date().getMonth()}-${new Date().getDate()}`
+                100}-${new Date().getMonth()+1}-${new Date().getDate()}`
             );
           }
           let employee = {

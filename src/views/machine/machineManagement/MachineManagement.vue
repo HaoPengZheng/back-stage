@@ -102,6 +102,7 @@
 
         <a-button type="primary" @click="changeIsRequestOpenDoor(record.id,true)" style="margin-left:8px;">回调开</a-button>
         <a-button type="primary" @click="changeIsRequestOpenDoor(record.id,false)" style="margin-left:8px;">回调关</a-button>
+        <a-button type="primary" @click="showMachineRecord(record.id,false)" style="margin-left:8px;">查看设备记录</a-button>
         
         <!-- <a-button type="danger" style="margin-left:8px" @click="handleSearchFace">查看设备人脸</a-button> -->
       </span>
@@ -130,6 +131,36 @@
         <a-time-picker format="HH:mm" v-model="sje" />
       </p>
     </a-modal>
+    <a-drawer
+        title="设备记录"
+        placement="right"
+        :closable="false"
+        @close="onMachineLogClose"
+        :visible="machineLogDrawerVisible"
+        width="50vw"
+      >
+      <a-table  :columns="machineLogColumns" :dataSource="machineLogData" :pagination="machineLogPagination" rowKey="id">
+         <span
+            slot="time"
+            slot-scope="time"
+          >{{$moment(new Date(time.time)).format('YYYY-MM-DD HH:mm:ss')}}</span>
+      </a-table>
+       <div
+          :style="{
+          position: 'absolute',
+          bottom: 0,
+          width: '100%',
+          borderTop: '1px solid #e8e8e8',
+          padding: '10px 16px',
+          textAlign: 'right',
+          left: 0,
+          background: '#fff',
+          borderRadius: '0 0 4px 4px',
+        }"
+        >
+      <a-button style="marginRight: 8px" @click="onMachineLogClose">关闭</a-button>
+       </div>
+    </a-drawer>
   </div>
 </template>
 
@@ -188,6 +219,39 @@ const statusMap = {
   }
 };
 
+const machineLogColumns = [
+   {
+    key: "faceid",
+    title: "面部ID",
+    dataIndex: "faceid"
+  },
+  {
+    key: "facename",
+    title: "姓名",
+    dataIndex: "facename"
+  },
+  {
+    key: "id",
+    title: "id",
+    dataIndex: "id"
+  },
+  {
+    key: "mac",
+    title: "mac",
+    dataIndex: "mac"
+  },
+  {
+    key: "macName",
+    title: "macName",
+    dataIndex: "macName"
+  },
+   {
+    key: "time",
+    title: "time",
+   scopedSlots: { customRender: "time" }
+  },
+]
+
 import {
   getInstitutions,
   getInstitutionType,
@@ -200,7 +264,7 @@ import {
   addTimeQuantum,
   deleteTimeQuantum,
   setIsRequestOpenDoor,
-  getFaceById,
+  getFaceById,   
 } from "@/api/machine";
 import TimeRange from "./components/TimeRange";
 import { inoutFaceList, machinesLogList } from "@/api/machine";
@@ -226,12 +290,28 @@ export default {
       dayCheckedList: [],
       timeQuantumName: "",
       sjb: null,
-      sje: null
+      sje: null,
+      machineLogDrawerVisible:false,
+      machineLogColumns,
+      machineLogData:[],
+      machineLogPagination: {
+        current: 1,
+        pageSize: 12,
+        total: 0,
+        showTotal: total => {
+          return `总共${total}条记录`;
+        },
+        onChange:(page,pageSize)=>{
+          this.machineLogPagination.current = page
+          this.getMachineLogData()
+        }
+      },
     };
   },
   created() {
     this.dayCheckedList = this.dayOptions;
     this.initData();
+   
   },
   filters: {
     statusFilter(type) {
@@ -252,11 +332,12 @@ export default {
         this.institutions = res.data.data;
       });
       let params = {
-        company: this.$ls.get("company").id
+        company: this.$ls.get("company").id,
+        disableLoadding:false
       };
       getMachineList(params).then(res => {
         this.data = res.data.data;
-        // this.keepQueryOnline(params)
+        this.keepQueryOnline(params)
       });
     },
     showDrawer() {
@@ -297,7 +378,7 @@ export default {
     keepQueryOnline() {
       window.setInterval(() => {
         setTimeout(this.queryOnline(), 0);
-      }, 1000);
+      }, 10000);
     },
     queryOnline() {
       let params = {
@@ -375,6 +456,28 @@ export default {
       setIsRequestOpenDoor(id,isRequestOpenDoor).then(res=>{
         this.$message.success('请求成功');
       })
+    },
+    onMachineLogClose(){
+      this.machineLogDrawerVisible = false
+    },
+    getMachineLogData(){
+       let params={
+        page: this.machineLogPagination.current,
+        limit: this.machineLogPagination.pageSize,
+        sort:'desc',
+        startTime: "1997-04-03 12:05:22",
+        endTime: this.$moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
+        mac:"6E:57:5E:53:6F:DE"
+      }
+      machinesLogList(params).then(res=>{
+        this.machineLogData = res.data.data.list
+        this.machineLogPagination.total = res.data.data.total
+      })
+    },
+    showMachineRecord(){
+      // this.data
+      this.machineLogDrawerVisible = true
+      this.getMachineLogData()
     }
   }
 };

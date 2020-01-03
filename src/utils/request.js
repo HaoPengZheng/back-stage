@@ -18,7 +18,9 @@ const service = axios.create({
 
 service.interceptors.request.use(config => {
   //loadding
-  store.commit('SET_IS_PAGE_LOADDING', true)
+  if(!(config.params&&config.params.disableLoadding)){
+    store.commit('SET_IS_PAGE_LOADDING', true)
+  }
   let token = Vue.ls.get('Access-Token')
   if (token) {
     //重置token

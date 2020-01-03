@@ -52,7 +52,7 @@
     <div class="btn-control">
       <a-button type="primary" @click="volumeVisible= !volumeVisible" style>批量设置</a-button>
       <a-modal
-        title="Title"
+        title="批量设置价格"
         :visible="volumeVisible"
         @ok="handleOk"
         :confirmLoading="confirmLoading"
@@ -66,9 +66,18 @@
           <div class="volume-item">
             <span class="volume-label">规则选择：</span>
           </div>
+          <div>
+            <a-checkbox-group @change="onVolumeRoleChange">
+              <a-checkbox
+                :value="role"
+                v-for="role in roleListOptions"
+                :key="role.id"
+              >{{role.title}}</a-checkbox>
+            </a-checkbox-group>
+          </div>
           <div class="volume-item">
             <span class="volume-label">价格：</span>
-            <a-input style="width:200px;"></a-input>
+            <a-input style="width:200px;" v-model="batchPrice"></a-input>
           </div>
           <div class="volume-item">
             <span class="volume-label">库存：</span>
@@ -173,7 +182,10 @@ export default {
       selectData: this.$moment(),
       volumeVisible: false,
       roleListOptions: [],
-      batchDateRange:[]
+      batchDateRange: [],
+      batchDateRoleSelect: [],
+      batchPrice: 0,
+      confirmLoading: false
     };
   },
   created() {
@@ -199,19 +211,40 @@ export default {
         this.roleListOptions = res.data.data;
       });
     },
-    handleOk(){
-      console.log(this.batchDateRange)
-      if(this.batchDateRange.length>0){
-        let startDate = this.batchDateRange[0]
-        let endDate = this.batchDateRange[1]
-        for(let i = 0 ; i < 10 ; i ++){
-          startDate =  startDate.add(1,'days');
-          console.log(startDate.format('l'))
+    handleCancel() {
+      this.volumeVisible = false;
+    },
+    handleOk() {
+      console.log(this.batchDateRange);
+      if (this.batchDateRange.length > 0) {
+        let data = {};
+        let startDate = this.batchDateRange[0];
+        let endDate = this.batchDateRange[1];
+        while (!startDate.isSame(endDate)) {
+          startDate = startDate.add(1, "days");
+          let str = startDate
+            .format("l")
+            .split("/")
+            .join("-");
+          data[str] = {};
+          for (let i = 0; i < this.batchDateRoleSelect.length; i++) {
+            data[str][this.batchDateRoleSelect[i].id] = {
+              price: this.batchPrice,
+              level: 5,
+              is_member: 1,
+              date_rule_id: 66
+            };
+          }
         }
+        console.log(data);
+        addGoodPrice(data, this.goodId).then(res => {
+          console.log(res);
+        });
+        this.volumeVisible = false;
       }
     },
-    onDateRangeChange(date,dateString){
-      this.batchDateRange = date
+    onDateRangeChange(date, dateString) {
+      this.batchDateRange = date;
     },
     handlePriceChange(value, role, str) {
       console.log(str);
@@ -314,6 +347,12 @@ export default {
     onPanelChange(value) {
       // this.value = value
     },
+
+    onVolumeRoleChange(checkedValue) {
+      console.log(checkedValue);
+      this.batchDateRoleSelect = checkedValue;
+    },
+
     getListData(value) {
       let listData;
       switch (value.date()) {

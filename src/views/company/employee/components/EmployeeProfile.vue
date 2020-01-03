@@ -70,7 +70,7 @@ export default {
       getEmployee(this.id).then(res => {
         // this.isLoadding = false;
         this.baseInfo.Name = res.data.authorization.name;
-        this.baseInfo.Sex = res.data.sex;
+        this.baseInfo.Sex = res.data.user.sex;
         this.baseInfo.account = res.data.user.account;
         this.baseInfo.CardNo = res.data.authorization.identify_card;
         this.baseInfo.Nation = res.data.staffInformation.nation;

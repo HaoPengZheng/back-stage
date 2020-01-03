@@ -92,7 +92,7 @@ export function getHtml(url){
 export function setGoodUpShelves(data,id){
   return request({
     url:`${GOOD_BASE_URL}/api/goods/${id}/upShelves`,
-    method:'POST',
+    method:'PATCH',
     data
   })
 }
@@ -101,6 +101,6 @@ export function setGoodUpShelves(data,id){
 export function setGoodDownShelves(id){
   return request({
     url:`${GOOD_BASE_URL}/api/goods/${id}/downShelves`,
-    method:'POST',
+    method:'PATCH',
   })
 }
