@@ -615,6 +615,10 @@ export default {
       this.fileList = this.goodImgList;
       this.imgList = this.goodImgList;
       this.imgListData = this.goodImgList;
+
+      this.backgroundImageFile = this.goodImgList.map(goodImg=>{
+        return goodImg.file_url
+      })
     },
     lightspots(val) {
       this.tempLightsports = val;

@@ -1,4 +1,5 @@
 // import Vue from 'vue'
+import { getGoodPrice} from "@/api/addGood";
 const addGoodState = {
     state: {
         isUpload: false,
@@ -135,7 +136,11 @@ const addGoodState = {
 
     },
     actions: {
+        setAddGoodRolesList({ commit }, rolesList) {
+            
+            commit('SET_ROLES_LIST',rolesList)
 
+        }
     }
 }
 

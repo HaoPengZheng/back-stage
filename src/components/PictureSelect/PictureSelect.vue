@@ -37,6 +37,13 @@ export default {
   created(){
     this.valueTemp = this.value
   },
+  watch:{
+    value:{
+      handler(val){
+        this.valueTemp = val
+      }
+    }
+  },
   methods: {
     handlePicSelect(fileList) {
       this.valueTemp = fileList.map(file => {

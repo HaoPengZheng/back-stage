@@ -120,3 +120,11 @@ export function addGoodPrice(data,no){
     }
   })
 }
+
+export function getGoodPrice(params,no){
+  return request({
+    url:`${GOOD_BASE_URL}/api/goods/${no}/price`,
+    method:'GET',
+    params
+  })
+}

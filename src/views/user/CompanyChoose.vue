@@ -142,7 +142,7 @@ export default {
     selectCompany(company) {
       this.$store.dispatch('setCompany',company.id)
       this.$ls.set('company',company)
-      this.$router.push("/dashboard");
+      this.$router.push({name:"shop-choice"});
     },
     showDeleteCompanyModal() {
       this.deleteModalVisible = true;
