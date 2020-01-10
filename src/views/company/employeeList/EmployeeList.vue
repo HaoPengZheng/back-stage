@@ -1,6 +1,19 @@
 <template>
   <div class="content-warp">
-    <a-input-search placeholder="根据姓名搜索" style="width: 200px" @search="onSearch" />
+    <div class="control">
+      <a-input-search placeholder="根据姓名搜索" style="width: 200px" @search="onSearch" />
+      <a-tree-select
+        style="width: 300px"
+        :treeData="treeSelectOption"
+        :value="value"
+        placeholder="根据部门职位搜索"
+        @change="onChange"
+        treeCheckable
+        :showCheckedStrategy="SHOW_PARENT"
+        searchPlaceholder="Please select"
+      />
+      <a-button type="primary"> 导出数据</a-button>
+    </div>
     <a-table
       :columns="columns"
       :rowKey="record => record.id"
@@ -29,6 +42,10 @@
 <script>
 import { getEmployeeList } from "@/api/staff";
 import EmployeeProfile from "@/views/company/employee/components/EmployeeProfile";
+import { TreeSelect } from "ant-design-vue";
+import { getInstitutions } from "@/api/institutions";
+const SHOW_PARENT = TreeSelect.SHOW_PARENT;
+
 const columns = [
   {
     title: "id",
@@ -57,6 +74,7 @@ const columns = [
     scopedSlots: { customRender: "operation" }
   }
 ];
+import XLSX from "xlsx";
 export default {
   components: {
     EmployeeProfile
@@ -80,11 +98,15 @@ export default {
       per_page: 20,
       employeeDetailVisible: false,
       name: "",
-      activeId: ""
+      activeId: "",
+      value: [],
+      treeSelectOption: [],
+      SHOW_PARENT
     };
   },
   created() {
     this.initEmployeeListData();
+    this.initData();
   },
   computed: {
     employeeData() {
@@ -96,7 +118,7 @@ export default {
         people.sex = employee.user.sex;
         people.birth = employee.authorization.birth;
         people.identify_card = employee.authorization.identify_card;
-        people.user = employee
+        people.user = employee;
         return people;
       });
     },
@@ -109,12 +131,73 @@ export default {
     }
   },
   methods: {
+    initData() {
+      this.getInstitutionsData();
+    },
+    getInstitutionsData() {
+      getInstitutions().then(res => {
+        console.log(res);
+        this.treeSelectOption = this.generateOption(res.data.data);
+        console.log(this.treeSelectOption);
+      });
+    },
+    generateDataToExcel(){
+       console.log(this.originalEmployeeData);
+        let excelObject = this.originalEmployeeData.map(employee => {
+          return {
+            姓名:  employee.authorization.name,
+            性别: employee.user.sex,
+            生日: employee.authorization.birth,
+            身份证: employee.authorization.identify_card
+          };
+        });
+        let wb = XLSX.utils.book_new();
+        let ws = XLSX.utils.json_to_sheet(excelObject, {
+          header: ["姓名", "性别", "生日", "身份证"]
+        });
+        console.log(excelObject)
+        XLSX.utils.book_append_sheet(wb, ws, "员工");
+        XLSX.writeFile(wb, "员工.xlsx");
+    },
+    generateOption(data) {
+      if (!data instanceof Array || data.length == 0) {
+        return [];
+      }
+      return data.map(institution => {
+        let isDisable = false;
+        if (
+          institution.positions.data.length == 0 &&
+          institution.children.data.length == 0
+        ) {
+          isDisable = true;
+        }
+        return {
+          value: "institution-" + institution.id,
+          title: institution.name,
+          key: "institution-" + institution.id,
+          disabled: isDisable,
+          children: this.generateOption(institution.children.data).concat(
+            this.generateRole(institution.positions.data)
+          )
+        };
+      });
+    },
+    generateRole(roles) {
+      return roles.map(role => {
+        return {
+          value: "role-" + role.id,
+          key: "role-" + role.id,
+          title: role.title
+        };
+      });
+    },
     initEmployeeListData() {
       this.getEmployeeListData();
     },
     getEmployeeListData() {
       getEmployeeList(this.param).then(res => {
         this.originalEmployeeData = res.data.data;
+       
         this.$set(this.pagination, "current", this.param.page);
         this.$set(this.pagination, "pageSize", this.param.per_page);
         this.$set(this.pagination, "total", res.data.meta.pagination.total);
@@ -129,17 +212,40 @@ export default {
       this.getEmployeeListData();
     },
     handleEmployeeDetail(record) {
-      console.log(record)
-      // 
+      console.log(record);
+      //
       this.activeId = `${record.user.user.id}`;
       this.employeeDetailVisible = true;
     },
     onClose() {
       this.employeeDetailVisible = false;
+    },
+    onChange(value) {
+      console.log("onChange ", value);
+      this.value = value;
+      let institutionList = [];
+      let roleList = [];
+      value.forEach(element => {
+        let keyMap = element.split("-");
+        if (keyMap[0] == "institution") {
+          institutionList.push(keyMap[1]);
+        } else {
+          roleList.push(keyMap[1]);
+        }
+      });
+      getEmployeeList({ institutions: institutionList, roles: roleList }).then(
+        res => {}
+      );
     }
   }
 };
 </script>
 
-<style>
+<style lang="less" scoped>
+.control{
+  margin-bottom: 15px;
+  & > *{
+    margin-right: 8px;
+  }
+}
 </style>

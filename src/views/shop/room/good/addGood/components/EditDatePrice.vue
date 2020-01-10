@@ -77,13 +77,28 @@
         :confirmLoading="confirmLoading"
         @cancel="handleCancel"
       >
-        <div>
+        <div class="volume">
           <div class="volume-item">
             <span class="volume-label">时间段：</span>
-            <a-range-picker @change="onDateRangeChange"></a-range-picker>
           </div>
           <div class="volume-item">
+            <a-range-picker @change="onDateRangeChange"></a-range-picker>
+          </div>
+
+          <div class="volume-item">
             <span class="volume-label">规则选择：</span>
+          </div>
+          <div class="volume-item">
+            <a-checkbox-group @change="onVolumeDaterulesChange">
+              <a-checkbox
+                :value="daterules"
+                v-for="daterules in daterulesData"
+                :key="daterules.id"
+              >{{daterules.rule_name}}</a-checkbox>
+            </a-checkbox-group>
+          </div>
+          <div class="volume-item">
+            <span class="volume-label">用户角色：</span>
           </div>
           <div>
             <a-checkbox-group @change="onVolumeRoleChange">
@@ -121,6 +136,7 @@ import { EditableCell } from "@/components";
 import { getClientRoles } from "@/api/member";
 import { mixinAddGoodState } from "../mixin";
 import { addGoodPrice, getGoodPrice, getDaterules } from "@/api/addGood";
+
 export default {
   components: {
     EditableCell
@@ -217,7 +233,8 @@ export default {
       roleViewSelect: [],
       hackRest: true,
       spinning: false,
-      isInHandleOnePrice: false
+      isInHandleOnePrice: false,
+      daterulesData: []
     };
   },
   created() {
@@ -285,6 +302,7 @@ export default {
     initData() {
       this.initRoles();
       this.initPrice();
+      this.initDaterulesData();
     },
     initPrice() {
       this.hackRest = false;
@@ -302,6 +320,12 @@ export default {
     initRoles() {
       getClientRoles(this.param).then(res => {
         this.roleListOptions = res.data.data;
+      });
+    },
+    initDaterulesData() {
+      getDaterules().then(res => {
+        this.daterulesData = res.data.data;
+        console.log(this.daterulesData);
       });
     },
     handleCancel() {
@@ -492,6 +516,7 @@ export default {
         return a.id - b.id;
       });
     },
+    onVolumeDaterulesChange(checkedValue) {},
 
     getMonthData(value) {
       if (value.month() === 8) {
@@ -558,21 +583,14 @@ export default {
   position: relative;
 }
 .volume {
-  position: absolute;
-  bottom: 32px;
-  height: 230px;
   width: 100%;
-  border: 2px solid #e8e8e8;
-  background: #e8e8e8;
-  padding: 20px;
   .volume-item {
-    margin: 5px 0;
-    display: flex;
+    margin: 10px 0;
     .volume-label {
-      width: 100px;
+      width: 80px;
       display: block;
-      font-size: 18px;
-      font-weight: 600;
+      font-size: 16px;
+      font-weight: 800;
     }
   }
 }

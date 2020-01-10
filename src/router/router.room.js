@@ -49,6 +49,28 @@ import { LoginLayout, BasicLayout, RouteView } from '@/layouts'
             },
           ]
         },
+        {
+          path: '/shop/room/order',
+          name: 'shop-room-order',
+          redirect: '/shop/room/order',
+          component: RouteView,
+          permission: ['dashboard'],
+          meta: { title: '酒店订单', icon: 'shop' },
+          children: [
+            {
+              path: '/shop/room/good/place',
+              name: 'shop-room-orlder-place',
+              component: () => import('@/views/shop/room/order/placeOrder/PlaceOrder'),
+              meta: { title: '酒店下单', },
+            },
+            {
+              path: '/shop/room/order/management',
+              name: 'shop-room-all-order',
+              component: () => import('@/views/shop/room/order/AllOrder'),
+              meta: { title: '酒店订单管理' }
+            },
+          ]
+        },
       ]
     }
   ]
