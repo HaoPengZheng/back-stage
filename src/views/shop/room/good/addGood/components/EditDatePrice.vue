@@ -94,7 +94,7 @@
                 :value="daterules"
                 v-for="daterules in daterulesData"
                 :key="daterules.id"
-              >{{daterules.rule_name}}</a-checkbox>
+              ><daterule-tag :daterule="daterules"></daterule-tag></a-checkbox>
             </a-checkbox-group>
           </div>
           <div class="volume-item">
@@ -132,14 +132,15 @@
 </template>
 
 <script>
-import { EditableCell } from "@/components";
+import { EditableCell,DateruleTag } from "@/components";
 import { getClientRoles } from "@/api/member";
 import { mixinAddGoodState } from "../mixin";
 import { addGoodPrice, getGoodPrice, getDaterules } from "@/api/addGood";
 
 export default {
   components: {
-    EditableCell
+    EditableCell,
+    DateruleTag
   },
   mixins: [mixinAddGoodState],
   data() {

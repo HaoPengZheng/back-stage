@@ -6,7 +6,7 @@
     </under-line>
     <!-- <order-detail-item></order-detail-item>
     <order-detail-item></order-detail-item> -->
-    <a-table :columns="columns" :dataSource="data">
+    <a-table :columns="columns" :dataSource="data" rowKey="id">
       <a slot="name" slot-scope="text" href="javascript:;">{{text}}</a>
       <span slot="customTitle">
         <a-icon type="smile-o" />商品名

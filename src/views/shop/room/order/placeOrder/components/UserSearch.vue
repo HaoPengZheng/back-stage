@@ -10,14 +10,17 @@
     />
     <a-button type="primary">确认</a-button>
     <user-info></user-info>
+    <create-user-button></create-user-button>
   </div>
 </template>
 
 <script>
 import UserInfo from "./UserInfo";
+import {CreateUserButton} from '@/components'
 export default {
   components:{
-    UserInfo
+    UserInfo,
+    CreateUserButton
   },
   methods: {
     onSearch() {}

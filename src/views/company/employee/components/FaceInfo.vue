@@ -194,6 +194,7 @@ export default {
     handlePushFaceToMachine() {
       let machine = [];
       let machineMap = new Map();
+      alert(this.checkedKeys)
       this.checkedKeys.forEach(obj => {
         let keyValue = obj.split("-");
         if (keyValue[0] == "machine") {

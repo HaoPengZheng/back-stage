@@ -31,6 +31,8 @@ import Steps from './Steps'
 import PictureGallery from './PictureGallery'
 import PictureSelect from './PictureSelect'
 import RoleSelect from './RoleSelect'
+import DateruleTag from './DateruleTag'
+import CreateUserButton from './CreateUserButton'
 export {
   ExceptionPage,
   GlobalHeader,
@@ -62,5 +64,7 @@ export {
   Steps,
   PictureGallery,
   PictureSelect,
-  RoleSelect
+  RoleSelect,
+  DateruleTag,
+  CreateUserButton
 }

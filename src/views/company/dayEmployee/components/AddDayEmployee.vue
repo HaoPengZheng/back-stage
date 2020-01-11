@@ -32,7 +32,7 @@
               </a-form-item>
               <a-form-item :label-col="{ span: 3 }" :wrapper-col="{ span: 16 }" label="性别">
                 <a-radio-group
-                  v-decorator="['Sex', { rules: [{ required: true, message: '性别是必须要填的!'}]}]"
+                  v-decorator="['Sex', {initialValue:1, rules: [{ required: true, message: '性别是必须要填的!'}]}]"
                 >
                   <a-radio :value="1">男</a-radio>
                   <a-radio :value="0">女</a-radio>
@@ -41,25 +41,25 @@
               <a-form-item :label-col="{ span: 3 }" :wrapper-col="{ span: 16 }" :label="`身份证号码`">
                 <a-input
                   placeholder="请填写身份证号码"
-                  v-decorator="['CardNo', { rules: [{ required: true, message: '身份证号码是必须要填的!'}]}]"
+                  v-decorator="['CardNo', {initialValue:`CardNo${new Date().getTime()}`, rules: [{ required: true, message: '身份证号码是必须要填的!'}]}]"
                 />
               </a-form-item>
               <a-form-item :label-col="{ span: 3 }" :wrapper-col="{ span: 16 }" :label="`民族`">
                 <a-input
                   placeholder="请填写用户民族"
-                  v-decorator="['Nation', { rules: [{ required: true, message: '民族是必须要填的!'}]}]"
+                  v-decorator="['Nation', { initialValue:`汉`,rules: [{ required: true, message: '民族是必须要填的!'}]}]"
                 />
               </a-form-item>
               <a-form-item :label-col="{ span: 3 }" :wrapper-col="{ span: 16 }" :label="`出生`">
                 <!-- <a-input placeholder="请填写用户真实姓名" v-model="Birth" /> -->
                 <a-date-picker
-                  v-decorator="['Birth', { rules: [{ required: true, message: '出生日期是必须要填的!'}]}]"
+                  v-decorator="['Birth', {initialValue:$moment(), rules: [{ required: true, message: '出生日期是必须要填的!'}]}]"
                 ></a-date-picker>
               </a-form-item>
               <a-form-item :label-col="{ span: 3 }" :wrapper-col="{ span: 16 }" :label="`地址`">
                 <a-input
                   placeholder="请填写用户地址"
-                  v-decorator="['Address', { rules: [{ required: true, message: '地址是必须要填的!'}]}]"
+                  v-decorator="['Address', { initialValue:`location${new Date().getTime()}`,rules: [{ required: true, message: '地址是必须要填的!'}]}]"
                 />
               </a-form-item>
               <a-form-item :label-col="{ span: 3 }" :wrapper-col="{ span: 16 }" label="职位">
@@ -637,7 +637,7 @@ export default {
     },
     handleMechineSubmit(e) {
       e.preventDefault();
-      let _this = this
+      let _this = this;
       this.form.validateFields((err, values) => {
         if (!err) {
           console.log("Received values of form: ", values);
@@ -645,17 +645,18 @@ export default {
 
           let role = values.role[values.role.length - 1].split("-")[1];
           console.log(values.TermDate);
-          console.log(this.$moment)
-          console.log(_this.$moment())
+          console.log(this.$moment);
+          console.log(_this.$moment());
           if (!values.EOD) {
             values.EOD = _this.$moment(
-              `${new Date().getFullYear()}-${new Date().getMonth()+1}-${new Date().getDate()}`
+              `${new Date().getFullYear()}-${new Date().getMonth() +
+                1}-${new Date().getDate()}`
             );
           }
           if (!values.TermDate) {
             values.TermDate = _this.$moment(
-              `${new Date().getFullYear() +
-                100}-${new Date().getMonth()+1}-${new Date().getDate()}`
+              `${new Date().getFullYear() + 100}-${new Date().getMonth() +
+                1}-${new Date().getDate()}`
             );
           }
           let employee = {
