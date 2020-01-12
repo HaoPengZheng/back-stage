@@ -66,37 +66,6 @@
                   <a-radio :value="2">女</a-radio>
                 </a-radio-group>
               </a-form-item>
-
-              <a-form-item
-                :label-col="{ span: 3 }"
-                :wrapper-col="{ span: 16 }"
-                label="账号"
-                :required="false"
-              >
-                <a-input
-                  v-decorator="[
-                `account`,
-                {
-                  rules: [],
-                }  ]"
-                />
-              </a-form-item>
-              <a-form-item
-                :label-col="{ span: 3 }"
-                :wrapper-col="{ span: 16 }"
-                label="密码"
-                :required="false"
-              >
-                <a-input
-                  placeholder
-                  v-decorator="[
-                `password`,
-                {
-                  rules: [],
-                }
-              ]"
-                />
-              </a-form-item>
               <a-form-item
                 :label-col="{ span: 3 }"
                 :wrapper-col="{ span: 16 }"
@@ -206,8 +175,7 @@ export default {
             phone_number: values.phone_number,
             realname: values.realname,
             name: values.name,
-            account: values.account,
-            password: values.password,
+            role:values.role,
             sex: values.sex,
             email: values.email
           };

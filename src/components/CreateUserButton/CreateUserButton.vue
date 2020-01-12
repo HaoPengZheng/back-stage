@@ -48,7 +48,7 @@ export default {
       this.visible = false;
     },
     handleSubmit(){
-        this.$refs.addUserForm.handleSubmit()
+      this.$refs.addUserForm.handleSubmit()
     },
   }
 };

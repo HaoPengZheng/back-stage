@@ -15,12 +15,29 @@
 
 <script>
 import UserInfo from "./UserInfo";
+import { getUserList } from "@/api/user";
 export default {
   components:{
     UserInfo
   },
+  data(){
+    return {
+      
+    }
+  },
   methods: {
-    onSearch() {}
+    onSearch(value) {
+      let params= {
+        include: "credit.records,authorization.contact,user.roles",
+        page: 1,
+        per_page: 20,
+        phone_number:value
+      }
+      console.log(value)
+      getUserList(params).then(res=>{
+        console.log(res)
+      })
+    }
   }
 };
 </script>

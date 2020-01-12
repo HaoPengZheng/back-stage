@@ -5,7 +5,7 @@
       :type="index==activeIndex?'red':'default'"
       :key="item"
       @click.native="selectItem(index)"
-    >{{item}}</base-button>
+    >{{item.name}}</base-button>
   </div>
 </template>
 
@@ -41,6 +41,7 @@ export default {
         return this.value;
       },
       set: function(newValue) {
+        console.log(newValue)
         this.$emit("input", newValue);
       }
     }

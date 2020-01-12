@@ -147,7 +147,9 @@ export default {
           this.$store.dispatch("setShop", shop);
         })
         .then(res => {
-          this.$router.push("/shop");
+          if(shop.type.sign == 'hotel'){
+            this.$router.push(`/shop/hotel/${shop.id}`);
+          }
         });
     },
     showDeleteCompanyModal() {

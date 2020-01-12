@@ -1,5 +1,5 @@
 import axios from 'axios'
-// import router from '@/router'
+import router from '@/router'
 import Vue from 'vue'
 import store from '@/store'
 import {
@@ -17,6 +17,7 @@ const service = axios.create({
 })
 
 service.interceptors.request.use(config => {
+  console.log(router.currentRoute.params)
   //loadding
   if(!(config.params&&config.params.disableLoadding)){
     store.commit('SET_IS_PAGE_LOADDING', true)
@@ -66,11 +67,13 @@ service.interceptors.request.use(config => {
 
   if (!config.headers.hasOwnProperty('company')) {
     let company = Vue.ls.get('company')
+
     if (company) {
       config.headers['company'] = company.id
     }
     // config.headers['company'] = 1
   }
+
   if (!config.headers.hasOwnProperty('shop')) {
     // let shop = Vue.ls.get('shop').id
     let shop 
@@ -78,7 +81,7 @@ service.interceptors.request.use(config => {
       shop = Vue.ls.get('shop').id
     }
     if (shop) {
-      config.headers['shop'] = store.getters.getShop
+      config.headers['shop'] = shop
     }
   }
 

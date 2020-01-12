@@ -1,7 +1,7 @@
 // eslint-disable-next-line
 import { LoginLayout, BasicLayout, RouteView } from '@/layouts'
 import { ShopLayout } from '../layouts'
-import { asyncShopRoomRouterMap} from './router.room'
+import { asyncShopHotelRouterMap} from './router.hotel'
 import { asyncShopSpringRouterMap } from './router.spring'
 import { constantRouterMap } from './router.base';
 /**
@@ -480,7 +480,7 @@ export const asyncRouterMap = [
  * 店动态路由
  */
 
-export {asyncShopSpringRouterMap ,asyncShopRoomRouterMap};
+export {asyncShopSpringRouterMap ,asyncShopHotelRouterMap};
 
 /**
  * 基础路由

@@ -127,22 +127,6 @@
                   label="下放机器："
                   style="width:100%"
                 >
-                  <!-- <div :value="machine.id" :key="machine.id" v-for="machine in machineData">
-                      <span>{{machine.name}}:</span>
-
-                      <a-checkbox
-                        :value="time.id"
-                        :key="`time${time.id}`"
-                        v-for="time in machine.timeRange"
-                      >{{time.sjdName}}</a-checkbox>
-                    </div>
-                    <a-checkbox-group v-model="machineSelect">
-                      <a-checkbox
-                        :value="machine.id"
-                        :key="machine.id"
-                        v-for="machine in machineData"
-                      >{{machine.name}}{{machine}}</a-checkbox>
-                  </a-checkbox-group>-->
                   <a-tree
                     checkable
                     @expand="onExpand"
@@ -250,20 +234,6 @@ export default {
           }
         }
       });
-      // for (let key of machineMap.entries()) {
-      //   console.log(key);
-      //   this.machineData.forEach(machineEle => {
-      //     let obj = {};
-      //     if (machineEle.id == key[0]) {
-      //       console.log(123);
-      //       obj.mac = machineEle.mac;
-      //       obj.effectbTime = Math.floor(values.EOD.valueOf() / 1000);
-      //       obj.effectTime = Math.floor(values.TermDate.valueOf() / 1000);
-      //       obj.timeLimit = this.getTimeLimitById(machineMap.get(key));
-      //     }
-      //     machine.push(obj);
-      //   });
-      // }
     }
   },
   created() {
