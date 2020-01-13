@@ -232,9 +232,10 @@ export default {
           this.newGoodTypeDrawerVisible = false;
         });
       } else {
+  
         let data = {
           name: this.typeName,
-          shop_id: this.shop_id,
+          shop_id: this.$route.params.shopId,
           company_no: this.$ls.get("company").id,
           parent: this.parentId,
           image: this.image,

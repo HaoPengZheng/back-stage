@@ -234,7 +234,7 @@ export default {
       console.log('change')
       let that = this;
       console.log(newVal)
-      if (newVal.fullPath == "/shop/hotel/good/add") {
+      if (newVal.name == "shop-hotel-good-management") {
         if (newVal.params.good) {
           this.$confirm({
             title: "确定执行此操作?",

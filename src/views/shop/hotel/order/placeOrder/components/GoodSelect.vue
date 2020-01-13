@@ -1,7 +1,5 @@
 <template>
   <div>
-    <radio-btn :items="goodTypeOptions" v-model="roomType"></radio-btn>
-    <radio-btn :items="subGoodTypeOptions" v-model="activeGood"></radio-btn>
     <div>
       <a-radio-group
         :defaultValue="goodTypeOptions[0].id"
@@ -21,6 +19,7 @@
         :defaultValue="subGoodTypeOptions[0].id"
         buttonStyle="solid"
         v-model="activeGood"
+         @change="handleSubGoodTypeChange"
       >
         <a-radio-button
           :value="subGoodType.id"
@@ -34,7 +33,7 @@
 
 <script>
 import { RadioBtn } from "@/components";
-import { getGoodTypeList } from "@/api/good";
+import { getGoodTypeList,getGoods } from "@/api/good";
 export default {
   components: {
     RadioBtn
@@ -91,22 +90,38 @@ export default {
       this.goodTypeOptions.forEach(ele => {
         if (value == ele.id) {
           this.subGoodTypeOptions = ele.children;
-          if (ele.hasOwnProperty("children") && ele.children.length > 0) {
-            this.form.setFieldsValue({
-              storeType: ele.children[0].id
-            });
-          } else {
-            this.form.setFieldsValue({
-              storeType: ""
-            });
-          }
+          
         }
       });
-    }
+    },
+    handleSubGoodTypeChange(value){
+      let params = {
+        page:1,
+        limit:10,
+        typeId:this.activeGood,
+        sort:'desc',
+        column:'no'
+      }
+      this.getGoodsData(1,10,{typeId:this.activeGood})
+      console.log(value)
+      console.log(this.activeGood)
+    },
+     //获取商品数据
+    getGoodsData(page, limit = 20, searchParam) {
+      this.loading = true;
+      getGoods(page, limit, searchParam).then(res => {
+        if (res.data.status == "success") {
+          this.loading = false;
+          this.pagination.current = res.data.data.current_page;
+          this.goodList = res.data.data.data;
+          this.pagination.total = res.data.data.total;
+        }
+      });
+    },
   }
 };
 </script>
-<style lang="less" scoped>
+<style lang="less" scoped> 
 /*定义滚动条高宽及背景 高宽分别对应横竖滚动条的尺寸*/
 ::-webkit-scrollbar {
   width: 16px; /*滚动条宽度*/

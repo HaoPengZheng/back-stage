@@ -8,9 +8,9 @@
       class="search-input"
       @search="onSearch"
     />
-    <a-button type="primary">确认</a-button>
-    <user-info></user-info>
     <create-user-button></create-user-button>
+    <user-info :data="activeUser" v-show="activeUser != null"></user-info>
+    
   </div>
 </template>
 
@@ -23,6 +23,13 @@ export default {
     UserInfo,
     CreateUserButton
   },
+  data(){
+    return {
+      activeUser:null,
+      userList:[],
+      showUserSelectVisible:false
+    }
+  },
   methods: {
     onSearch(value) {
       let params= {
@@ -31,9 +38,21 @@ export default {
         per_page: 20,
         phone_number:value
       }
-      console.log(value)
       getUserList(params).then(res=>{
-        console.log(res)
+        this.activeUser = null
+        this.userList = []
+        let userList = res.data.data
+        if(userList instanceof Array){
+          if(userList.length == 0){
+            this.$message.error('查无用户')
+          }else if(userList.length == 1){
+            this.activeUser = userList[0]
+            console.log(this.activeUser)
+          }else{
+            this.userList = userList
+            this.showUserSelectVisible = true
+          }
+        }
       })
     }
   }

@@ -290,7 +290,7 @@ export default {
     jumpToEdit(record) {
       console.log(record);
       this.$router.push({
-        name: "shop-room-good-add",
+        name: "shop-hotel-good-add",
         params: { good: record }
       });
     },

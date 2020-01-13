@@ -2,7 +2,7 @@
   <div class="user-info-warp">
     <a-popover placement="bottomLeft">
       <template slot="content">
-        
+      
         <p><a-icon type="euro" />{{info.points}}</p>
         <p><a-icon type="crown" />{{info.vipLevel}}</p>
         <p><a-icon type="phone" />{{info.phone}}</p>
@@ -11,7 +11,7 @@
       <template slot="title">
         <span>用户个人资料</span>
       </template>
-      <a-button type="link">{{info.name}}({{info.phone}},{{info.vipLevel}})</a-button>
+      <a-button type="link">{{data.authorization.name}}({{data.authorization.contact.phone_number}})</a-button>
     </a-popover>
   </div>
 </template>
@@ -19,7 +19,10 @@
 <script>
 export default {
   props: {
-    // info: Object
+    data: Object
+  },
+  computed:{
+
   },
   data(){
     return{
