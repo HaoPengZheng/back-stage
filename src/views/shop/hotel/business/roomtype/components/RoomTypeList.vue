@@ -32,7 +32,7 @@
       </a-col>
     </a-form>
     <a-col :span="24">
-      <a-table :columns="columns" :dataSource="data">
+      <a-table :columns="columns" :dataSource="data" rowKey="type_id">
         <template slot="typeName" slot-scope="text, record">
           <editable-cell :text="text" @change="onCellChange(record, 'name', $event)" />
         </template>

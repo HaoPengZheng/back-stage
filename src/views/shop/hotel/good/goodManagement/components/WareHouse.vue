@@ -1,6 +1,7 @@
 <template>
   <div>
     <a-table
+      rowKey="name"
       :columns="columns"
       :dataSource="goodList"
       :bordered="true"

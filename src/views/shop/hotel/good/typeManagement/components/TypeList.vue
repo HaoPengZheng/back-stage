@@ -92,7 +92,7 @@
         </div>
       </a-drawer>
     </div>
-    <a-table :columns="columns" :dataSource="data" bordered>
+    <a-table :columns="columns" :dataSource="data" bordered rowKey="id">
       <template slot="cover" slot-scope="text, record">
         <img :src="record.image" style="width:100px;height:100px" />
       </template>
