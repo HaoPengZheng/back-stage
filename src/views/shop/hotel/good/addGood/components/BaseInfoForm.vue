@@ -677,6 +677,28 @@ export default {
             loadding: false
           });
         });
+      this.initRoomTypeSelect()
+    },
+    initRoomTypeSelect(){
+      getRoomTypesByShop(this.$route.params.shopId).then(res => {
+        this.$store.commit("SET_FORM", {
+          loadding: false
+        });
+        this.roomTypeOptions = [
+          {
+            value: -1,
+            label: "暂不选择"
+          }
+        ].concat(
+          res.data.data.map(ele => {
+            return {
+              value: ele.store_id,
+              label: ele.type_name
+            };
+          })
+        );
+        console.log(this.roomTypeOptions)
+      });
     },
     handleInstituteChange(value, option) {
       this.$store.commit("SET_FORM", {
@@ -699,6 +721,7 @@ export default {
             };
           })
         );
+        console.log(this.roomTypeOptions)
       });
     },
     //初始化类目

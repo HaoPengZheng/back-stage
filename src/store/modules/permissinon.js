@@ -1,5 +1,5 @@
 //权限
-import { asyncRouterMap, constantRouterMap,asyncShopHotelRouterMap,asyncShopSpringRouterMap } from '@/router/router.config.js'
+import { asyncRouterMap, constantRouterMap,asyncShopHotelRouterMap,asyncShopSpringRouterMap,asyncShopCateringRouterMap } from '@/router/router.config.js'
 import {resetRouter} from '@/router'
 /**
  * 过滤账户是否拥有某一个权限，并将菜单从加载列表移除
@@ -116,7 +116,7 @@ const permission = {
         let shopTypeMap = {
           'hotel':asyncShopHotelRouterMap,
           'hot_spring':asyncShopSpringRouterMap,
-          'catering':asyncShopSpringRouterMap,
+          'catering':asyncShopCateringRouterMap,
         }
         let shopRouterMap = shopTypeMap[shopType]
 

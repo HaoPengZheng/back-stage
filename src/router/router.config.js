@@ -3,6 +3,7 @@ import { LoginLayout, BasicLayout, RouteView } from '@/layouts'
 import { ShopLayout } from '../layouts'
 import { asyncShopHotelRouterMap} from './router.hotel'
 import { asyncShopSpringRouterMap } from './router.spring'
+import { asyncShopCateringRouterMap} from './router.catering'
 import { constantRouterMap } from './router.base';
 /**
  * 公司动态路由
@@ -480,7 +481,7 @@ export const asyncRouterMap = [
  * 店动态路由
  */
 
-export {asyncShopSpringRouterMap ,asyncShopHotelRouterMap};
+export {asyncShopSpringRouterMap ,asyncShopHotelRouterMap,asyncShopCateringRouterMap};
 
 /**
  * 基础路由

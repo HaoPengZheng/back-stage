@@ -17,7 +17,6 @@ const service = axios.create({
 })
 
 service.interceptors.request.use(config => {
-  console.log(router.currentRoute.params)
   //loadding
   if(!(config.params&&config.params.disableLoadding)){
     store.commit('SET_IS_PAGE_LOADDING', true)

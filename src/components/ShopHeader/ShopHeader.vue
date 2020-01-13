@@ -86,14 +86,17 @@ export default {
         }
       })
       this.$ls.set("shop", activeShop);
+      console.log(activeShop)
       this.$store
         .dispatch("ResetRouter")
         .then(res => {
           this.$store.dispatch("setShop", activeShop);
         })
         .then(res => {
-          this.$router.push("/shop");
-        });
+
+           this.$router.push(`/shop/${activeShop.type.sign }/${activeShop.id}`);
+          console.log(`/shop/${activeShop.type.sign }/${activeShop.id}`)
+       });
     }
   },
   beforeDestroy() {

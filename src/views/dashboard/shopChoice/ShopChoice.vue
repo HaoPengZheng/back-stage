@@ -104,9 +104,7 @@ export default {
       deleteModalVisible: false,
       searchValue: "",
       pagination: {
-        onChange: page => {
-
-        },
+        onChange: page => {},
         pageSize: 9
       }
     };
@@ -135,9 +133,11 @@ export default {
   methods: {
     onSearch(value) {
       this.searchValue = value;
-      this.shopList = this.shopListBackup.filter(shop => {
-        return shop.name.includes(value);
-      });
+      if (this.shopListBackup instanceof Array) {
+        this.shopList = this.shopListBackup.filter(shop => {
+          return shop.name.includes(value);
+        });
+      }
     },
     selectShop(shop) {
       this.$ls.set("shop", shop);
@@ -147,9 +147,10 @@ export default {
           this.$store.dispatch("setShop", shop);
         })
         .then(res => {
-          if(shop.type.sign == 'hotel'){
-            this.$router.push(`/shop/hotel/${shop.id}`);
-          }
+          this.$router.push(`/shop/${shop.type.sign }/${shop.id}`);
+          // if (shop.type.sign == "hotel") {
+          //   this.$router.push(`/shop/hotel/${shop.id}`);
+          // }
         });
     },
     showDeleteCompanyModal() {
