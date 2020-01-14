@@ -1,23 +1,28 @@
 <template>
   <div class="user-info-warp">
-    <a-popover placement="bottomLeft">
+   
+    <a-popover placement="bottomLeft"  trigger="click">
       <template slot="content">
-      
-        <p><a-icon type="euro" />{{info.points}}</p>
+        <user-profile :userInfo="data"></user-profile>
+        <!-- <p><a-icon type="euro" />{{info.points}}</p>
         <p><a-icon type="crown" />{{info.vipLevel}}</p>
         <p><a-icon type="phone" />{{info.phone}}</p>
-        <p><a-icon type="environment" />{{info.address}}</p>
+        <p><a-icon type="environment" />{{info.address}}</p> -->
       </template>
       <template slot="title">
         <span>用户个人资料</span>
       </template>
-      <a-button type="link">{{data.authorization.name}}({{data.authorization.contact.phone_number}})</a-button>
+      <a-button type="link">{{data.realName}}({{data.phone}})</a-button>
     </a-popover>
   </div>
 </template>
 
 <script>
+import {UserProfile} from '@/components'
 export default {
+   components:{
+    UserProfile
+  },
   props: {
     data: Object
   },
@@ -26,17 +31,7 @@ export default {
   },
   data(){
     return{
-       info: {
-        name: "刘光光",
-        vipLevel: "白银会员",
-        points: "2000分",
-        phone: "15919289952",
-        oldCardNumber: "8602585",
-        birthday: "2019/01/06",
-        tagInfo: "喜欢吃辣，蔡少盐",
-        email: "",
-        address: "广东省珠海市斗门区斗门镇珠海XXXX"
-      }
+       
     }
   }
 };

@@ -128,6 +128,8 @@ export default {
       immediate: true,
       handler: function(val) {
         this.platformId = val;
+        this.tableData = []
+        this.handlerSearch();
       }
     },
     startValue(val) {

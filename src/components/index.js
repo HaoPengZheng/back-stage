@@ -33,6 +33,7 @@ import PictureSelect from './PictureSelect'
 import RoleSelect from './RoleSelect'
 import DateruleTag from './DateruleTag'
 import CreateUserButton from './CreateUserButton'
+import UserProfile from './UserProfile'
 export {
   ExceptionPage,
   GlobalHeader,
@@ -66,5 +67,6 @@ export {
   PictureSelect,
   RoleSelect,
   DateruleTag,
-  CreateUserButton
+  CreateUserButton,
+  UserProfile
 }
